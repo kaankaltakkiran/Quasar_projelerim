@@ -4,7 +4,8 @@
       <q-toolbar class="bg-purple text-white shadow-2 rounded-borders ">
         <q-btn flat label="Homepage" @click="goHome" />
         <q-space />
-        <q-tabs v-model="tab" shrink stretch>
+        <q-tabs outside-arrows
+        mobile-arrows v-model="tab" shrink stretch>
           <template v-for="page in parentPages" :key="page.id">
                 <!--
      hasChildren fonksiyonu ile sayfanın alt sayfaları var mı kontrol edilir
