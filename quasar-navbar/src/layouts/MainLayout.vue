@@ -61,7 +61,7 @@ onMounted(() => {
 const router = useRouter();
 const navigateToPage = (slug: string) => { // sayfa slug'ına göre yönlendirme
   tab.value = slug;
-  router.push({ path: `/${slug}` });
+  router.push({ path: `/sayfalar/${slug}` }); 
 };
 // anasayfaya git
 const goHome = () => {
