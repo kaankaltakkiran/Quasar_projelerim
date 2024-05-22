@@ -1,0 +1,103 @@
+{
+    "pages": [
+      {
+        "id": 1,
+        "parent_id": 0,
+        "sort_order": 10,
+        "page_name": "Kurumsal",
+        "page_slug": "kurumsal",
+        "page_content": "<h1>Kurumsal</h1>",
+        "counter": 0
+      },
+      {
+        "id": 2,
+        "parent_id": 0,
+        "sort_order": 20,
+        "page_name": "Seyahat Bilgileri",
+        "page_slug": "seyahat-bilgileri",
+        "page_content": "<h1>Seyahat Bilgileri</h1>",
+        "counter": 0
+      },
+      {
+        "id": 3,
+        "parent_id": 0,
+        "sort_order": 30,
+        "page_name": "İletişim",
+        "page_slug": "iletisim",
+        "page_content": "<h1>İletişim</h1>",
+        "counter": 0
+      },
+      {
+        "id": 4,
+        "parent_id": 1,
+        "sort_order": 10,
+        "page_name": "İlkelerimiz",
+        "page_slug": "ilkelerimiz",
+        "page_content": "<h1>İlkelerimiz</h1>",
+        "counter": 0
+      },
+      {
+        "id": 5,
+        "parent_id": 1,
+        "sort_order": 20,
+        "page_name": "Vizyonumuz",
+        "page_slug": "vizyonumuz",
+        "page_content": "<h1>Vizyonumuz</h1>",
+        "counter": 0
+      },
+      {
+        "id": 6,
+        "parent_id": 1,
+        "sort_order": 30,
+        "page_name": "Misyonumuz",
+        "page_slug": "misyonumuz",
+        "page_content": "<h1>Misyonumuz</h1>",
+        "counter": 0
+      },
+      {
+        "id": 7,
+        "parent_id": 1,
+        "sort_order": 40,
+        "page_name": "Kalite Politikamız",
+        "page_slug": "kalite-politikamiz",
+        "page_content": "<h1>Kalite Politikamız</h1>",
+        "counter": 0
+      },
+      {
+        "id": 8,
+        "parent_id": 1,
+        "sort_order": 50,
+        "page_name": "Belgelerimiz",
+        "page_slug": "belgelerimiz",
+        "page_content": "<h1>Belgelerimiz</h1>",
+        "counter": 0
+      },
+      {
+        "id": 12,
+        "parent_id": 2,
+        "sort_order": 10,
+        "page_name": "Bagaj İşlemleri",
+        "page_slug": "bagaj-islemleri",
+        "page_content": "<h1>Bagaj İşlemleri</h1>",
+        "counter": 0
+      },
+      {
+        "id": 13,
+        "parent_id": 2,
+        "sort_order": 20,
+        "page_name": "Yolcu Taşıma Sözleşmesi",
+        "page_slug": "yolcu-tasima-sozlesmesi",
+        "page_content": "<h1>Yolcu Taşıma Sözleşmesi</h1>",
+        "counter": 0
+      },
+      {
+        "id": 14,
+        "parent_id": 2,
+        "sort_order": 30,
+        "page_name": "Sıkça Sorulan Sorular",
+        "page_slug": "sikca-sorulan-sorular",
+        "page_content": "<h1>Sıkça Sorulan Sorular</h1>",
+        "counter": 0
+        }
+    ]
+}

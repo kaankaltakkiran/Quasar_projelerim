@@ -1,27 +1,39 @@
 <template>
-    <q-toolbar class="bg-purple text-white shadow-2 rounded-borders">
-      <q-btn flat label="Homepage" />
-      <q-space />
-      <q-tabs v-model="tab" shrink stretch>
-        <q-tab name="tab1" label="Tab 1" />
-        <q-tab name="tab2" label="Tab 2" />
-        <q-tab name="tab3" label="Tab 3" />
-        <q-btn-dropdown auto-close flat label="More">
+  <q-toolbar class="bg-purple text-white shadow-2 rounded-borders">
+    <q-btn flat label="Homepage" />
+    <q-space />
+    <q-tabs v-model="tab" shrink stretch>
+      <template v-for="page in parentPages" :key="page.id">
+           <!--
+       !hasChildren(page.id) alt sayfaları var mı kontrol et
+      -->
+        <q-tab v-if="!hasChildren(page.id)" :name="page.page_slug" :label="page.page_name" />
+        <q-btn-dropdown v-else auto-close flat :label="page.page_name">
           <q-list>
-            <q-item clickable @click="tab = 'tab4'">
-              <q-item-section>Tab 4</q-item-section>
-            </q-item>
-            <q-item clickable @click="tab = 'tab5'">
-              <q-item-section>Tab 5</q-item-section>
+            <q-item v-for="child in getChildren(page.id)" :key="child.id" clickable @click="tab = child.page_slug">
+              <q-item-section>{{ child.page_name }}</q-item-section>
             </q-item>
           </q-list>
         </q-btn-dropdown>
-      </q-tabs>
-    </q-toolbar>
+      </template>
+    </q-tabs>
+  </q-toolbar>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useNavbarStore } from 'src/stores/navbarPage-store';
 
 const tab = ref('tab1');
+const navbarStore = useNavbarStore();
+//parent idsi 0 olan sayfaları al
+const parentPages = computed(() => navbarStore.pages.filter(page => page.parent_id === 0));
+//id si verilen sayfanın alt sayfalarını var mı kontrol et
+const hasChildren = (id: number) => navbarStore.pages.some(page => page.parent_id === id);
+//id si verilen sayfanın alt sayfalarını getir
+const getChildren = (parentId: number) => navbarStore.pages.filter(page => page.parent_id === parentId);
+
+onMounted(() => {
+  navbarStore.loadData();
+});
 </script>
