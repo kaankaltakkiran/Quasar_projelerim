@@ -1,6 +1,5 @@
 <template>
-  <q-page class="row items-center justify-evenly">
-  </q-page>
+    <h4 class="text-center">Welcome Home Page</h4>
 </template>
 
 <script setup lang="ts">
