@@ -1,5 +1,5 @@
 # Quasar App (quasar-navbar)
-
+[Web site link](https://quasar-navbar.netlify.app/)
 A Quasar Project
 
 ## Install the dependencies
