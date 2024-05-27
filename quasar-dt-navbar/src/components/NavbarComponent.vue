@@ -29,16 +29,12 @@
         </q-toolbar-title>
                <!--Navbar title end-->
                       <!--Navbar menu start-->
-        <q-tabs v-model="tab" dense align="right" class="desktop-tabs">
+        <q-tabs v-model="tab" dense align="right" class="desktop-tabs"> <!--Static-->
           <q-route-tab to="/" exact name="anasayfa" label="Ana Sayfa" />
-          <q-route-tab to="/tab2" exact name="tab2" label="Page Two" />
-          <q-btn-dropdown auto-close stretch flat label="More...">
+          <q-btn-dropdown v-for="menu in filteredMenus" :key="menu.id" auto-close stretch flat :label="menu.page_name">
             <q-list>
-              <q-item clickable @click="setTab('movies')">
-                <q-item-section>Movies</q-item-section>
-              </q-item>
-              <q-item clickable @click="setTab('photos')">
-                <q-item-section>Photos</q-item-section>
+              <q-item v-for="child in menu.children" :key="child.id" :to="child.page_slug" clickable @click="setTab(child.page_slug)">
+                <q-item-section>{{ child.page_name }}</q-item-section>
               </q-item>
             </q-list>
           </q-btn-dropdown>
@@ -50,22 +46,16 @@
     <!--Drawer  for mobile start-->
     <q-drawer v-model="leftDrawerOpen" side="left" overlay behavior="mobile" bordered>
       <q-list>
-        <q-item clickable @click="setTab('anasayfa')">
+        <q-item to="/" clickable @click="setTab('anasayfa')">
           <q-item-section>Anasayfa</q-item-section>
         </q-item>
-        <q-item clickable @click="setTab('tab2')">
-          <q-item-section>Page Two</q-item-section>
-        </q-item>
-        <q-btn-dropdown auto-close stretch flat label="More...">
-          <q-list>
-            <q-item clickable @click="setTab('movies')">
-              <q-item-section>Movies</q-item-section>
-            </q-item>
-            <q-item clickable @click="setTab('photos')">
-              <q-item-section>Photos</q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
+        <q-btn-dropdown v-for="menu in filteredMenus" :key="menu.id" auto-close stretch flat :label="menu.page_name">
+            <q-list>
+              <q-item v-for="child in menu.children" :key="child.id" :to="child.page_slug" clickable @click="setTab(child.page_slug)">
+                <q-item-section>{{ child.page_name }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
       </q-list>
     </q-drawer>
     <!--Drawer  for mobile end-->
@@ -76,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref,onMounted } from 'vue'
+import { ref,onMounted,computed } from 'vue'
 //ref ile tab ve leftDrawerOpen değişkenlerini oluşturduk
 const tab = ref('anasayfa')
 const leftDrawerOpen = ref(false)
@@ -110,6 +100,18 @@ onMounted(() => {
     //data yoksa yükle
     fetchMenus();
   }
+});
+// Menüleri filtrele
+const filteredMenus = computed(() => {
+  //ana menüleri al
+  return menuStore.menus.filter(menu => menu.parent_id == 0).map(menu => {
+    //her ana menüye ait alt menüleri al
+    const children = menuStore.menus.filter(child => child.parent_id === menu.id)
+    return {
+      ...menu,  //ifadesi, ana menü nesnesinin tüm özelliklerini (id, parent_id, vb.) yeni nesneye kopyalar.
+      children
+    }
+  })
 });
 </script>
 
