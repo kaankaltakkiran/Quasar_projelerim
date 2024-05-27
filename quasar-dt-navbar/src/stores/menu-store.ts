@@ -2,10 +2,20 @@
 import { defineStore } from 'pinia';
 import { api } from 'src/boot/axios'; // Import the axios instance
 
+// Menu arayüzünü içe aktar
+interface Menu {
+  id: number;
+  parent_id: number;
+  sort_order: number;
+  page_name: string;
+  page_slug: string;
+  page_content: string;
+  counter: number;
+}
 // Define the user store
 export const useMenuStore = defineStore('menu', {
   state: () => ({
-    menus: [],
+    menus: [] as Menu[], // Menu arayüzünü kullan
   }),
   actions: {
     async fetchMenus() {
