@@ -5,26 +5,21 @@
     <div v-else>
       <!-- Menü öğelerini listeleme -->
       <div v-for="menuItem in filteredMenuItems" :key="menuItem.id" v-html="menuItem.page_content"></div>
-
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, watch, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useMenuStore } from 'src/stores/menu-store';
 import axios from 'axios';
 
+// Router nesnesini kullan
+const router = useRouter();
 // Route'dan gelen slug değerini al
 const route = useRoute();
 const slug = ref<string>(''); // Slug değerini tutan değişken
-
-// Route parametresini izleyerek slug değerini güncelle
-watch(() => route.params.slug, (newSlug) => {
-  slug.value = newSlug as string;
-  fetchData(); // Yeni slug değeri geldiğinde veriyi güncelle 
-});
 
 // Menü store'unu kullan
 const menuStore = useMenuStore();
@@ -47,6 +42,11 @@ const fetchData = async () => {
   } catch (error) {
     console.error('Failed to fetch menus:', error);
   }
+
+  // Eğer filtrelenmiş öğeler boş ise 404 sayfasına yönlendir
+  if (filteredMenuItems.value.length === 0) {
+    router.push('/404');
+  }
 };
 
 // Bileşen DOM'a monte edildiğinde veya slug değeri değiştiğinde verileri getir
@@ -60,4 +60,5 @@ const filteredMenuItems = computed(() => {
   // Menü öğelerini slug değerine göre filtrele
   return menuStore.menus.filter(menuItem => menuItem.page_slug === slug.value);
 });
+
 </script>
