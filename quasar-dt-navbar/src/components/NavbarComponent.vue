@@ -33,7 +33,7 @@
           <q-route-tab to="/" exact name="anasayfa" label="Ana Sayfa" />
           <q-btn-dropdown v-for="menu in filteredMenus" :key="menu.id" auto-close stretch flat :label="menu.page_name">
             <q-list>
-              <q-item v-for="child in menu.children" :key="child.id" :to="child.page_slug" clickable @click="setTab(child.page_slug)">
+              <q-item v-for="child in menu.children" :key="child.id" :to="`/sayfalar/${child.page_slug}`" clickable @click="setTab(child.page_slug)">
                 <q-item-section>{{ child.page_name }}</q-item-section>
               </q-item>
             </q-list>
