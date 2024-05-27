@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref,onMounted } from 'vue'
 //ref ile tab ve leftDrawerOpen değişkenlerini oluşturduk
 const tab = ref('anasayfa')
 const leftDrawerOpen = ref(false)
@@ -89,6 +89,28 @@ function setTab(newTab: string) {
   tab.value = newTab
   leftDrawerOpen.value = false // Drawer'ı kapat
 }
+import { useMenuStore } from 'src/stores/menu-store';
+// Menu store'u kullan
+const menuStore = useMenuStore();
+
+// Menüleri getiren fonksiyon
+const fetchMenus = async () => {
+  try {
+    // API'den menüleri al
+    await menuStore.fetchMenus();
+  } catch (error) {
+    console.error('Failed to fetch menus:', error);
+  }
+};
+
+// Bileşen DOM'a monte edildiğinde verileri getir
+
+onMounted(() => {
+  if (menuStore.menus.length === 0) {
+    //data yoksa yükle
+    fetchMenus();
+  }
+});
 </script>
 
 <style scoped lang="scss">
