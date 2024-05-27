@@ -10,7 +10,7 @@ export const useMenuStore = defineStore('menu', {
   actions: {
     async fetchMenus() {
       try {
-        //http://localhost/veri/get_menu.php adresine GET isteği gönderir
+        //http://localhost/veri/navbar-project/navbar-data/get_menu.php adresine GET isteği gönderir
         const response = await api.get('/get_menu.php');
         this.menus = response.data;
         console.log(this.menus);
