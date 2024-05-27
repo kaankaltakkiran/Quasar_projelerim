@@ -1,5 +1,7 @@
 # Quasar App (quasar-dt-navbar)
 
+[Veritabanı ile navbar](https://quasar-dt-navbar.netlify.app/)
+
 A Quasar Project
 
 ## Install the dependencies
