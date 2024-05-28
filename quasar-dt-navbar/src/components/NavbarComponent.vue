@@ -3,7 +3,7 @@
     <q-header reveal bordered class="bg-primary text-white" height-hint="98">
       <q-toolbar>
         <!--Navbar start-->
-        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+        <q-btn dense flat round icon="menu" class="mobile-tabs" @click="toggleLeftDrawer" />
          <!--Navbar title start-->
         <q-toolbar-title>
           <a
