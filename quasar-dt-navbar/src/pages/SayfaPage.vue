@@ -34,10 +34,12 @@ const fetchData = async () => {
   try {
     // API'den menüleri al
     // Slug değerine göre menü verisini getir
+    //bu kısımmdan veritabanından slug değerine göre menü verisini gelmiyor hepsi geliyor
     const response = await axios.get(
       `http://localhost/veri/navbar-project/navbar-data/get_menu.php?page_slug=${slug.value}` 
     );
     menuStore.menus = response.data; // Menü verisini güncelle
+    console.log('Menus:', menuStore.menus);
     pageLoading.value = false; // Sayfa yükleme tamamlandı
   } catch (error) {
     console.error('Failed to fetch menus:', error);
