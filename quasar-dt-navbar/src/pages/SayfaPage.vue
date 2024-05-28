@@ -10,10 +10,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, onMounted,onBeforeUnmount, watch, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useMenuStore } from 'src/stores/menu-store';
 import axios from 'axios';
+import { useQuasar } from 'quasar'
+
+const $q = useQuasar()
+let timer: ReturnType<typeof setTimeout> | undefined
 
 // Router nesnesini kullan
 const router = useRouter();
@@ -29,6 +33,10 @@ const pageLoading = ref<boolean>(true); // Sayfa yüklenirken true, yüklendikte
 
 // Veriyi getiren fonksiyon
 const fetchData = async () => {
+  showLoading(); // Loading göstergesini göster
+    // 1 saniyelik bekleme süresi ekle
+    await new Promise(resolve => setTimeout(resolve, 1000)); // 1 saniye bekle
+    
   slug.value = route.params.slug as string; // Route parametresinden slug değerini al
 
   try {
@@ -43,6 +51,8 @@ const fetchData = async () => {
     pageLoading.value = false; // Sayfa yükleme tamamlandı
   } catch (error) {
     console.error('Failed to fetch menus:', error);
+  }finally {
+    hideLoading(); // İşlem tamamlandığında loading göstergesini gizle
   }
 
   // Eğer filtrelenmiş öğeler boş ise 404 sayfasına yönlendir
@@ -62,5 +72,31 @@ const filteredMenuItems = computed(() => {
   // Menü öğelerini slug değerine göre filtrele
   return menuStore.menus.filter(menuItem => menuItem.page_slug === slug.value);
 });
+onBeforeUnmount(() => {
+  if (timer !== void 0) {
+    clearTimeout(timer)
+    $q.loading.hide()
+  }
+})
 
+const showLoading = () => {
+  $q.loading.show({
+    message: 'Some important <b>process</b> is in progress.<br><span class="text-amber text-italic">Please wait...</span>',
+    html: true
+  })
+
+  // hiding in 3s
+  timer = setTimeout(() => {
+    $q.loading.hide()
+    timer = void 0
+  }, 3000)
+}
+
+const hideLoading = () => {
+  if (timer !== void 0) {
+    clearTimeout(timer);
+    timer = void 0;
+  }
+  $q.loading.hide();
+}
 </script>
