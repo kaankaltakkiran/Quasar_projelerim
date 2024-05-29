@@ -13,28 +13,23 @@ import { useMenuStore } from 'src/stores/menu-store';
 import axios from 'axios';
 import { useQuasar } from 'quasar'
 
+// Quasar kullanımı için $q değişkenini tanımla
 const $q = useQuasar()
+// Loading göstergesini göstermek için timer değişkeni
 let timer: ReturnType<typeof setTimeout> | undefined
-
 // Router nesnesini kullan
 const router = useRouter();
 // Route'dan gelen slug değerini al
 const route = useRoute();
 const slug = ref<string>(''); // Slug değerini tutan değişken
-
 // Menü store'unu kullan
 const menuStore = useMenuStore();
-
-
-
 // Veriyi getiren fonksiyon
 const fetchData = async () => {
   showLoading(); // Loading göstergesini göster
     // 1 saniyelik bekleme süresi ekle
     await new Promise(resolve => setTimeout(resolve, 1000)); // 1 saniye bekle
-    
   slug.value = route.params.slug as string; // Route parametresinden slug değerini al
-
   try {
     // API'den menüleri al
     // Slug değerine göre menü verisini getir
@@ -51,17 +46,14 @@ const fetchData = async () => {
     hideLoading(); // İşlem tamamlandığında loading göstergesini gizle
     triggerPositive();
   }
-
   // Eğer filtrelenmiş öğeler boş ise 404 sayfasına yönlendir
   if (filteredMenuItems.value.length === 0) {
     router.push('/404');
   }
 };
-
 // Bileşen DOM'a monte edildiğinde veya slug değeri değiştiğinde verileri getir
 onMounted(fetchData);
 watch(() => route.params.slug, fetchData);
-
 // Filtrelenmiş menü öğelerini hesapla
 const filteredMenuItems = computed(() => {
   if (!slug.value || !menuStore.menus) return []; // Slug veya menü verisi yoksa boş dizi döndür
@@ -75,7 +67,7 @@ onBeforeUnmount(() => {
     $q.loading.hide()
   }
 })
-
+// Loading göstergesini göstermek için fonksiyonlar
 const showLoading = () => {
   $q.loading.show({
     message: 'Some important <b>process</b> is in progress.<br><span class="text-amber text-italic">Please wait...</span>',
@@ -88,7 +80,7 @@ const showLoading = () => {
     timer = void 0
   }, 3000)
 }
-
+// Loading göstergesini gizlemek için fonksiyon
 const hideLoading = () => {
   if (timer !== void 0) {
     clearTimeout(timer);
@@ -96,6 +88,7 @@ const hideLoading = () => {
   }
   $q.loading.hide();
 }
+// Bildirim göstermek için fonksiyonlar
 const triggerPositive = () => {
   $q.notify({
     type: 'positive',
