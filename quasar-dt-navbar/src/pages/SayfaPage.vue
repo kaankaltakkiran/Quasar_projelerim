@@ -1,11 +1,8 @@
 <template>
   <q-page padding>
 
-    <div v-if="pageLoading">Yükleniyor, lütfen bekleyin...</div>
-    <div v-else>
       <!-- Menü öğelerini listeleme -->
       <div v-for="menuItem in filteredMenuItems" :key="menuItem.id" v-html="menuItem.page_content"></div>
-    </div>
   </q-page>
 </template>
 
@@ -28,8 +25,7 @@ const slug = ref<string>(''); // Slug değerini tutan değişken
 // Menü store'unu kullan
 const menuStore = useMenuStore();
 
-// Veri yüklenme durumunu tutan değişken
-const pageLoading = ref<boolean>(true); // Sayfa yüklenirken true, yüklendikten sonra false
+
 
 // Veriyi getiren fonksiyon
 const fetchData = async () => {
@@ -48,11 +44,12 @@ const fetchData = async () => {
     );
     menuStore.menus = response.data; // Menü verisini güncelle
     console.log('Menus:', menuStore.menus);
-    pageLoading.value = false; // Sayfa yükleme tamamlandı
   } catch (error) {
     console.error('Failed to fetch menus:', error);
+    triggerWarning();
   }finally {
     hideLoading(); // İşlem tamamlandığında loading göstergesini gizle
+    triggerPositive();
   }
 
   // Eğer filtrelenmiş öğeler boş ise 404 sayfasına yönlendir
@@ -98,5 +95,21 @@ const hideLoading = () => {
     timer = void 0;
   }
   $q.loading.hide();
+}
+const triggerPositive = () => {
+  $q.notify({
+    type: 'positive',
+    message: 'Veri başarıyla yüklendi.',
+    timeout: 750,
+    position: 'top-right',
+  })
+}
+const triggerWarning = () => {
+  $q.notify({
+    type: 'warning',
+    message: 'Veri yüklenirken bir hata oluştu.',
+    timeout: 750,
+    position: 'top-right',
+  })
 }
 </script>
