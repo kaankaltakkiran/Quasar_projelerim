@@ -1,4 +1,9 @@
 # Quasar App (quasar-crud-project)
+## cors nedir ?
+CORS (Cross-Origin Resource Sharing), bir web sayfasının kendi domaini dışındaki bir kaynağa (API, resim, CSS dosyası vb.) erişim yapmasına izin vermek için kullanılan bir güvenlik mekanizmasıdır. Tarayıcılar, bir kaynağa yapılan isteğin güvenli olup olmadığını kontrol etmek için CORS politikalarını uygularlar. CORS hatası genellikle, sunucunun gelen isteklere izin vermediğinde ortaya çıkar.
+## OPTIONS nedir ?
+OPTIONS yöntemi, bir HTTP isteği türüdür ve istemci (örneğin bir tarayıcı), bir sunucunun belirli kaynaklar üzerinde hangi HTTP yöntemlerini desteklediğini öğrenmek için kullanır. Ayrıca, tarayıcıların CORS (Cross-Origin Resource Sharing) politikalarını uygulamak için preflight istekleri yapmak amacıyla da kullanılır. Preflight istekleri, özellikle güvenlik nedeniyle, istemcinin belirli eylemleri gerçekleştirmeden önce izinleri kontrol etmek için gönderilir.
+
 
 A Quasar Project
 

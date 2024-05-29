@@ -44,18 +44,19 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
 import { ref } from 'vue'
+import axios from 'axios'
 
 defineOptions({
   name: 'IndexPage'
 });
 
 const $q = useQuasar()
-
+//form verileri
 const name = ref<string | null>(null)
 const age = ref<number | null>(null)
 const accept = ref<boolean>(false)
-
-const onSubmit = () => {
+//form submit edilmişse
+const onSubmit = async () => {
   if (!accept.value) {
     $q.notify({
       color: 'red-5',
@@ -63,19 +64,35 @@ const onSubmit = () => {
       icon: 'warning',
       message: 'You need to accept the license and terms first',
       position: 'top-right'
-      
     })
-  } else {
+    return
+  }
+  //form verilerini apiye gönder
+  try {
+    const response = await axios.post('http://localhost/veri/crud-project/api.php', {
+      name: name.value,
+      age: age.value
+    })
     $q.notify({
       color: 'green-4',
       textColor: 'white',
       icon: 'cloud_done',
-      message: 'Submitted',
+      message: response.data.message, 
+      position: 'top-right'
+    })
+    onReset();
+  } catch (error) {
+    $q.notify({
+      color: 'red-5',
+      textColor: 'white',
+      icon: 'warning',
+      message: 'An error occurred while sending the form',
       position: 'top-right'
     })
   }
 }
 
+//form resetle
 const onReset = () => {
   name.value = null
   age.value = null
