@@ -44,7 +44,10 @@
 import { ref,Ref, onMounted } from 'vue'
 import { QTableColumn } from 'quasar'
 import axios from 'axios'
+import { useQuasar } from 'quasar';
 
+// Quasar'dan kullanılacak fonksiyonları al
+const $q = useQuasar();
 // veri adını ve türlerini belirle
 interface Person {
   id: number
@@ -92,13 +95,23 @@ const deleteUser = async (id: number) => {
     //bu şekil de olmalı  await axios.delete('http://localhost/veri/crud-project/api.php', { params: { id: id } })
     await axios.delete('http://localhost/veri/crud-project/api.php', { data: { id: id } })
     rows.value = rows.value.filter((user) => user.id !== id)
-    console.log('User deleted:', id)
+    //console.log('User deleted:', id)
     confirm.value = false
+    triggerPositive();
   } catch (error) {
     console.error('Error deleting user:', error)
   }
 }
-
+const triggerPositive = () => {
+    $q.notify({
+      color: 'green-4',
+      textColor: 'white',
+      icon: 'cloud_done',
+      message: 'Kayıt başarıyla silindi', 
+      position: 'top-right',
+      timeout: 750
+    })
+}
 // tablo verilerini sayfa yüklendiğinde çek
 onMounted(() => {
   fetchData()
