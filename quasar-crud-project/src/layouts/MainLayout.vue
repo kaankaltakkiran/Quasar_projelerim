@@ -7,6 +7,12 @@
           Quasar App
         </q-toolbar-title>
 <q-tabs dense align="right" v-model="tab">
+    <q-route-tab
+   label="Ana Sayfa"
+    name="home"
+    to="/"
+    exact
+  />
   <q-route-tab
    label="Persons"
     name="persons"

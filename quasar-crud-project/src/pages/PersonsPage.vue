@@ -18,6 +18,11 @@
           </template>
         </q-input>
       </template>
+         <template v-slot:body-cell-delete="props">
+        <q-td :props="props">
+          <q-btn color="negative" dense @click="deleteUser(props.row.id)">Delete</q-btn>
+        </q-td>
+      </template>
     </q-table>
   </div>
 </template>
@@ -35,8 +40,10 @@ interface Person {
 }
 // tablo sütunlarını belirle
 const columns: QTableColumn[] = [
-  { name: 'user_name', align: 'left', label: 'Name', field: 'user_name', sortable: true },
-  { name: 'user_age', align: 'center', label: 'Age', field: 'user_age', sortable: true }
+  { name: 'id', align: 'left', label: 'id', field: 'id', sortable: true },
+    { name: 'user_name', align: 'left', label: 'Name', field: 'user_name', sortable: true },
+  { name: 'user_age', align: 'center', label: 'Age', field: 'user_age', sortable: true },
+   { name: 'delete',align: 'center', label: 'Delete',field: 'delete'}
 ]
 // tablo verilerini çek
 const rows = ref<Person[]>([]);
@@ -50,6 +57,21 @@ const fetchData = async () => {
     console.log('Data fetched:', response.data)
   } catch (error) {
     console.error('Error fetching data:', error)
+  }
+}
+// id'si verilen kullanıcıyı sil
+const deleteUser = async (id: number) => {
+  console.log('Deleting user:', id)
+  try {
+    // Silinecek kullanıcının id'sini içeren JSON verisi gönderiliyor
+    //normal url de kabul etmedi
+    //await axios.delete(`http://localhost/veri/crud-project/api.php?id=${id}`)
+    //bu şekil de olmalı  await axios.delete('http://localhost/veri/crud-project/api.php', { params: { id: id } })
+    await axios.delete('http://localhost/veri/crud-project/api.php', { data: { id: id } })
+    rows.value = rows.value.filter((user) => user.id !== id)
+    console.log('User deleted:', id)
+  } catch (error) {
+    console.error('Error deleting user:', error)
   }
 }
 // tablo verilerini sayfa yüklendiğinde çek
