@@ -5,12 +5,11 @@
       :grid="$q.screen.xs"
       flat
       bordered
-      title="Treats"
+      title="Persons"
       :rows="rows"
       :columns="columns"
       row-key="name"
       :filter="filter"
-      hide-header
     >
       <template v-slot:top-right>
         <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
@@ -24,93 +23,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { QTableColumn } from 'quasar'
+import axios from 'axios'
 
-interface Row {
-  name: string
-  calories: number
-  fat: number
-  carbs: number
+// veri adını ve türlerini belirle
+interface Person {
+  id: number
+  user_name: string
+  user_age: number
 }
-
+// tablo sütunlarını belirle
 const columns: QTableColumn[] = [
-  {
-    name: 'desc',
-    required: true,
-    label: 'Dessert (100g serving)',
-    align: 'left',
-    field: (row: Row) => row.name,
-    format: (val: string) => `${val}`,
-    sortable: true
-  },
-  { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-  { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-  { name: 'carbs', label: 'Carbs (g)', field: 'carbs' }
+  { name: 'user_name', align: 'left', label: 'Name', field: 'user_name', sortable: true },
+  { name: 'user_age', align: 'center', label: 'Age', field: 'user_age', sortable: true }
 ]
+// tablo verilerini çek
+const rows = ref<Person[]>([]);
+// tablo verilerini filtrele
+const filter = ref('');
 
-const rows: Row[] = [
-  {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    fat: 6.0,
-    carbs: 24
-  },
-  {
-    name: 'Ice cream sandwich',
-    calories: 237,
-    fat: 9.0,
-    carbs: 37
-  },
-  {
-    name: 'Eclair',
-    calories: 262,
-    fat: 16.0,
-    carbs: 23
-  },
-  {
-    name: 'Cupcake',
-    calories: 305,
-    fat: 3.7,
-    carbs: 67
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-    fat: 16.0,
-    carbs: 49
-  },
-  {
-    name: 'Jelly bean',
-    calories: 375,
-    fat: 0.0,
-    carbs: 94
-  },
-  {
-    name: 'Lollipop',
-    calories: 392,
-    fat: 0.2,
-    carbs: 98
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-    fat: 3.2,
-    carbs: 87
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-    fat: 25.0,
-    carbs: 51
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-    fat: 26.0,
-    carbs: 65
+const fetchData = async () => {
+  try {
+    const response = await axios.get('http://localhost/veri/crud-project/api.php')
+    rows.value = response.data // tablo verilerini doldur
+    console.log('Data fetched:', response.data)
+  } catch (error) {
+    console.error('Error fetching data:', error)
   }
-]
-
-const filter = ref('')
+}
+// tablo verilerini sayfa yüklendiğinde çek
+onMounted(() => {
+  fetchData()
+})
 </script>
