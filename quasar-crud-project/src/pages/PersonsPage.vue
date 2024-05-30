@@ -22,13 +22,13 @@
       <!-- Silme butonu -->
          <template v-slot:body-cell-delete="props">
         <q-td :props="props">
-       <q-btn color="negative" dense @click="confirmDeleteUser(props.row.id)">Delete User</q-btn>
+       <q-btn color="negative" icon-right="delete" dense @click="confirmDeleteUser(props.row.id)">Delete User</q-btn>
         </q-td>
       </template>
       <!-- Güncelleme butonu -->
         <template v-slot:body-cell-update="props">
         <q-td :props="props">
-          <q-btn color="primary" dense @click="openUpdateDialog(props.row)">Update User</q-btn>
+          <q-btn color="secondary" icon-right="update" dense @click="openUpdateDialog(props.row)">Update User</q-btn>
         </q-td>
       </template>
     </q-table>
@@ -50,7 +50,7 @@
       <q-dialog v-model="updateDialog" persistent>
     <q-card style="width: 700px; max-width: 80vw;">
       <q-card-section>
-        <div class="text-h6">Kullanıcıyı Güncelle</div>
+        <div class="text-h6 text-center text-deep-orange">Kullanıcıyı Güncelle</div>
       </q-card-section>
       <q-card-section>
         <q-input v-model="selectedUser.user_name" label="Name" />

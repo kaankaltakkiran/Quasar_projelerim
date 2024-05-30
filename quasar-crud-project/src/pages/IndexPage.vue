@@ -32,8 +32,8 @@
   <q-toggle v-model="accept" label="I accept the license and terms" />
 
   <div>
-    <q-btn label="Submit" type="submit" color="primary"/>
-    <q-btn label="Reset" type="reset" color="red"  class="q-ml-sm" />
+    <q-btn label="Submit" type="submit" icon-right="send" color="primary"/>
+    <q-btn label="Reset" type="reset" icon-right="backspace" color="red"  class="q-ml-sm" />
   </div>
 </q-form>
 
