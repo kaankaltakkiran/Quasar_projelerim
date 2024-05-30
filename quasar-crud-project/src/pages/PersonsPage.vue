@@ -11,6 +11,7 @@
       row-key="name"
       :filter="filter"
     >
+    <!-- Tablo başlığında arama kutusu -->
       <template v-slot:top-right>
         <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
           <template v-slot:append>
@@ -18,26 +19,49 @@
           </template>
         </q-input>
       </template>
+      <!-- Silme butonu -->
          <template v-slot:body-cell-delete="props">
         <q-td :props="props">
        <q-btn color="negative" dense @click="confirmDeleteUser(props.row.id)">Delete User</q-btn>
         </q-td>
       </template>
+      <!-- Güncelleme butonu -->
+        <template v-slot:body-cell-update="props">
+        <q-td :props="props">
+          <q-btn color="primary" dense @click="openUpdateDialog(props.row)">Update User</q-btn>
+        </q-td>
+      </template>
     </q-table>
   </div>
-   <q-dialog v-model="confirm" medium persistent>
-      <q-card>
+  <!-- Silme işlemi için dialog -->  
+   <q-dialog v-model="confirm"  persistent>
+      <q-card style="width: 700px; max-width: 80vw;">
         <q-card-section class="row items-center">
           <span class="q-ml-sm">Kayıdı silmek istediğinizden emin misiniz ?</span>
         </q-card-section>
-
         <q-card-actions align="right">
-         <q-btn flat label="Hayır" color="red" @click="confirm = false" />
+         <q-btn flat label="İptal" color="red" @click="confirm = false" />
          <!-- id null değilse silme işlemi çalışacak -->
         <q-btn flat label="Evet" color="primary" @click="deleteUser(selectedUserId!)" />
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <!-- Güncelleme işlemi için dialog -->
+      <q-dialog v-model="updateDialog" persistent>
+    <q-card style="width: 700px; max-width: 80vw;">
+      <q-card-section>
+        <div class="text-h6">Kullanıcıyı Güncelle</div>
+      </q-card-section>
+      <q-card-section>
+        <q-input v-model="selectedUser.user_name" label="Name" />
+        <q-input v-model="selectedUser.user_age" label="Age" type="number" />
+      </q-card-section>
+      <q-card-actions align="right">
+        <q-btn flat label="İptal" color="negative" @click="closeUpdateDialog" />
+        <q-btn flat label="Kaydet" color="primary" @click="updateUser" />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup lang="ts">
@@ -59,7 +83,8 @@ const columns: QTableColumn[] = [
   { name: 'id', align: 'left', label: 'id', field: 'id', sortable: true },
     { name: 'user_name', align: 'left', label: 'Name', field: 'user_name', sortable: true },
   { name: 'user_age', align: 'center', label: 'Age', field: 'user_age', sortable: true },
-   { name: 'delete',align: 'center', label: 'Delete',field: 'delete'}
+  { name: 'delete', align: 'center', label: 'Delete', field: 'delete' },
+  { name: 'update', align: 'center', label: 'Update', field: 'update' },
 ]
 // tablo verilerini çek
 const rows = ref<Person[]>([]);
@@ -69,6 +94,10 @@ const filter = ref('');
 const confirm: Ref<boolean> = ref(false)
 // silinecek kullanıcının id'si
 const selectedUserId: Ref<number | null> = ref(null)
+// Partial(typesciprt değişkeni) ile sadece belirli alanları güncelleyebiliriz(isteğe bağlı)
+const selectedUser: Ref<Partial<Person>> = ref({});
+// güncelleme işlemi için dialog
+const updateDialog: Ref<boolean> = ref(false);
 
 const fetchData = async () => {
   try {
@@ -97,21 +126,66 @@ const deleteUser = async (id: number) => {
     rows.value = rows.value.filter((user) => user.id !== id)
     //console.log('User deleted:', id)
     confirm.value = false
-    triggerPositive();
+      triggerPositive('Kayıt başarıyla silindi');
   } catch (error) {
     console.error('Error deleting user:', error)
   }
 }
-const triggerPositive = () => {
-    $q.notify({
-      color: 'green-4',
-      textColor: 'white',
-      icon: 'cloud_done',
-      message: 'Kayıt başarıyla silindi', 
-      position: 'top-right',
-      timeout: 750
-    })
+/*  güncelleme işlemi için dialogu aç
+ ...user, user objesinin tüm özelliklerinin selectedUser.value'a kopyalanmasını sağlar. Bu şekilde, selectedUser objesi, diyaloğun içinde gösterilecek olan mevcut kullanıcının verilerini içerir.
+*/
+const openUpdateDialog = (user: Person) => {
+  selectedUser.value = { ...user }
+  updateDialog.value = true
 }
+// güncelleme işlemi için dialogu kapat
+const closeUpdateDialog = () => {
+  updateDialog.value = false
+}
+
+// güncelleme işlemi için kullanıcıyı güncelle
+const updateUser = async () => {
+  try {
+    const response = await axios.put('http://localhost/veri/crud-project/api.php', selectedUser.value)
+    if (response.data.message === 'User updated') {
+      const index = rows.value.findIndex(user => user.id === selectedUser.value.id)
+      if (index !== -1) {
+        rows.value[index] = { ...selectedUser.value } as Person
+      }
+      updateDialog.value = false
+      triggerPositive('Kayıt başarıyla güncellendi');
+    } else {
+      triggerNegative('Güncelleme başarısız oldu');
+    }
+  } catch (error) {
+    console.error('Error updating user:', error)
+    triggerNegative('Güncelleme sırasında hata oluştu');
+  }
+}
+
+
+const triggerPositive = (message: string) => {
+  $q.notify({
+    color: 'green-4',
+    textColor: 'white',
+    icon: 'cloud_done',
+    message: message,
+    position: 'top-right',
+    timeout: 750
+  })
+}
+
+const triggerNegative = (message: string) => {
+  $q.notify({
+    color: 'red-5',
+    textColor: 'white',
+    icon: 'warning',
+    message: message,
+    position: 'top-right',
+    timeout: 750
+  })
+}
+
 // tablo verilerini sayfa yüklendiğinde çek
 onMounted(() => {
   fetchData()
