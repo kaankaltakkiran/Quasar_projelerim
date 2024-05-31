@@ -13,11 +13,16 @@ CREATE TABLE `users` (
   `user_name` varchar(50) NOT NULL,
   `user_age` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
 
 INSERT INTO `users` (`id`, `user_name`, `user_age`) VALUES
 (1,	'Kaan',	24),
-(2,	'Ahmet',	38)
+(2,	'Veli',	10),
+(3,	'Ahmet',	30),
+(4,	'Ayşe',	27),
+(5,	'Fatma',	36),
+(6,	'Selma',	18),
+(7,	'Burak',	12)
 ON DUPLICATE KEY UPDATE `id` = VALUES(`id`), `user_name` = VALUES(`user_name`), `user_age` = VALUES(`user_age`);
 
--- 2024-05-29 19:09:40
+-- 2024-05-31 09:12:29
