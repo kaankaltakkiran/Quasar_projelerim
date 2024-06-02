@@ -69,27 +69,38 @@ const onSubmit = async () => {
   }
   //form verilerini apiye gönder
   try {
-    const response = await axios.post('http://localhost/veri/crud-project/api.php', {
-      name: name.value,
-      age: age.value
-    })
+  const response = await axios.post('http://localhost/veri/crud-project/api.php', {
+    name: name.value,
+    age: age.value
+  });
+  if (response.status === 201) {
     $q.notify({
       color: 'green-4',
       textColor: 'white',
       icon: 'cloud_done',
-      message: response.data.message, 
+      message: response.data.message,
       position: 'top-right'
-    })
+    });
     onReset();
-  } catch (error) {
+  } else {
     $q.notify({
       color: 'red-5',
       textColor: 'white',
       icon: 'warning',
       message: 'An error occurred while sending the form',
       position: 'top-right'
-    })
+    });
   }
+} catch (error) {
+  console.error('Error sending form:', error);
+  $q.notify({
+    color: 'red-5',
+    textColor: 'white',
+    icon: 'warning',
+    message: 'An error occurred while sending the form',
+    position: 'top-right'
+  });
+}
 }
 
 //form resetle

@@ -102,10 +102,18 @@ const updateDialog: Ref<boolean> = ref(false);
 const fetchData = async () => {
   try {
     const response = await axios.get('http://localhost/veri/crud-project/api.php')
-    rows.value = response.data // tablo verilerini doldur
-    console.log('Data fetched:', response.data)
+    if (response.status == 200) {
+      if (response.data.length > 0) {
+        rows.value = response.data // tablo verilerini doldur
+        console.log('Data fetched:', response.data)
+      }
+      else {
+        triggerNegative('Veritabanında kayıt bulunamadı !');
+      }
+    }
   } catch (error) {
     console.error('Error fetching data:', error)
+    triggerNegative('Veri çekme sırasında hata oluştu !');
   }
 }
 
@@ -147,7 +155,7 @@ const closeUpdateDialog = () => {
 const updateUser = async () => {
   try {
     const response = await axios.put('http://localhost/veri/crud-project/api.php', selectedUser.value)
-    if (response.data.message === 'User updated') {
+    if (response.status ==200) {
       const index = rows.value.findIndex(user => user.id === selectedUser.value.id)
       if (index !== -1) {
         rows.value[index] = { ...selectedUser.value } as Person
@@ -155,11 +163,11 @@ const updateUser = async () => {
       updateDialog.value = false
       triggerPositive('Kayıt başarıyla güncellendi');
     } else {
-      triggerNegative('Güncelleme başarısız oldu');
+      triggerNegative('Güncelleme başarısız oldu !');
     }
   } catch (error) {
     console.error('Error updating user:', error)
-    triggerNegative('Güncelleme sırasında hata oluştu');
+    triggerNegative('Güncelleme sırasında hata oluştu !');
   }
 }
 
@@ -182,7 +190,7 @@ const triggerNegative = (message: string) => {
     icon: 'warning',
     message: message,
     position: 'top-right',
-    timeout: 750
+    timeout: 2000
   })
 }
 
