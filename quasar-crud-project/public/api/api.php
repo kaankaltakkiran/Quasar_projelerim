@@ -23,6 +23,7 @@ switch ($method) {
             $stmt = $DB->prepare("SELECT * FROM users");
             $stmt->execute();
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            http_response_code(200);
             echo json_encode($users);
         } catch (PDOException $e) {
             http_response_code(500);
@@ -40,6 +41,7 @@ switch ($method) {
                 $stmt->bindParam(':name', $data->name);
                 $stmt->bindParam(':age', $data->age);
                 if ($stmt->execute()) {
+                   http_response_code(201);
                     echo json_encode(['message' => 'User created']);
                 } else {
                     http_response_code(400);
@@ -65,6 +67,7 @@ case 'PUT':
             $stmt->bindParam(':age', $data->user_age);
             $stmt->bindParam(':id', $data->id);
             if ($stmt->execute()) {
+             http_response_code(200);
                 echo json_encode(['message' => 'User updated']);
             } else {
                 http_response_code(400);
@@ -88,6 +91,7 @@ case 'PUT':
                 $stmt = $DB->prepare("DELETE FROM users WHERE id = :id");
                 $stmt->bindParam(':id', $data->id);
                 if ($stmt->execute()) {
+                 http_response_code(200);
                     echo json_encode(['message' => 'User deleted']);
                 } else {
                     http_response_code(400);
