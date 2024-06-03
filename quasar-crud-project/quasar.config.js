@@ -60,7 +60,7 @@ module.exports = configure(function (/* ctx */) {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+       env: {CRUD_API_URL: 'http://192.168.0.24/api.php'},
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,

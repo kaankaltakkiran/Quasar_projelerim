@@ -69,7 +69,7 @@ const onSubmit = async () => {
   }
   //form verilerini apiye gönder
   try {
-  const response = await axios.post('http://localhost/veri/crud-project/api.php', {
+  const response = await axios.post(process.env.CRUD_API_URL, {
     name: name.value,
     age: age.value
   });
