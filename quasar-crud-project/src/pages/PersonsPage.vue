@@ -101,7 +101,7 @@ const updateDialog: Ref<boolean> = ref(false);
 
 const fetchData = async () => {
   try {
-    const response = await axios.get(process.env.CRUD_API_URL||'http://192.168.0.24/api.php')
+    const response = await axios.get(process.env.CRUD_API_URL)
     if (response.status == 200) {
       if (response.data.length > 0) {
         rows.value = response.data // tablo verilerini doldur
@@ -130,7 +130,7 @@ const deleteUser = async (id: number) => {
     //normal url de kabul etmedi
     //await axios.delete(`http://localhost/veri/crud-project/api.php?id=${id}`)
     //bu şekil de olmalı  await axios.delete('http://localhost/veri/crud-project/api.php', { params: { id: id } })
-    await axios.delete(process.env.CRUD_API_URL ||'http://192.168.0.24/api.php' , { data: { id: id } })
+    await axios.delete(process.env.CRUD_API_URL, { data: { id: id } })
     rows.value = rows.value.filter((user) => user.id !== id)
     //console.log('User deleted:', id)
     confirm.value = false
@@ -154,7 +154,7 @@ const closeUpdateDialog = () => {
 // güncelleme işlemi için kullanıcıyı güncelle
 const updateUser = async () => {
   try {
-    const response = await axios.put(process.env.CRUD_API_URL ||'http://192.168.0.24/api.php', selectedUser.value)
+    const response = await axios.put(process.env.CRUD_API_URL, selectedUser.value)
     if (response.status ==200) {
       const index = rows.value.findIndex(user => user.id === selectedUser.value.id)
       if (index !== -1) {
