@@ -110,12 +110,12 @@ const fetchData = async (action:string) => {
         console.log('Data fetched:', response.data)
       }
       else {
-        triggerNegative('Veritabanında kayıt bulunamadı !');
+       triggerNotification('Veritabanında kayıt bulunamadı!', 'negative')
       }
     }
   } catch (error) {
     console.error('Error fetching data:', error)
-    triggerNegative('Veri çekme sırasında hata oluştu !');
+      triggerNotification('Veri çekme sırasında hata oluştu!', 'negative')
   }
 }
 
@@ -136,7 +136,7 @@ const deleteUser = async (id: number) => {
     rows.value = rows.value.filter((user) => user.id !== id)
     //console.log('User deleted:', id)
     confirm.value = false
-      triggerPositive('Kayıt başarıyla silindi');
+ triggerNotification('Kayıt başarıyla silindi', 'positive')
   } catch (error) {
     console.error('Error deleting user:', error)
   }
@@ -163,38 +163,28 @@ const updateUser = async () => {
         rows.value[index] = { ...selectedUser.value } as Person
       }
       updateDialog.value = false
-      triggerPositive('Kayıt başarıyla güncellendi');
+      triggerNotification('Kayıt başarıyla güncellendi', 'positive')
     } else {
-      triggerNegative('Güncelleme başarısız oldu !');
+        triggerNotification('Güncelleme başarısız oldu!', 'negative')
     }
   } catch (error) {
     console.error('Error updating user:', error)
-    triggerNegative('Güncelleme sırasında hata oluştu !');
+    triggerNotification('Güncelleme sırasında hata oluştu!', 'negative')
   }
 }
 
-
-const triggerPositive = (message: string) => {
+//mesaj durumuna göre bildirim göster
+const triggerNotification = (message: string, type: 'positive' | 'negative') => {
   $q.notify({
-    color: 'green-4',
+    color: type === 'positive' ? 'green-4' : 'red-5',
     textColor: 'white',
-    icon: 'cloud_done',
-    message: message,
+    icon: type === 'positive' ? 'cloud_done' : 'warning',
+    message,
     position: 'top-right',
-    timeout: 750
+    timeout: 1000
   })
 }
 
-const triggerNegative = (message: string) => {
-  $q.notify({
-    color: 'red-5',
-    textColor: 'white',
-    icon: 'warning',
-    message: message,
-    position: 'top-right',
-    timeout: 2000
-  })
-}
 
 // tablo verilerini sayfa yüklendiğinde çek
 onMounted(() => {
