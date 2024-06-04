@@ -16,18 +16,32 @@ if ($method === 'OPTIONS') {
 }
 
 
+//gelen get isteğine göre işlemm yapma
+$action = isset($_GET['action']) ? $_GET['action'] : '';
+
 switch ($method) {
     case 'GET':
-        // Fetch all users
-        try {
-            $stmt = $DB->prepare("SELECT * FROM users");
-            $stmt->execute();
-            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            http_response_code(200);
-            echo json_encode($users, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-        } catch (PDOException $e) {
-            http_response_code(500);
-            echo json_encode(['error' => $e->getMessage()]);
+        switch ($action) {
+            case 'users':
+                // Fetch all users
+                try {
+                    $stmt = $DB->prepare("SELECT * FROM users");
+                    $stmt->execute();
+                    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    http_response_code(200);
+                    echo json_encode($users, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+                } catch (PDOException $e) {
+                    http_response_code(500);
+                    echo json_encode(['error' => $e->getMessage()]);
+                }
+                break;
+            case 'anotherAction':
+                // Başka bir GET işlemi
+                break;
+            default:
+                http_response_code(400);
+                echo json_encode(['message' => 'Invalid action']);
+                break;
         }
         break;
 
