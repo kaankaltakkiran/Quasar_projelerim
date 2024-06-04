@@ -99,10 +99,11 @@ const selectedUser: Ref<Partial<Person>> = ref({});
 // güncelleme işlemi için dialog
 const updateDialog: Ref<boolean> = ref(false);
 
-const fetchData = async () => {
+  //gelen get adına göre veri çekme
+const fetchData = async (action:string) => {
   try {
     //process.env.CRUD_API_URL
-    const response = await axios.get('http://localhost/veri/crud-project/api.php')
+ const response = await axios.get(`http://localhost/veri/crud-project/api.php?action=${action}`)
     if (response.status == 200) {
       if (response.data.length > 0) {
         rows.value = response.data // tablo verilerini doldur
@@ -197,6 +198,6 @@ const triggerNegative = (message: string) => {
 
 // tablo verilerini sayfa yüklendiğinde çek
 onMounted(() => {
-  fetchData()
+  fetchData('users'); //api deki users tablosundan veri çek
 })
 </script>
