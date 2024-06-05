@@ -21,8 +21,8 @@
       </template>
         <template v-slot:body-cell-user_name="props">
     <q-td :props="props">
-      <!-- Kullanıcı adına tıklanınca goToUserDetail fonksiyonu çağrılıyor -->
-      <a :href="`/persons/${props.row.id}`" @click.prevent="goToUserDetail(props.row)">{{ props.row.user_name }}</a>
+      <!-- Kullanıcı adına tıklanınca tekil kullanıcı sayfasına git -->
+      <a :href="`/persons/${props.row.id}`">{{ props.row.user_name }}</a>
     </q-td>
   </template>
       <!-- Silme butonu -->
@@ -75,12 +75,9 @@ import { ref,Ref, onMounted } from 'vue'
 import { QTableColumn } from 'quasar'
 import axios from 'axios'
 import { useQuasar } from 'quasar';
-import { useRouter } from 'vue-router';
 
 // Quasar'dan kullanılacak fonksiyonları al
 const $q = useQuasar();
-// Router'ı al
-const router = useRouter();
 // veri adını ve türlerini belirle
 interface Person {
   id: number
@@ -193,12 +190,6 @@ const triggerNotification = (message: string, type: 'positive' | 'negative') => 
     timeout: 1000
   })
 }
-// Kullanıcı detaylarına gitme fonksiyonu
-const goToUserDetail = (row: Person) => {
-  router.push({ path: `/persons/${row.id}` });
-};
-
-
 // tablo verilerini sayfa yüklendiğinde çek
 onMounted(() => {
   fetchData('users'); //api deki users tablosundan veri çek
