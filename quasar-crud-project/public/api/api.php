@@ -15,15 +15,15 @@ if ($method === 'OPTIONS') {
     exit;
 }
 
-
 //gelen get isteğine göre işlemm yapma
 $action = isset($_GET['action']) ? $_GET['action'] : '';
+//gelen userid varsa tam sayıya çevir
+$id = isset($_GET['userid']) ? intval($_GET['userid']) : 0;
 
 switch ($method) {
     case 'GET':
         switch ($action) {
             case 'users':
-                // Fetch all users
                 try {
                     $stmt = $DB->prepare("SELECT * FROM users");
                     $stmt->execute();
@@ -35,8 +35,30 @@ switch ($method) {
                     echo json_encode(['error' => $e->getMessage()]);
                 }
                 break;
-            case 'anotherAction':
-                // Başka bir GET işlemi
+            case 'user':
+            //id gelmişse
+                if ($id > 0) {
+                    try {
+                        $stmt = $DB->prepare("SELECT * FROM users WHERE id = :userid");
+                        $stmt->bindParam(':userid', $id);
+                        $stmt->execute();
+                        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+                        //kullanıcı varsa
+                        if ($user) {
+                            http_response_code(200);
+                            echo json_encode($user, JSON_UNESCAPED_UNICODE |JSON_PRETTY_PRINT);
+                        } else {
+                            http_response_code(404);
+                            echo json_encode(['message' => 'User not found']);
+                        }
+                    } catch (PDOException $e) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $e->getMessage()]);
+                    }
+                } else {
+                    http_response_code(400);
+                    echo json_encode(['message' => 'Invalid ID']);
+                }
                 break;
             default:
                 http_response_code(400);
