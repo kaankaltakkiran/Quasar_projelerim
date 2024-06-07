@@ -19,8 +19,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `user_name`, `user_email`, `user_status`) VALUES
 (1,	'kaan',	'kaan@gmail.com',	0),
 (2,	'Veli',	'veli@gmail.com',	0),
-(3,	'Ayşe',	'ayse@gmail.com',	0),
-(4,	'Fatma',	'fatma@gmail.com',	0)
+(3,	'Ayşe',	'ayse@gmail.com',	1),
+(4,	'Fatma',	'fatma@gmail.com',	1)
 ON DUPLICATE KEY UPDATE `id` = VALUES(`id`), `user_name` = VALUES(`user_name`), `user_email` = VALUES(`user_email`), `user_status` = VALUES(`user_status`);
 
--- 2024-06-06 17:14:24
+-- 2024-06-07 14:21:25
