@@ -1,13 +1,13 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <p>Header</p>
+  <navbar-component>
     <q-page-container>
       <router-view />
     </q-page-container>
-  </q-layout>
+  </navbar-component>
 </template>
 
 <script setup lang="ts">
+import NavbarComponent from 'src/components/NavbarComponent.vue';
 defineOptions({
   name: 'MainLayout',
 });
