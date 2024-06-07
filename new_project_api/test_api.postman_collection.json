@@ -1,155 +1,148 @@
 {
-	"info": {
-		"_postman_id": "57ab2762-b92c-40ae-b516-88fc517ebafb",
-		"name": "test_api",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "35946335"
-	},
-	"item": [
-		{
-			"name": "get users",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"method\": \"get-users\"\n}\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost/veri/ornek_api/api.php",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"veri",
-						"ornek_api",
-						"api.php"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get user",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"method\": \"get-user\",\n  \"id\": 1\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost/veri/ornek_api/api.php",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"veri",
-						"ornek_api",
-						"api.php"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "add user",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"method\": \"add-user\",\n  \"name\": \"Ahmet\",\n  \"email\": \"ahmet@gmail.com\",\n  \"status\": 1\n}\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost/veri/ornek_api/api.php",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"veri",
-						"ornek_api",
-						"api.php"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "delete user",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"method\": \"delete-user\",\n  \"id\": 2\n}\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost/veri/ornek_api/api.php",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"veri",
-						"ornek_api",
-						"api.php"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "update user",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"method\": \"update-user\",\n  \"id\": 1,\n  \"name\": \"updatekaan\",\n  \"email\": \"updatekaan@gmail.com\"\n}\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost/veri/ornek_api/api.php",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"veri",
-						"ornek_api",
-						"api.php"
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "_postman_id": "57ab2762-b92c-40ae-b516-88fc517ebafb",
+    "name": "test_api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "35946335"
+  },
+  "item": [
+    {
+      "name": "get users",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"method\": \"get-users\"\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost/veri/ornek_api/api.php",
+          "protocol": "http",
+          "host": ["localhost"],
+          "path": ["veri", "ornek_api", "api.php"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get user",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"method\": \"get-user\",\n  \"id\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost/veri/ornek_api/api.php",
+          "protocol": "http",
+          "host": ["localhost"],
+          "path": ["veri", "ornek_api", "api.php"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "add user",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"method\": \"add-user\",\n  \"name\": \"Ahmet\",\n  \"email\": \"ahmet@gmail.com\",\n  \"status\": 1\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost/veri/ornek_api/api.php",
+          "protocol": "http",
+          "host": ["localhost"],
+          "path": ["veri", "ornek_api", "api.php"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "delete user",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"method\": \"delete-user\",\n  \"id\": 2\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost/veri/ornek_api/api.php",
+          "protocol": "http",
+          "host": ["localhost"],
+          "path": ["veri", "ornek_api", "api.php"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "update user",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"method\": \"update-user\",\n  \"id\": 1,\n  \"name\": \"updatekaan\",\n  \"email\": \"updatekaan@gmail.com\"\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost/veri/ornek_api/api.php",
+          "protocol": "http",
+          "host": ["localhost"],
+          "path": ["veri", "ornek_api", "api.php"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get user by status",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"method\": \"get-users-by-status\",\n  \"status\": 1\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost/veri/ornek_api/api.php",
+          "protocol": "http",
+          "host": ["localhost"],
+          "path": ["veri", "ornek_api", "api.php"]
+        }
+      },
+      "response": []
+    }
+  ]
 }
