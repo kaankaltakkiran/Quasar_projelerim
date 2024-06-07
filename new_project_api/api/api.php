@@ -44,6 +44,21 @@ switch ($METHOD) {
     $response['user'] = $row;
     break;
     
+      case 'get-users-by-status':
+       ################################### Get Users by Status ###################################
+     if (isset($data['status'])) {
+    $sql = "SELECT * FROM users WHERE user_status = :status";
+    $SORGU = $DB->prepare($sql);
+    $SORGU->bindParam(':status', $data['status']);
+    $SORGU->execute();
+    $rows = $SORGU->fetchAll(PDO::FETCH_ASSOC);
+    $response['success'] = true; // İşlem başarılı
+    $response['users'] = $rows;
+    } else {
+    $response['error'] = "Status parameter is missing";
+    }
+     break;
+
       case 'add-user':
     ################################### Add User ###################################
     $sql = "INSERT INTO users (user_name,user_email, user_status) VALUES (:name, :email,:status)";
@@ -59,15 +74,20 @@ switch ($METHOD) {
     
   case 'delete-user':
   ################################### Delete User ###################################
+   if (isset($data['id'])) {
    $sql = "DELETE FROM users WHERE id = :id";
    $SORGU = $DB->prepare($sql);
    $SORGU->bindParam(':id', $data['id']);
    $SORGU->execute();
    $response['success'] = true; // İşlem başarılı
+   }else{
+    $response['error'] = "ID parameter is missing"; //id yoksa
+   }
    break;
    
    case 'update-user':
    ################################### Update User ###################################
+   if (isset($data['id'])) {
    $sql = "UPDATE users SET user_name = :name, user_email = :email  WHERE id = :id";
    $SORGU = $DB->prepare($sql);
    $SORGU->bindParam(':id', $data['id']);
@@ -76,11 +96,14 @@ switch ($METHOD) {
    $SORGU->execute();
    $response['success'] = true; // İşlem başarılı
    $response['user'] = [
-     'id' => $data['id'],
-     'user_name' => $data['name'],
-   'user_email' => $data['email'],
-    ];
-   break;
+       'id' => $data['id'],
+       'user_name' => $data['name'],
+       'user_email' => $data['email'],
+   ];
+   }else{
+    $response['error'] = "ID parameter is missing";
+   }
+  break;
     
   default:
     ################################### Default ###################################
