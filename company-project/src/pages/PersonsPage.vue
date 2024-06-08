@@ -30,8 +30,15 @@
             </template>
           </q-input>
         </template>
+        <!-- Silme butonu -->
+        <template v-slot:top>
+          <q-btn
+            label="Delete Person"
+            color="negative"
+            @click="deleteSelectedRows"
+          />
+        </template>
       </q-table>
-
       <div class="q-mt-md">Selected: {{ JSON.stringify(selected) }}</div>
     </div>
   </div>
@@ -45,7 +52,7 @@ import { IPerson } from '../interfaces/IPerson';
 
 // tablo değişkenleri
 const rows = ref<IPerson[]>([]);
-const selected = ref<IPerson[]>([]);
+const selected = ref<IPerson[]>([]); //seçilen verileri tut
 const filter = ref('');
 
 // tablo sütunlarını belirle
@@ -82,12 +89,35 @@ const fetchData = async () => {
         method: 'get-users',
       }
     );
-    console.log(response);
+    // console.log(response);
     if (response.data.success === true) {
       rows.value = response.data.users; // tablo verilerini doldur
     }
   } catch (error) {
     console.error('Error fetching data:', error);
+  }
+};
+// seçilen satırları silme fonksiyonu
+const deleteSelectedRows = async () => {
+  try {
+    // seçilen verilerin id'lerini al
+    const selectedIds = selected.value.map((IPerson) => IPerson.id);
+    console.log(selectedIds);
+    const response = await axios.post(
+      'http://localhost/veri/ornek_api/api.php',
+      {
+        method: 'delete-user',
+        ids: selectedIds, // id parametresi bir dizi olarak gönderiliyor
+      }
+    );
+    console.log(response);
+    if (response.data.success === true) {
+      // Başarılı silme işlemi sonrasında tabloyu güncelle
+      selected.value = []; // seçilen verileri temizle
+      fetchData(); // verileri tekrar çek
+    }
+  } catch (error) {
+    console.error('Error deleting data:', error);
   }
 };
 // seçilen verileri string olarak döndür
