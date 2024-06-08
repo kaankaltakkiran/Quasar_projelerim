@@ -35,7 +35,7 @@
           <q-btn
             label="Delete Person"
             color="negative"
-            @click="deleteSelectedRows"
+            @click="confirmDelete"
           />
         </template>
       </q-table>
@@ -107,7 +107,7 @@ const deleteSelectedRows = async () => {
     const selectedIds = selected.value.map((IPerson) => IPerson.id);
     console.log(selectedIds);
     const response = await axios.post(
-      'http://localhost/veri/ornek_apii/api.php',
+      'http://localhost/veri/ornek_api/api.php',
       {
         method: 'delete-user',
         ids: selectedIds, // id parametresi bir dizi olarak gönderiliyor
@@ -122,7 +122,6 @@ const deleteSelectedRows = async () => {
   } catch (error) {
     console.error('Error deleting data:', error);
     triggerNegative(); // Hata oluştuğunda bildirim göster
-    triggerInfo(); // Hata oluştuğunda bildirim göster
   }
 };
 // seçilen verileri string olarak döndür
@@ -166,5 +165,27 @@ const triggerInfo = () => {
     position: 'top-right',
     timeout: 1000,
   });
+};
+// Delete onay kutusu
+const confirmDelete = () => {
+  if (selected.value.length === 0) {
+    triggerInfo(); // Eğer hiçbir satır seçilmediyse bilgi mesajı göster
+    return;
+  }
+  $q.dialog({
+    title: 'Confirm',
+    message: 'Are you sure you want to delete the selected users?',
+    cancel: true,
+    persistent: true,
+  })
+    .onOk(() => {
+      deleteSelectedRows();
+    })
+    .onCancel(() => {
+      console.log('Delete operation cancelled');
+    })
+    .onDismiss(() => {
+      console.log('Dialog dismissed');
+    });
 };
 </script>
