@@ -49,6 +49,9 @@ import { ref, onMounted } from 'vue';
 import { QTableColumn } from 'quasar';
 import axios from 'axios';
 import { IPerson } from '../interfaces/IPerson';
+import { useQuasar } from 'quasar';
+
+const $q = useQuasar();
 
 // tablo değişkenleri
 const rows = ref<IPerson[]>([]);
@@ -104,7 +107,7 @@ const deleteSelectedRows = async () => {
     const selectedIds = selected.value.map((IPerson) => IPerson.id);
     console.log(selectedIds);
     const response = await axios.post(
-      'http://localhost/veri/ornek_api/api.php',
+      'http://localhost/veri/ornek_apii/api.php',
       {
         method: 'delete-user',
         ids: selectedIds, // id parametresi bir dizi olarak gönderiliyor
@@ -112,12 +115,14 @@ const deleteSelectedRows = async () => {
     );
     console.log(response);
     if (response.data.success === true) {
-      // Başarılı silme işlemi sonrasında tabloyu güncelle
       selected.value = []; // seçilen verileri temizle
       fetchData(); // verileri tekrar çek
+      triggerPositive(); // Başarılı silme işlemi sonrasında bildirim göster
     }
   } catch (error) {
     console.error('Error deleting data:', error);
+    triggerNegative(); // Hata oluştuğunda bildirim göster
+    triggerInfo(); // Hata oluştuğunda bildirim göster
   }
 };
 // seçilen verileri string olarak döndür
@@ -132,4 +137,34 @@ function getSelectedString() {
 onMounted(() => {
   fetchData();
 });
+const triggerPositive = () => {
+  $q.notify({
+    color: 'green-4',
+    textColor: 'white',
+    icon: 'cloud_done',
+    message: 'Person deleted successfully',
+    position: 'top-right',
+    timeout: 750,
+  });
+};
+const triggerNegative = () => {
+  $q.notify({
+    color: 'red-5',
+    textColor: 'white',
+    icon: 'warning',
+    message: 'error occurred when deleting the user !',
+    position: 'top-right',
+    timeout: 1000,
+  });
+};
+const triggerInfo = () => {
+  $q.notify({
+    color: 'blue-5',
+    textColor: 'white',
+    icon: 'info',
+    message: 'please delete the person you want to delete !',
+    position: 'top-right',
+    timeout: 1000,
+  });
+};
 </script>
