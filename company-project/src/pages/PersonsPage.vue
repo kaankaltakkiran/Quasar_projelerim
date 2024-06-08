@@ -1,36 +1,39 @@
 <template>
-  <div class="q-pa-md">
-    <q-table
-      flat
-      bordered
-      title="Treats"
-      :rows="rows"
-      :columns="columns"
-      row-key="name"
-      :selected-rows-label="getSelectedString"
-      selection="multiple"
-      v-model:selected="selected"
-      :filter="filter"
-    >
-      <template v-slot:body-cell-selection="props">
-        <q-checkbox v-model="props.selected" />
-      </template>
-      <template v-slot:top-right>
-        <q-input
-          borderless
-          dense
-          debounce="300"
-          v-model="filter"
-          placeholder="Search"
-        >
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-        </q-input>
-      </template>
-    </q-table>
+  <h2 class="text-red text-center">Person List</h2>
+  <div class="row justify-center">
+    <div class="q-pa-md col-12 col-sm-10 col-md-8 col-lg-6">
+      <q-table
+        flat
+        bordered
+        title="Treats"
+        :rows="rows"
+        :columns="columns"
+        row-key="name"
+        :selected-rows-label="getSelectedString"
+        selection="multiple"
+        v-model:selected="selected"
+        :filter="filter"
+      >
+        <template v-slot:body-cell-selection="props">
+          <q-checkbox v-model="props.selected" />
+        </template>
+        <template v-slot:top-right>
+          <q-input
+            borderless
+            dense
+            debounce="300"
+            v-model="filter"
+            placeholder="Search"
+          >
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template>
+      </q-table>
 
-    <div class="q-mt-md">Selected: {{ JSON.stringify(selected) }}</div>
+      <div class="q-mt-md">Selected: {{ JSON.stringify(selected) }}</div>
+    </div>
   </div>
 </template>
 
