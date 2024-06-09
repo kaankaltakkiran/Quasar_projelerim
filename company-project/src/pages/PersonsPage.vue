@@ -32,6 +32,12 @@
             </template>
           </q-input>
         </template>
+        <template v-slot:body-cell-user_name="props">
+          <q-td :props="props">
+            <!-- Kullanıcı adına tıklanınca tekil kullanıcı sayfasına git -->
+            <a :href="`/persons/${props.row.id}`">{{ props.row.user_name }}</a>
+          </q-td>
+        </template>
         <!-- Delete butonu -->
         <template v-slot:top>
           <q-btn
