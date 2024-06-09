@@ -38,6 +38,15 @@
             label="Persons Page"
           />
         </q-tabs>
+        <q-btn
+          flat
+          dense
+          @click="$q.dark.toggle()"
+          :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
+          :label="$q.dark.isActive ? 'Dark' : 'Light'"
+          :no-caps="true"
+          class="q-mx-md"
+        />
         <!--Navbar menu end-->
       </q-toolbar>
     </q-header>
