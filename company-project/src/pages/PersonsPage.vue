@@ -19,19 +19,6 @@
         <template v-slot:body-cell-selection="props">
           <q-checkbox v-model="props.selected" />
         </template>
-        <template v-slot:top-right>
-          <q-input
-            borderless
-            dense
-            debounce="300"
-            v-model="filter"
-            placeholder="Search"
-          >
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
-        </template>
         <template v-slot:body-cell-user_name="props">
           <q-td :props="props">
             <!-- Kullanıcı adına tıklanınca tekil kullanıcı sayfasına git -->
@@ -39,7 +26,7 @@
           </q-td>
         </template>
         <!-- Delete butonu -->
-        <template v-slot:top>
+        <template v-slot:top="props">
           <q-btn
             label="Delete Person"
             color="negative"
@@ -55,6 +42,26 @@
             icon-right="update"
             dense
             @click="confirmUpdate"
+          />
+          <q-space />
+          <q-input
+            borderless
+            dense
+            debounce="300"
+            color="primary"
+            v-model="filter"
+          >
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+          <q-btn
+            flat
+            round
+            dense
+            :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+            @click="props.toggleFullscreen"
+            class="q-ml-md"
           />
         </template>
       </q-table>
