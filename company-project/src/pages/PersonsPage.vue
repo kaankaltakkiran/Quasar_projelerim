@@ -44,6 +44,7 @@
             @click="confirmUpdate"
           />
           <q-space />
+          <!-- Search butonu-->
           <q-input
             borderless
             dense
@@ -63,10 +64,19 @@
             @click="props.toggleFullscreen"
             class="q-ml-md"
           />
+          <!-- Export butonu-->
+          <q-btn
+            color="secondary"
+            icon-right="archive"
+            label="Export to csv"
+            no-caps
+            class="q-mx-md"
+            @click="exportTable"
+          />
         </template>
       </q-table>
       <!-- Table end-->
-      <div class="q-mt-md">Selected: {{ JSON.stringify(selected) }}</div>
+      <div class="q-mt-md">Selected Value: {{ JSON.stringify(selected) }}</div>
     </div>
     <!-- Güncelleme Dialogu -->
     <q-dialog v-model="showUpdateDialog">
@@ -107,10 +117,10 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { QTableColumn } from 'quasar';
+import { useQuasar, QTableColumn, exportFile } from 'quasar';
 import axios from 'axios';
 import { IPerson } from '../interfaces/IPerson';
-import { useQuasar } from 'quasar';
+
 const options = [
   {
     label: '0',
@@ -290,5 +300,61 @@ const triggerInfo = (message: string) => {
     position: 'top-right',
     timeout: 1000,
   });
+};
+
+type RowType = {
+  id: number;
+  user_name: string;
+  user_email: string;
+  user_status: number;
+};
+
+type FormatFunction = (val: string, row: RowType) => string;
+
+const wrapCsvValue = (
+  val: string,
+  formatFn: FormatFunction | undefined,
+  row: RowType
+) => {
+  let formatted = formatFn !== undefined ? formatFn(val, row) : val;
+
+  formatted =
+    formatted === undefined || formatted === null ? '' : String(formatted);
+
+  formatted = formatted.split('"').join('""');
+
+  return `"${formatted}"`;
+};
+
+const exportTable = () => {
+  const content = [
+    columns.map((col) => wrapCsvValue(col.label, undefined, rows.value[0])),
+  ]
+    .concat(
+      rows.value.map((row) =>
+        columns
+          .map((col) =>
+            wrapCsvValue(
+              typeof col.field === 'function'
+                ? col.field(row)
+                : row[col.field as keyof IPerson],
+              col.format,
+              row
+            )
+          )
+          .join(',')
+      )
+    )
+    .join('\r\n');
+
+  const status = exportFile('table-export.csv', content, 'text/csv');
+
+  if (status !== true) {
+    $q.notify({
+      message: 'Error exporting data!',
+      color: 'negative',
+      icon: 'warning',
+    });
+  }
 };
 </script>
