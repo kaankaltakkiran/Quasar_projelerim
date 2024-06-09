@@ -244,7 +244,8 @@ const confirmUpdate = () => {
     return;
   }
   // Seçilen kullanıcının verilerini güncelleme dialogunda göstermek için seçilen verileri kopyala
-  selectedToUpdate.value = JSON.parse(JSON.stringify(selected.value[0]));
+  // selectedToUpdate.value = JSON.parse(JSON.stringify(selected.value[0]));
+  selectedToUpdate.value = { ...selected.value[0] };
   showUpdateDialog.value = true; // Güncelleme dialogunu göster
 };
 
