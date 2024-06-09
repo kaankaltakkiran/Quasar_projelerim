@@ -37,6 +37,8 @@
           <q-btn
             label="Delete Person"
             color="negative"
+            icon-right="delete"
+            dense
             @click="confirmDelete"
           />
           <!-- Update butonu-->
@@ -44,6 +46,8 @@
             class="q-ml-md"
             label="Update Person"
             color="primary"
+            icon-right="update"
+            dense
             @click="confirmUpdate"
           />
         </template>
@@ -176,20 +180,13 @@ const confirmDelete = () => {
     return;
   }
   $q.dialog({
-    title: 'Confirm',
+    title: 'Please be careful !',
     message: 'Are you sure you want to delete the selected users ?',
     cancel: true,
     persistent: true,
-  })
-    .onOk(() => {
-      deleteSelectedRows();
-    })
-    .onCancel(() => {
-      console.log('Delete operation cancelled');
-    })
-    .onDismiss(() => {
-      console.log('Dialog dismissed');
-    });
+  }).onOk(() => {
+    deleteSelectedRows(); // seçilen verileri sil
+  });
 };
 // seçilen verileri string olarak döndür
 function getSelectedString() {
