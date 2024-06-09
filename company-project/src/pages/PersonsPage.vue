@@ -69,11 +69,15 @@
             v-model="selectedToUpdate.user_email"
             label="Email"
           />
-          <q-input
-            class="q-mb-md"
+          <div class="rounded-borders q-my-md">Select User Status</div>
+          <q-option-group
             v-model="selectedToUpdate.user_status"
-            label="Status"
-          />
+            :options="options"
+            color="red"
+            inline
+            dense
+          >
+          </q-option-group>
         </q-card-section>
         <q-card-actions align="center">
           <q-btn label="Update" color="primary" @click="updateSelectedRows" />
@@ -94,7 +98,16 @@ import { QTableColumn } from 'quasar';
 import axios from 'axios';
 import { IPerson } from '../interfaces/IPerson';
 import { useQuasar } from 'quasar';
-
+const options = [
+  {
+    label: '0',
+    value: '0',
+  },
+  {
+    label: '1',
+    value: '1',
+  },
+];
 const $q = useQuasar();
 
 // tablo değişkenleri
@@ -213,6 +226,7 @@ const updateSelectedRows = async () => {
       showUpdateDialog.value = false; // Güncelleme dialogunu kapat
       fetchData(); // verileri tekrar çek
       triggerNotification('Record updated successfully!', 'positive');
+      selected.value = []; // işaretli satırları temizle
     }
   } catch (error) {
     console.error('Error updating data:', error);
