@@ -40,12 +40,13 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { IPerson } from '../interfaces/IPerson';
 
 // Route bilgileri
 const route = useRoute();
+const router = useRouter();
 // Kullanıcı bilgileri
 const user = ref<IPerson | null>(null);
 
@@ -59,8 +60,12 @@ const fetchUser = async (userid: number) => {
         id: userid,
       }
     );
-    if (response.data.success === true) {
+    // console.log(response.data);
+    if (response.data.success === true && response.data.user) {
       user.value = response.data.user;
+    } else {
+      //???????? Kullanıcı bulunamazsa 404 sayfasına yönlendir ????????
+      router.push('/404');
     }
   } catch (error) {
     console.error('Error fetching data:', error);

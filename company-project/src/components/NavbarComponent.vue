@@ -102,7 +102,7 @@ const fetchMenus = async () => {
         method: 'get-menus',
       }
     );
-    console.log(response.data);
+    //console.log(response.data);
     if (response.data.success === true) {
       menus.value = response.data.menus; // tablo verilerini doldur
     }
