@@ -30,12 +30,13 @@
         <!--Navbar title end-->
         <!--Navbar menu start-->
         <q-tabs v-model="tab" dense align="right" class="desktop-tabs">
-          <q-route-tab to="/" exact name="home" label="Home Page" />
+          <!--Dinamik menü-->
           <q-route-tab
-            to="/persons"
-            exact
-            name="persons"
-            label="Persons Page"
+            v-for="menu in menus"
+            :key="menu.id"
+            :to="menu.page_slug"
+            :name="menu.page_name"
+            :label="menu.page_name"
           />
         </q-tabs>
         <q-btn
@@ -60,11 +61,14 @@
       bordered
     >
       <q-list>
-        <q-item clickable to="/">
-          <q-item-section>Home Page</q-item-section>
-        </q-item>
-        <q-item clickable to="/persons">
-          <q-item-section>Persons Page</q-item-section>
+        <!--Mobile dinamik menü-->
+        <q-item
+          v-for="menu in menus"
+          :key="menu.id"
+          clickable
+          :to="menu.page_slug"
+        >
+          <q-item-section>{{ menu.page_name }}</q-item-section>
         </q-item>
       </q-list>
     </q-drawer>
@@ -76,14 +80,39 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { IMenu } from '../interfaces/IMenu';
+
 //ref ile tab ve leftDrawerOpen değişkenlerini oluşturduk
 const tab = ref('home');
 const leftDrawerOpen = ref(false);
 //toggleLeftDrawer fonksiyonu ile leftDrawer'ı açıp kapatıyoruz
+
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
+const menus = ref<IMenu[]>([]); // menü verileri
+//gelen get adına göre veri çekme
+const fetchMenus = async () => {
+  try {
+    const response = await axios.post(
+      'http://localhost/veri/ornek_api/menu_api.php',
+      {
+        method: 'get-menu',
+      }
+    );
+    console.log(response.data);
+    if (response.data.success === true) {
+      menus.value = response.data.menu; // tablo verilerini doldur
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+onMounted(() => {
+  fetchMenus();
+});
 </script>
 
 <style scoped lang="scss">
