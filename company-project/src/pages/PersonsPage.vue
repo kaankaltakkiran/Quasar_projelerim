@@ -310,7 +310,7 @@ const triggerInfo = (message: string) => {
     timeout: 1000,
   });
 };
-
+// Export işlemleri
 type RowType = {
   id: number;
   user_name: string;
