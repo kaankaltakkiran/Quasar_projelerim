@@ -99,7 +99,7 @@ const fetchMenus = async () => {
     const response = await axios.post(
       'http://localhost/veri/ornek_api/menu_api.php',
       {
-        method: 'get-menu',
+        method: 'get-menus',
       }
     );
     console.log(response.data);
