@@ -104,7 +104,7 @@ const fetchMenus = async () => {
     );
     console.log(response.data);
     if (response.data.success === true) {
-      menus.value = response.data.menu; // tablo verilerini doldur
+      menus.value = response.data.menus; // tablo verilerini doldur
     }
   } catch (error) {
     console.error('Error fetching data:', error);
