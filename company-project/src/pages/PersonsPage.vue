@@ -81,6 +81,9 @@
     <!-- Güncelleme Dialogu -->
     <q-dialog v-model="showUpdateDialog">
       <q-card style="width: 700px; max-width: 80vw">
+        <div class="row justify-end">
+          <q-btn dense icon="close" flat @click="showUpdateDialog = false" />
+        </div>
         <q-card-section>
           <q-input
             class="q-mb-md"
@@ -103,10 +106,16 @@
           </q-option-group>
         </q-card-section>
         <q-card-actions align="center">
-          <q-btn label="Update" color="primary" @click="updateSelectedRows" />
+          <q-btn
+            label="Update"
+            color="primary"
+            icon-right="check"
+            @click="updateSelectedRows"
+          />
           <q-btn
             label="Cancel"
             color="negative"
+            icon-right="cancel"
             @click="showUpdateDialog = false"
           />
         </q-card-actions>

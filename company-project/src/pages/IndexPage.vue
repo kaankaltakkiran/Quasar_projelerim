@@ -134,5 +134,6 @@ const onReset = () => {
   email.value = null;
   name.value = null;
   accept.value = false;
+  status.value = '0';
 };
 </script>
