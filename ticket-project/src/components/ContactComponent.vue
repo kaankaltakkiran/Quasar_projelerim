@@ -32,9 +32,9 @@
             label="Biletimi ÜCRETSİZ SMS ile alıp, kampanya ve duyuruları ticari elektronik ileti olarak almayı ve kişisel verilerimin pazarlama amacıyla işlenmesini onaylıyorum"
           />
 
-          <div>
+          <!--   <div>
             <q-btn label="Submit" type="submit" color="primary" />
-          </div>
+          </div> -->
         </q-form>
       </div>
     </q-card-section>
