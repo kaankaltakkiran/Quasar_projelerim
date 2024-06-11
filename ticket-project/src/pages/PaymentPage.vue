@@ -17,7 +17,9 @@
         }"
       />
     </div>
-    <div class="col-lg-3 col-md-6 col-12 q-pa-md"></div>
+    <div class="col-lg-3 col-md-6 col-12 q-pa-md">
+      <ContactComponent />
+    </div>
     <div class="col-lg-3 col-md-6 col-12 q-pa-md"></div>
   </div>
   <!-- 2. Satır -->
@@ -27,6 +29,7 @@
 </template>
 <script setup lang="ts">
 import InfoComponent from 'src/components/InfoComponent.vue';
+import ContactComponent from 'src/components/ContactComponent.vue';
 
 defineOptions({
   name: 'PaymentPage',

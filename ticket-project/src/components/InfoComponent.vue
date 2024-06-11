@@ -1,5 +1,5 @@
 <template>
-  <q-card>
+  <q-card class="q-pa-md">
     <q-card-section class="q-gutter-md">
       <div class="row items-center">
         <div style="flex-shrink: 0">
