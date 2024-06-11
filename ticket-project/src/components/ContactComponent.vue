@@ -24,8 +24,7 @@
             :rules="phoneRules"
             @input="formatPhoneNumber"
           />
-
-          <q-toggle
+          <q-checkbox
             v-model="accept"
             class="text-caption q-pt-md"
             label="Biletimi ÜCRETSİZ SMS ile alıp, kampanya ve duyuruları ticari elektronik ileti olarak almayı ve kişisel verilerimin pazarlama amacıyla işlenmesini onaylıyorum"
@@ -97,14 +96,14 @@ const onSubmit = () => {
       color: 'red-5',
       textColor: 'white',
       icon: 'warning',
-      message: 'You need to accept the license and terms first',
+      message: 'Lütfen onay kutucuğunu işaretleyiniz',
     });
   } else {
     $q.notify({
       color: 'green-4',
       textColor: 'white',
       icon: 'cloud_done',
-      message: 'Submitted',
+      message: 'Form başarıyla gönderildi',
     });
   }
 };
