@@ -51,10 +51,10 @@
       bordered
     >
       <q-list>
-        <q-item clickable @click="setTab('home')">
+        <q-item clickable to="/">
           <q-item-section>Home Page</q-item-section>
         </q-item>
-        <q-item clickable @click="setTab('payment')">
+        <q-item clickable to="/payment">
           <q-item-section>Payment Page</q-item-section>
         </q-item>
       </q-list>
@@ -74,11 +74,6 @@ const leftDrawerOpen = ref(false);
 //toggleLeftDrawer fonksiyonu ile leftDrawer'ı açıp kapatıyoruz
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
-}
-//setTab fonksiyonu ile tab'ı değiştiriyoruz
-function setTab(newTab: string) {
-  tab.value = newTab;
-  leftDrawerOpen.value = false; // Drawer'ı kapat
 }
 </script>
 
