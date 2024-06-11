@@ -1,29 +1,57 @@
 <template>
-  <q-card class="bg-secondary text-white">
-    <q-card-section>
-      <div class="text-h6">Our Changing Planet</div>
-      <div class="text-subtitle2">by John Doe</div>
+  <q-card>
+    <q-card-section class="q-gutter-md">
+      <div class="row items-center">
+        <div style="flex-shrink: 0">
+          <q-avatar
+            icon="directions_bus"
+            text-color="white"
+            color="primary"
+            class="q-ml-md"
+          />
+        </div>
+        <div style="flex-grow: 1">
+          <div class="text-h6 text-center">Metro Turizm</div>
+        </div>
+      </div>
+    </q-card-section>
+
+    <q-separator />
+    <q-card-section class="q-gutter-md">
+      <div class="row items-center justify-between">
+        <div>
+          <div>Kalkış:</div>
+          <div>Varış:</div>
+          <div>Otogarlar:</div>
+          <div>Hareket Zamanı:</div>
+          <div>Koltuk:</div>
+        </div>
+        <div>
+          <div>Esenler Otogarı</div>
+          <div>Ankara (Aşti) Otogarı</div>
+          <div>12 Haziran Çarşamba</div>
+          <div>00:05</div>
+          <div>---</div>
+        </div>
+      </div>
     </q-card-section>
     <q-separator />
-    <q-card-section>
-      {{ lorem }}
+    <q-card-section class="q-gutter-md">
+      <div class="text-h6">Bilet İşlemleri</div>
+      <div>
+        Seferin 6 saat öncesine kadar biletinizi iptal edebilir ve
+        değiştirebilirsiniz. Biletiniz açığa alınamaz.
+      </div>
     </q-card-section>
 
     <q-separator dark />
 
     <q-card-actions>
-      <q-btn flat>Action 1</q-btn>
-      <q-btn flat>Action 2</q-btn>
+      <div class="text-subtitle2 text-red">
+        Otobüs Salı'yı Çarşamba'ya bağlayan gece kalkacaktır.
+      </div>
     </q-card-actions>
   </q-card>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-
-const lorem = ref(
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-);
-</script>
-
-<style lang="sass" scoped></style>
+<script setup lang="ts"></script>
