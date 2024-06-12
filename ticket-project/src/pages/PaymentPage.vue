@@ -19,15 +19,12 @@
     </div>
     <div class="col-lg-3 col-md-6 col-12 q-pa-md">
       <ContactComponent />
+      <div class="col-lg-3 col-md-6 col-12 q-pa-md">
+        <PassengerComponent />
+      </div>
     </div>
     <div class="col-lg-3 col-md-6 col-12 q-pa-md">
       <CreditCartComponent />
-    </div>
-  </div>
-  <!-- 2. Satır -->
-  <div class="row justify-center">
-    <div class="col-lg-3 col-md-6 col-12 q-pa-md">
-      <PassengerComponent />
     </div>
   </div>
 </template>

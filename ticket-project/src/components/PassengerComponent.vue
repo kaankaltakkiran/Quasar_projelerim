@@ -147,12 +147,3 @@ const onReset = () => {
   selectedCountry.value = '';
 };
 </script>
-
-<style scoped>
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%; /* Gerekirse yüksekliği ayarlayabilirsiniz */
-}
-</style>
