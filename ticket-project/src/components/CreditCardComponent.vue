@@ -77,6 +77,9 @@
   </q-card>
   <q-dialog v-model="showDialog">
     <q-card style="width: 500px; max-width: 80vw">
+      <div class="row justify-end">
+        <q-btn dense icon="close" flat @click="showDialog = false" />
+      </div>
       <q-card-section>
         <div class="text-h6">CVC2 Nedir?</div>
         <q-img
@@ -185,6 +188,6 @@ const onReset = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%; /* Gerekirse yüksekliği ayarlayabilirsiniz */
+  height: 100%; /* yükseklik ayarı*/
 }
 </style>
