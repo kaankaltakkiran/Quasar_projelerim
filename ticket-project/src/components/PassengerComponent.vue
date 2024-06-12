@@ -4,84 +4,80 @@
       <h5 class="text-center">Kişisel Bilgiler</h5>
       <q-separator />
       <div class="q-pa-md" style="max-width: 400px">
-        <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+        <div v-for="(index, key) in 3" :key="key">
           <div class="text-center">
-            <span class="text-caption">Koltuk:10</span>
+            <span class="text-caption">Koltuk: {{ index }}</span>
           </div>
-          <q-input
-            filled
-            v-model="nameSurname"
-            label="Adı Ve Soyadı *"
-            hint="Ad ve soyadınızı giriniz"
-            :rules="nameSurnameRules"
-          />
-          <q-checkbox
-            v-model="isNonCitizen"
-            label="T.C vatandaşı değilim"
-            class="q-mt-md"
-          />
-          <div v-if="!isNonCitizen">
+          <q-form
+            @submit="onSubmit(index)"
+            @reset="onReset(index)"
+            class="q-gutter-md"
+          >
             <q-input
               filled
-              type="tel"
-              v-model="tcNo"
-              class="q-mt-md"
-              label="T.C kimlik no *"
-              hint="T.C kimlik numarası giriniz"
-              lazy-rules
-              :rules="tcNoRules"
-              mask="###########"
+              v-model="nameSurnames[index]"
+              :label="`${index}. Yolcu adı ve soyadı * `"
+              hint="Ad ve soyadınızı giriniz"
+              :rules="nameSurnameRules"
             />
-          </div>
-          <div v-else>
-            <q-select
-              filled
-              v-model="selectedCountry"
-              label="Ülke"
-              :options="countryOptions"
+            <q-checkbox
+              v-model="isNonCitizens[index]"
+              label="T.C vatandaşı değilim"
               class="q-mt-md"
             />
-            <q-input
-              filled
-              v-model="passportNo"
-              class="q-mt-md"
-              label="Pasaport Numarası *"
-              hint="Pasaport numaranızı giriniz"
-              lazy-rules
-              :rules="passportNoRules"
-            />
-          </div>
-          <!-- <div>
-            <q-btn label="Submit" type="submit" color="primary" />
-          </div> -->
-        </q-form>
+            <div v-if="!isNonCitizens[index]">
+              <q-input
+                filled
+                type="tel"
+                v-model="tcNos[index]"
+                class="q-mt-md"
+                :label="`${index}. Yolcu T.C kimlik no *`"
+                hint="T.C kimlik numarası giriniz"
+                lazy-rules
+                :rules="tcNoRules"
+                mask="###########"
+              />
+            </div>
+            <div v-else>
+              <q-select
+                filled
+                v-model="selectedCountries[index]"
+                :label="`${index}. Yolcu ülke ${index}`"
+                :options="countryOptions"
+                class="q-mt-md"
+              />
+              <q-input
+                filled
+                v-model="passportNos[index]"
+                class="q-mt-md"
+                :label="`${index}. Yolcu Pasaport Numarası *`"
+                hint="Pasaport numaranızı giriniz"
+                lazy-rules
+                :rules="passportNoRules"
+              />
+            </div>
+          </q-form>
+        </div>
       </div>
     </q-card-section>
   </q-card>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 
 // T.C kimlik no
-const tcNo = ref<string>('');
+const tcNos = ref<string[]>(['', '', '']);
 // Ad ve soyad
-const nameSurname = ref<string | null>(null);
+const nameSurnames = ref<(string | null)[]>([null, null, null]);
 // Pasaport no
-const passportNo = ref<string>('');
+const passportNos = ref<string[]>(['', '', '']);
 
 // T.C vatandaşı değilim checkbox durumu
-const isNonCitizen = ref<boolean>(false);
+const isNonCitizens = ref<boolean[]>([false, false, false, false]);
 
 // Seçilen ülke
-const selectedCountry = ref<string>('');
-
-// tc vatandaşı değilse tc no alanını temizle
-watch(isNonCitizen, (newVal) => {
-  if (newVal) {
-    tcNo.value = '';
-  }
-});
+const selectedCountries = ref<string[]>(['', '', '']);
 
 // Ülke seçenekleri
 const countryOptions = [
@@ -135,15 +131,22 @@ const passportNoRules = [
     val.length >= 5 || 'Pasaport numarası en az 5 karakter olmalıdır',
 ];
 
-const onSubmit = () => {
+const onSubmit = (index: number) => {
   // Formu gönderme işlemleri burada yapılabilir
+  console.log({
+    nameSurname: nameSurnames.value[index],
+    tcNo: tcNos.value[index],
+    passportNo: passportNos.value[index],
+    isNonCitizen: isNonCitizens.value[index],
+    selectedCountry: selectedCountries.value[index],
+  });
 };
 
-const onReset = () => {
-  nameSurname.value = '';
-  tcNo.value = '';
-  passportNo.value = '';
-  isNonCitizen.value = false;
-  selectedCountry.value = '';
+const onReset = (index: number) => {
+  nameSurnames.value[index] = null;
+  tcNos.value[index] = '';
+  passportNos.value[index] = '';
+  isNonCitizens.value[index] = false;
+  selectedCountries.value[index] = '';
 };
 </script>
