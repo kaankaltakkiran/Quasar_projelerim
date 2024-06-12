@@ -30,13 +30,14 @@
         <!--Navbar title end-->
         <!--Navbar menu start-->
         <q-tabs v-model="tab" dense align="right" class="desktop-tabs">
-          <q-route-tab to="/" exact name="home" label="Home Page" />
+          <q-route-tab to="/" exact name="home" label="Ana Sayfa" />
           <q-route-tab
             to="/payment"
             exact
             name="payment"
-            label="Payment Page"
+            label="Ödeme Sayfası"
           />
+          <q-route-tab to="/calendar" exact name="calendar" label="Takvim" />
         </q-tabs>
         <!--Navbar menu end-->
       </q-toolbar>
@@ -52,10 +53,13 @@
     >
       <q-list>
         <q-item clickable to="/">
-          <q-item-section>Home Page</q-item-section>
+          <q-item-section>Ana Sayfa</q-item-section>
         </q-item>
         <q-item clickable to="/payment">
-          <q-item-section>Payment Page</q-item-section>
+          <q-item-section>Ödeme Sayfası</q-item-section>
+        </q-item>
+        <q-item clickable to="/calendar">
+          <q-item-section>Takvim</q-item-section>
         </q-item>
       </q-list>
     </q-drawer>
