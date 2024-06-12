@@ -11,14 +11,25 @@
         :day-content="formatDayContent"
       />
       {{ date }}
+      <!-- Aya göre tatil günleri -->
+      <div v-if="selectedMonthEvents.length">
+        <ul>
+          <li v-for="event in selectedMonthEvents" :key="event.date">
+            {{ event.label }}
+
+            {{ event.date }}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { date as quasarDate } from 'quasar';
 
+// güncel tarihi al ve seçili olsun
 const currentDate = new Date();
 const formattedCurrentDate = quasarDate.formatDate(currentDate, 'YYYY/MM');
 const date = ref(
@@ -28,8 +39,8 @@ const date = ref(
     .toString()
     .padStart(2, '0')}/${currentDate.getFullYear()}`
 );
-
-const events = [
+// Tatil günleri
+const holidays = [
   {
     date: '2024/01/01',
     label: 'Yılbaşı',
@@ -104,8 +115,8 @@ const events = [
   },
 ];
 
-// Extract event dates
-const eventDates = events.map((event) => event.date);
+// Tatil günlerinin tarihlerini al
+const eventDates = holidays.map((event) => event.date);
 
 // Event color getter function
 const getEventColor = (date: string): string => {
@@ -116,8 +127,14 @@ const getEventColor = (date: string): string => {
   return '';
 };
 
-// Function to format day content
+// seçili tarihi formatla
 const formatDayContent = (date: string): string => {
   return quasarDate.formatDate(date, 'DD/MM/YYYY');
 };
+
+// Seçili aydaki tatil günlerini getir
+const selectedMonthEvents = computed(() => {
+  const selectedMonth = date.value.split('/')[1]; // Ay bilgisini alma
+  return holidays.filter((event) => event.date.split('/')[1] === selectedMonth);
+});
 </script>
