@@ -7,7 +7,7 @@
         :event-color="getEventColor"
         mask="DD/MM/YYYY"
         :navigation-min-year-month="formattedCurrentDate"
-        navigation-max-year-month="2026/01"
+        navigation-max-year-month="2024/12"
         :day-content="formatDayContent"
       />
       {{ date }}
