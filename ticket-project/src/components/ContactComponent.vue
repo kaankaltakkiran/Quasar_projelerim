@@ -68,7 +68,7 @@ const phoneRules = [
     (val && val.replace(/\D/g, '').length === 11) ||
     'Telefon numarası 11 hane olmalıdır', // 11 hane kontrolü
   (val: string) =>
-    (val && val.startsWith('0 50')) || 'Telefon numarası 0 50 ile başlamalıdır', // 0 50 ile başlama kontrolü
+    (val && val.startsWith('05')) || 'Telefon numarası 05 ile başlamalıdır', // 0 5 ile başlama kontrolü
 ];
 
 const formatPhoneNumber = (val: string | null) => {
