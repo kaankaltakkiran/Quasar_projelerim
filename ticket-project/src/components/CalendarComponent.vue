@@ -6,6 +6,9 @@
         :events="eventDates"
         :event-color="getEventColor"
         mask="DD/MM/YYYY"
+        :navigation-min-year-month="formattedCurrentDate"
+        navigation-max-year-month="2026/01"
+        :day-content="formatDayContent"
       />
       {{ date }}
     </div>
@@ -14,20 +17,90 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { date as quasarDate } from 'quasar';
 
 const currentDate = new Date();
-const formattedCurrentDate = `${currentDate
-  .getDate()
-  .toString()
-  .padStart(2, '0')}/${(currentDate.getMonth() + 1)
-  .toString()
-  .padStart(2, '0')}/${currentDate.getFullYear()}`;
-const date = ref(formattedCurrentDate);
+const formattedCurrentDate = quasarDate.formatDate(currentDate, 'YYYY/MM');
+const date = ref(
+  `${currentDate.getDate().toString().padStart(2, '0')}/${(
+    currentDate.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, '0')}/${currentDate.getFullYear()}`
+);
 
 const events = [
   {
-    date: '2024/06/11',
-    label: 'İstanbul - Ankara',
+    date: '2024/01/01',
+    label: 'Yılbaşı',
+  },
+  {
+    date: '2024/04/09',
+    label: 'Ramazan Bayramı Arifesi',
+  },
+  {
+    date: '2024/04/10',
+    label: 'Ramazan Bayramı 1. Gün',
+  },
+  {
+    date: '2024/04/11',
+    label: 'Ramazan Bayramı 2. Gün',
+  },
+  {
+    date: '2024/04/12',
+    label: 'Ramazan Bayramı 3. Gün',
+  },
+  {
+    date: '2024/04/23',
+    label: 'Ulusal Egemenlik ve Çocuk Bayramı',
+  },
+  {
+    date: '2024/05/01',
+    label: 'Emek ve Dayanışma Günü',
+  },
+  {
+    date: '2024/05/19',
+    label: 'Atatürk’ü Anma, Gençlik ve Spor Bayramı',
+  },
+  {
+    date: '2024/06/15',
+    label: 'Kurban Bayramı Arifesi',
+  },
+  {
+    date: '2024/06/16',
+    label: 'Kurban Bayramı 1. Gün',
+  },
+  {
+    date: '2024/06/17',
+    label: 'Kurban Bayramı 2. Gün',
+  },
+  {
+    date: '2024/06/18',
+    label: 'Kurban Bayramı 3. Gün',
+  },
+  {
+    date: '2024/06/19',
+    label: 'Kurban Bayramı 4. Gün',
+  },
+  {
+    date: '2024/07/15',
+    label: 'Demokrasi ve Millî Birlik Günü',
+  },
+  {
+    date: '2024/08/30',
+    label: 'Zafer Bayramı',
+  },
+  {
+    date: '2024/10/28',
+    label: 'Cumhuriyet Bayramı Arifesi',
+  },
+  {
+    date: '2024/10/29',
+    label: 'Cumhuriyet Bayramı',
+  },
+  {
+    date: '2024/12/31',
+    label: 'Yılbaşı Gecesi',
   },
 ];
 
@@ -41,5 +114,10 @@ const getEventColor = (date: string): string => {
     return 'teal';
   }
   return '';
+};
+
+// Function to format day content
+const formatDayContent = (date: string): string => {
+  return quasarDate.formatDate(date, 'DD/MM/YYYY');
 };
 </script>
