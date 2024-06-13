@@ -1,21 +1,33 @@
 <template>
   <div class="q-mt-md row justify-center q-gutter-x-md">
-    <!-- 1. Satır -->
     <div class="col-lg-3 col-md-6 col-12 q-pa-md">
+      <q-input filled v-model="selectedDate" mask="date">
+        <template v-slot:append>
+          <q-icon
+            name="event"
+            class="cursor-pointer"
+            @click="showDatepicker = true"
+          />
+        </template>
+      </q-input>
+
       <q-date
-        v-model="date"
+        v-model="selectedDate"
+        @update:model-value="onDateUpdate"
         :events="eventDates"
         :event-color="getEventColor"
+        :modal="true"
+        :persistent="true"
+        v-if="showDatepicker"
       />
-      {{ date }}
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { date } from 'quasar'; // Quasar'dan date modülünü içe aktar
 
-const date = ref<string>('2024/06/01');
 const holidays = [
   {
     date: '2024/01/01',
@@ -91,18 +103,19 @@ const holidays = [
   },
 ];
 
-// güncel tarihi al ve seçili olsun
-const currentDate = new Date();
-
 // Tatil günlerinin tarihlerini al
 const eventDates = holidays.map((event) => event.date);
 
 // Event color getter function
 const getEventColor = (date: string): string => {
-  const selectedDate = new Date(date);
-  if (selectedDate.getTime() < currentDate.getTime()) {
-    return 'teal';
-  }
-  return '';
+  return eventDates.includes(date) ? 'teal' : '';
+};
+
+const showDatepicker = ref(false);
+const selectedDate = ref(date.formatDate(new Date(), 'YYYY/MM/DD')); // Geçerli tarihi seçili tarih olarak ayarla
+
+const onDateUpdate = (value: string) => {
+  selectedDate.value = value;
+  showDatepicker.value = false; // Tarih seçildikten sonra datepicker'ı kapat
 };
 </script>
