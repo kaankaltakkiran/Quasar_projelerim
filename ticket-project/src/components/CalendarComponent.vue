@@ -149,15 +149,13 @@ const getMonthEvents = (
 
 // Seçili tarihi izleyen ve tatil günlerini filtreleyen watch komutu
 const filteredHolidays = ref<{ date: string; label: string }[]>([]);
-const selectedMonthYear = computed(() => {
-  const [year, month] = selectedDate.value.split('/').map(Number);
-  return `${year} / ${String(month).padStart(2, '0')}`;
-});
+const selectedMonthYear = ref<string>('');
 
 watch(
   selectedDate,
   (newDate) => {
     const [year, month] = newDate.split('/').map(Number);
+    selectedMonthYear.value = `${year} / ${String(month).padStart(2, '0')}`;
     filteredHolidays.value = getMonthEvents(year, month - 1);
   },
   { immediate: true }
@@ -165,6 +163,10 @@ watch(
 
 // Navigasyon (ay veya yıl değişikliği) olduğunda çalışacak fonksiyon
 const onNavigation = (view: { year: number; month: number }) => {
+  selectedMonthYear.value = `${view.year} / ${String(view.month).padStart(
+    2,
+    '0'
+  )}`;
   filteredHolidays.value = getMonthEvents(view.year, view.month - 1);
 };
 
