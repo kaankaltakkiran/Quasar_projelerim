@@ -21,20 +21,33 @@
         :navigation-max-year-month="maxYearMonth"
         :options="options"
         @update:model-value="onDateUpdate"
+        @navigation="onNavigation"
         :events="eventDates"
         :event-color="getEventColor"
         :modal="true"
         :persistent="true"
         v-if="showDatepicker"
       >
-        <div class="row items-center justify-end">
-          <q-btn
-            @click="showDatepicker = false"
-            label="Close"
-            color="primary"
-            flat
-          />
-        </div>
+        <template v-slot:default>
+          <div class="row items-center justify-end q-mt-md">
+            <q-btn
+              @click="showDatepicker = false"
+              label="Close"
+              color="primary"
+              flat
+            />
+          </div>
+          <!-- Tatil günleri listesi(o ayda tatil günü yoksa gözükme) -->
+          <div v-if="filteredHolidays.length" class="q-mt-md">
+            <h6 class="text-red">{{ selectedMonthYear }} Ayındaki Tatiller</h6>
+            <ul>
+              <li v-for="holiday in filteredHolidays" :key="holiday.date">
+                {{ holiday.date }} - {{ holiday.label }}
+                <br />
+              </li>
+            </ul>
+          </div>
+        </template>
       </q-date>
     </div>
     <div class="q-mt-md">
@@ -54,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { date } from 'quasar'; // Quasar'dan date modülünü içe aktar
 
 const holidays = [
@@ -87,22 +100,22 @@ const getEventColor = (date: string): string => {
 };
 
 const showDatepicker = ref(false);
-const selectedDate = ref(date.formatDate(new Date(), 'YYYY/MM/DD')); // Geçerli tarihi seçili tarih olarak ayarla
+const selectedDate = ref<string>(date.formatDate(new Date(), 'YYYY/MM/DD')); // Geçerli tarihi seçili tarih olarak ayarla
 
 // Geçerli yıl ve ayı al
 const currentYear = new Date().getFullYear();
 const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0'); // Ay değerini iki haneli yapmak için padStart kullanılır
 
 // Min ve max yıl-ay değerlerini ayarla
-const minYearMonth = ref(`${currentYear}/${currentMonth}`);
-const maxYearMonth = ref(`${currentYear}/12`);
+const minYearMonth = ref<string>(`${currentYear}/${currentMonth}`);
+const maxYearMonth = ref<string>(`${currentYear}/12`);
 
 // Options fonksiyonu ile seçilebilir tarihleri tanımla
-const options = computed(() => {
+const options = computed<string[]>(() => {
   const today = new Date();
   const endDate = new Date(2025, 0, 1); // 2024/12/31 tarihine kadar seçilir
 
-  const optionsArray = [];
+  const optionsArray: string[] = [];
   let dateToCheck = new Date(today);
 
   while (dateToCheck <= endDate) {
@@ -114,12 +127,46 @@ const options = computed(() => {
 });
 
 // Bugün ve Yarın butonları için fonksiyonlar
-const todayDate = date.formatDate(new Date(), 'YYYY/MM/DD');
-const tomorrowDate = (() => {
+const todayDate: string = date.formatDate(new Date(), 'YYYY/MM/DD');
+const tomorrowDate: string = (() => {
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   return date.formatDate(tomorrow, 'YYYY/MM/DD');
 })();
+
+// Seçili aydaki tatil günlerini filtreleyen fonksiyon
+const getMonthEvents = (
+  year: number,
+  month: number
+): { date: string; label: string }[] => {
+  return holidays.filter((holiday) => {
+    const holidayDate = new Date(holiday.date);
+    return (
+      holidayDate.getFullYear() === year && holidayDate.getMonth() === month
+    );
+  });
+};
+
+// Seçili tarihi izleyen ve tatil günlerini filtreleyen watch komutu
+const filteredHolidays = ref<{ date: string; label: string }[]>([]);
+const selectedMonthYear = computed(() => {
+  const [year, month] = selectedDate.value.split('/').map(Number);
+  return `${year} / ${String(month).padStart(2, '0')}`;
+});
+
+watch(
+  selectedDate,
+  (newDate) => {
+    const [year, month] = newDate.split('/').map(Number);
+    filteredHolidays.value = getMonthEvents(year, month - 1);
+  },
+  { immediate: true }
+);
+
+// Navigasyon (ay veya yıl değişikliği) olduğunda çalışacak fonksiyon
+const onNavigation = (view: { year: number; month: number }) => {
+  filteredHolidays.value = getMonthEvents(view.year, view.month - 1);
+};
 
 // Bugün ve Yarın butonlarına tıklandığında çalışacak fonksiyonlar
 const setSelectedDate = (dateString: string) => {
