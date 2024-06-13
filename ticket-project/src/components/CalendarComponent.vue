@@ -37,15 +37,12 @@
               flat
             />
           </div>
-          <!-- Tatil günleri listesi(o ayda tatil günü yoksa gözükme) -->
+          <!-- Tatil günleri listesi (o ayda tatil günü yoksa gözükme) -->
           <div v-if="filteredHolidays.length" class="q-mt-md">
-            <h6 class="text-red">{{ selectedMonthYear }} Ayındaki Tatiller</h6>
-            <ul>
-              <li v-for="holiday in filteredHolidays" :key="holiday.date">
-                {{ holiday.date }} - {{ holiday.label }}
-                <br />
-              </li>
-            </ul>
+            <template v-for="holiday in filteredHolidays" :key="holiday.date">
+              <span class="text-caption">- {{ formatHoliday(holiday) }}</span>
+              <br />
+            </template>
           </div>
         </template>
       </q-date>
@@ -179,5 +176,13 @@ const setSelectedDate = (dateString: string) => {
 const onDateUpdate = (value: string) => {
   selectedDate.value = value;
   showDatepicker.value = false; // Tarih seçildikten sonra datepicker'ı kapat
+};
+
+// Tatil günlerini formatlayan fonksiyon
+const formatHoliday = (holiday: { date: string; label: string }): string => {
+  const dateObj = new Date(holiday.date);
+  const day = dateObj.getDate();
+  const monthName = date.formatDate(dateObj, 'MMMM'); // Ay adını al
+  return `${day} ${monthName} - ${holiday.label}`;
 };
 </script>
