@@ -17,8 +17,6 @@
       </q-input>
       <q-date
         v-model="selectedDate"
-        subtitle="Tarih"
-        title="Bilet Tarihi Seçiniz"
         :navigation-min-year-month="minYearMonth"
         :navigation-max-year-month="maxYearMonth"
         :options="options"
@@ -29,6 +27,7 @@
         :modal="true"
         :persistent="true"
         v-if="showDatepicker"
+        class="custom-q-date"
       >
         <template v-slot:default>
           <div class="row items-center justify-end q-mt-md">
@@ -188,3 +187,9 @@ const formatHoliday = (holiday: { date: string; label: string }): string => {
   return `${day} ${monthName} - ${holiday.label}`;
 };
 </script>
+
+<style>
+.custom-q-date .q-date__header {
+  display: none; /* q-date headerı gizler */
+}
+</style>
