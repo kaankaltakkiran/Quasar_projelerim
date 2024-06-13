@@ -26,7 +26,16 @@
         :modal="true"
         :persistent="true"
         v-if="showDatepicker"
-      />
+      >
+        <div class="row items-center justify-end">
+          <q-btn
+            @click="showDatepicker = false"
+            label="Close"
+            color="primary"
+            flat
+          />
+        </div>
+      </q-date>
     </div>
     <div class="q-mt-md">
       <q-btn
