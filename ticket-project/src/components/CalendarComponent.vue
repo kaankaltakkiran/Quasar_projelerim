@@ -15,7 +15,6 @@
           />
         </template>
       </q-input>
-
       <q-date
         v-model="selectedDate"
         :navigation-min-year-month="minYearMonth"
@@ -27,6 +26,19 @@
         :modal="true"
         :persistent="true"
         v-if="showDatepicker"
+      />
+    </div>
+    <div class="q-mt-md">
+      <q-btn
+        label="Bugün"
+        color="primary"
+        @click="setSelectedDate(todayDate)"
+        class="q-mr-sm"
+      />
+      <q-btn
+        label="Yarın"
+        color="secondary"
+        @click="setSelectedDate(tomorrowDate)"
       />
     </div>
   </div>
@@ -91,6 +103,20 @@ const options = computed(() => {
 
   return optionsArray;
 });
+
+// Bugün ve Yarın butonları için fonksiyonlar
+const todayDate = date.formatDate(new Date(), 'YYYY/MM/DD');
+const tomorrowDate = (() => {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return date.formatDate(tomorrow, 'YYYY/MM/DD');
+})();
+
+// Bugün ve Yarın butonlarına tıklandığında çalışacak fonksiyonlar
+const setSelectedDate = (dateString: string) => {
+  selectedDate.value = dateString;
+  showDatepicker.value = false; // Tarih seçildikten sonra datepicker'ı kapat
+};
 
 const onDateUpdate = (value: string) => {
   selectedDate.value = value;
