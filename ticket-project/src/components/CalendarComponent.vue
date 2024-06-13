@@ -17,6 +17,8 @@
       </q-input>
       <q-date
         v-model="selectedDate"
+        subtitle="Tarih"
+        title="Bilet Tarihi Seçiniz"
         :navigation-min-year-month="minYearMonth"
         :navigation-max-year-month="maxYearMonth"
         :options="options"
