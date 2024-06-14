@@ -38,6 +38,7 @@
             label="Ödeme Sayfası"
           />
           <q-route-tab to="/calendar" exact name="calendar" label="Takvim" />
+          <q-route-tab to="/persons" exact name="persons" label="Kişiler" />
         </q-tabs>
         <!--Navbar menu end-->
       </q-toolbar>
@@ -60,6 +61,9 @@
         </q-item>
         <q-item clickable to="/calendar">
           <q-item-section>Takvim</q-item-section>
+        </q-item>
+        <q-item clickable to="/persons">
+          <q-item-section>Kişiler</q-item-section>
         </q-item>
       </q-list>
     </q-drawer>
