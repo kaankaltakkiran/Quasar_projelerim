@@ -131,6 +131,7 @@ const columns: QTableColumn[] = [
     label: 'Durum',
     field: 'user_status',
     sortable: true,
+    format: (val) => (val === '1' ? 'Aktif' : 'Pasif'), // durum değerini yazıya çevir
   },
 ];
 //gelen get adına göre veri çekme
