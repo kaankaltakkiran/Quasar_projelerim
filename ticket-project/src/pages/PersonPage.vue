@@ -137,7 +137,7 @@ const columns: QTableColumn[] = [
 //gelen get adına göre veri çekme
 const fetchUsers = async () => {
   try {
-    const response = await api.post('http://localhost/veri/ornek_api/api.php', {
+    const response = await api.post('api.php', {
       method: 'get-users',
     });
     console.log('Response:', response);
