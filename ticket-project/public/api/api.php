@@ -32,6 +32,10 @@ switch ($METHOD) {
 
         $response = fetchUsers($DB); // kullanıcıları getirme fonksiyonu
         break;
+    case 'add-user':
+        ################################### Add User ###################################
+        $response = addUser($DB, $data);
+        break;
 
     default:
         ################################### default ###################################
@@ -53,5 +57,19 @@ function fetchUsers($DB)
     $rows = $SORGU->fetchAll(PDO::FETCH_ASSOC);
     $response['success'] = true; // İşlem başarılı
     $response['users'] = $rows;
+    return $response;
+}
+
+function addUser($DB, $data)
+{
+    $sql = "INSERT INTO users (user_name, user_email, user_status) VALUES (:name, :email, :status)";
+    $SORGU = $DB->prepare($sql);
+    $SORGU->bindParam(':name', $data['name']);
+    $SORGU->bindParam(':email', $data['email']);
+    // status alanının value değerini doğrudan kaydet
+    $statusValue = $data['status']['value']; //value değerini kaydet
+    $SORGU->bindParam(':status', $statusValue);
+    $SORGU->execute();
+    $response['success'] = true; // İşlem başarılı
     return $response;
 }
