@@ -183,6 +183,7 @@ const onSubmit = async () => {
         position: 'top-right',
       });
       onReset(); //formu sıfırla
+      fetchUsers(); //tabloyu güncelle
     } else {
       $q.notify({
         color: 'red-5',
