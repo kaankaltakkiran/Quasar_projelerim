@@ -74,6 +74,7 @@
               color="negative"
               class="q-mr-sm"
               icon="delete"
+              @click="confirmDeleteUser(props.row.id)"
             />
             <q-btn size="md" color="positive" icon="update" />
           </q-td>
@@ -81,11 +82,29 @@
       </q-table>
     </div>
   </div>
+  <!-- Silme işlemi için dialog -->
+  <q-dialog v-model="confirm" persistent>
+    <q-card style="width: 700px; max-width: 80vw">
+      <q-card-section class="row items-center">
+        <span class="q-ml-sm">Kayıdı silmek istediğinizden emin misiniz ?</span>
+      </q-card-section>
+      <q-card-actions align="right">
+        <q-btn flat label="İptal" color="red" @click="confirm = false" />
+        <!-- id null değilse silme işlemi çalışacak -->
+        <q-btn
+          flat
+          label="Evet"
+          color="primary"
+          @click="deleteUser(selectedUserId!)"
+        />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup lang="ts">
 import { useQuasar, QTableColumn } from 'quasar';
-import { ref, onMounted } from 'vue';
+import { ref, Ref, onMounted } from 'vue';
 import { api } from 'boot/axios'; //axios instance
 import { IPerson } from 'src/models/model';
 
@@ -98,6 +117,10 @@ const accept = ref<boolean>(false);
 const status = ref<string[]>([]);
 // tablo verileri
 const rows = ref<IPerson[]>([]); // tablo verilerini tut
+// silme işlemi için onay kutusu
+const confirm: Ref<boolean> = ref(false);
+// silinecek kullanıcının id'si
+const selectedUserId: Ref<number | null> = ref(null);
 
 //select options
 const options = [
@@ -145,7 +168,7 @@ const columns: QTableColumn[] = [
     sortable: true,
     format: (val) => (val === '1' ? 'Aktif' : 'Pasif'), // durum değerini yazıya çevir
   },
-  { name: 'actions', align: 'center', label: 'Actions', field: 'actions' },
+  { name: 'actions', align: 'center', label: 'İşlemler', field: 'actions' },
 ];
 
 //gelen get adına göre veri çekme
@@ -154,12 +177,31 @@ const fetchUsers = async () => {
     const response = await api.post('api.php', {
       method: 'get-users',
     });
-    console.log('Response:', response);
+    // console.log('Response:', response);
     if (response.data.success === true) {
       rows.value = response.data.users; // tablo verilerini doldur
     }
   } catch (error) {
     console.error('Error fetching data:', error);
+  }
+};
+// silme işlemi için onay verilirse id'si verilen kullanıcıyı sil
+const confirmDeleteUser = (id: number) => {
+  selectedUserId.value = id;
+  confirm.value = true;
+};
+// id'si verilen kullanıcıyı sil
+const deleteUser = async (id: number) => {
+  console.log('Deleting user:', id);
+  try {
+    await api.post('api.php', {
+      id,
+      method: 'delete-user',
+    });
+    confirm.value = false;
+    fetchUsers(); // tabloyu güncelle
+  } catch (error) {
+    console.error('Error deleting user:', error);
   }
 };
 // sayfa yüklendiğinde verileri çek
