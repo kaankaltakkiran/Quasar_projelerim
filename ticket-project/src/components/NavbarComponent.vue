@@ -53,7 +53,7 @@
       bordered
     >
       <q-list>
-        <q-item clickable to="/">
+        <q-item clickable exact to="/">
           <q-item-section>Ana Sayfa</q-item-section>
         </q-item>
         <q-item clickable to="/payment">
@@ -77,7 +77,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 //ref ile tab ve leftDrawerOpen değişkenlerini oluşturduk
-const tab = ref('home');
+const tab = ref('');
 const leftDrawerOpen = ref(false);
 //toggleLeftDrawer fonksiyonu ile leftDrawer'ı açıp kapatıyoruz
 function toggleLeftDrawer() {
