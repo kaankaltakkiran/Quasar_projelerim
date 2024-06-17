@@ -44,7 +44,6 @@
   <div class="row justify-center q-gutter-x-md q-mt-md">
     <div class="col-xs-12 col-sm-6 col-md-10 q-mt-md">
       <q-table
-        :grid="$q.screen.xs"
         flat
         bordered
         title="Kişi Listesi"
@@ -65,6 +64,19 @@
               <q-icon name="search" />
             </template>
           </q-input>
+        </template>
+        <!-- Silme ve güncelleme butonları -->
+        <template v-slot:body-cell-actions="props">
+          <q-td :props="props">
+            <q-btn
+              size="md"
+              round
+              color="negative"
+              class="q-mr-sm"
+              icon="delete"
+            />
+            <q-btn size="md" color="positive" icon="update" />
+          </q-td>
         </template>
       </q-table>
     </div>
@@ -133,7 +145,9 @@ const columns: QTableColumn[] = [
     sortable: true,
     format: (val) => (val === '1' ? 'Aktif' : 'Pasif'), // durum değerini yazıya çevir
   },
+  { name: 'actions', align: 'center', label: 'Actions', field: 'actions' },
 ];
+
 //gelen get adına göre veri çekme
 const fetchUsers = async () => {
   try {
