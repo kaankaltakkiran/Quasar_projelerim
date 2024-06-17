@@ -47,12 +47,11 @@
         :grid="$q.screen.xs"
         flat
         bordered
-        title="Treats"
+        title="Kişi Listesi"
         :rows="rows"
         :columns="columns"
-        row-key="name"
+        row-key="id"
         :filter="filter"
-        hide-header
       >
         <template v-slot:top-right>
           <q-input
@@ -60,7 +59,7 @@
             dense
             debounce="300"
             v-model="filter"
-            placeholder="Search"
+            placeholder="Ara"
           >
             <template v-slot:append>
               <q-icon name="search" />
@@ -73,10 +72,10 @@
 </template>
 
 <script setup lang="ts">
-import { useQuasar } from 'quasar';
-import { ref } from 'vue';
-import { QTableColumn } from 'quasar';
+import { useQuasar, QTableColumn } from 'quasar';
+import { ref, onMounted } from 'vue';
 import { api } from 'boot/axios'; //axios instance
+import { IPerson } from 'src/models/model';
 
 const $q = useQuasar();
 //form verileri
@@ -85,6 +84,8 @@ const name = ref<string | null>(null);
 const email = ref<string | null>(null);
 const accept = ref<boolean>(false);
 const status = ref<string[]>([]);
+// tablo verileri
+const rows = ref<IPerson[]>([]); // tablo verilerini tut
 
 //select options
 const options = [
@@ -97,6 +98,7 @@ const options = [
     value: '1',
   },
 ];
+
 //email için kurallar
 const emailRules = [
   (val: string) => !!val || 'Lütfen email adresinizi giriniz',
@@ -106,6 +108,49 @@ const emailRules = [
   },
 ];
 
+// tablo sütunlarını belirle
+const columns: QTableColumn[] = [
+  { name: 'id', align: 'left', label: 'Kayıt No', field: 'id', sortable: true },
+  {
+    name: 'user_name',
+    align: 'left',
+    label: 'İsim',
+    field: 'user_name',
+    sortable: true,
+  },
+  {
+    name: 'user_email',
+    align: 'center',
+    label: 'Email',
+    field: 'user_email',
+    sortable: true,
+  },
+  {
+    name: 'user_status',
+    align: 'center',
+    label: 'Durum',
+    field: 'user_status',
+    sortable: true,
+  },
+];
+//gelen get adına göre veri çekme
+const fetchUsers = async () => {
+  try {
+    const response = await api.post('http://localhost/veri/ornek_api/api.php', {
+      method: 'get-users',
+    });
+    console.log('Response:', response);
+    if (response.data.success === true) {
+      rows.value = response.data.users; // tablo verilerini doldur
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+// sayfa yüklendiğinde verileri çek
+onMounted(() => {
+  fetchUsers();
+});
 //form submit edilmişse
 const onSubmit = async () => {
   if (!accept.value) {
@@ -164,92 +209,4 @@ const onReset = () => {
   accept.value = false;
   status.value = [];
 };
-interface Row {
-  name: string;
-  calories: number;
-  fat: number;
-  carbs: number;
-}
-const columns: QTableColumn[] = [
-  {
-    name: 'desc',
-    required: true,
-    label: 'Dessert (100g serving)',
-    align: 'left',
-    field: (row: Row) => row.name,
-    format: (val: string) => `${val}`,
-    sortable: true,
-  },
-  {
-    name: 'calories',
-    align: 'center',
-    label: 'Calories',
-    field: 'calories',
-    sortable: true,
-  },
-  { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-  { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-];
-const rows: Row[] = [
-  {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-  },
-  {
-    name: 'Ice cream sandwich',
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-  },
-  {
-    name: 'Eclair',
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-  },
-  {
-    name: 'Cupcake',
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-  },
-  {
-    name: 'Jelly bean',
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-  },
-  {
-    name: 'Lollipop',
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-    fat: 25.0,
-    carbs: 51,
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-    fat: 26.0,
-    carbs: 65,
-  },
-];
 </script>

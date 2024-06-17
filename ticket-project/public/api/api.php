@@ -66,7 +66,6 @@ function addUser($DB, $data)
     $SORGU = $DB->prepare($sql);
     $SORGU->bindParam(':name', $data['name']);
     $SORGU->bindParam(':email', $data['email']);
-    // status alanının value değerini doğrudan kaydet
     $statusValue = $data['status']['value']; //value değerini kaydet
     $SORGU->bindParam(':status', $statusValue);
     $SORGU->execute();
