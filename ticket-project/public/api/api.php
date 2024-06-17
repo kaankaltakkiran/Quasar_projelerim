@@ -37,6 +37,11 @@ switch ($METHOD) {
         $response = addUser($DB, $data);
         break;
 
+    case 'delete-user':
+        ################################### Delete User ###################################
+        $response = deleteUser($DB, $data);
+        break;
+
     default:
         ################################### default ###################################
         $response['error'] = "`method` adı geçerli değil";
@@ -66,9 +71,23 @@ function addUser($DB, $data)
     $SORGU = $DB->prepare($sql);
     $SORGU->bindParam(':name', $data['name']);
     $SORGU->bindParam(':email', $data['email']);
+    // status alanının value değerini doğrudan kaydet
     $statusValue = $data['status']['value']; //value değerini kaydet
     $SORGU->bindParam(':status', $statusValue);
     $SORGU->execute();
     $response['success'] = true; // İşlem başarılı
     return $response;
+}
+
+function deleteUser($DB, $data)
+{
+    if (isset($data['id'])) {
+        $sql = "DELETE FROM users WHERE id = :id";
+        $SORGU = $DB->prepare($sql);
+        $SORGU->bindParam(':id', $data['id']);
+        $SORGU->execute();
+        $response['success'] = true; // İşlem başarılı
+    } else {
+        $response['error'] = "ID parameter is missing"; //id yoksa
+    }
 }
