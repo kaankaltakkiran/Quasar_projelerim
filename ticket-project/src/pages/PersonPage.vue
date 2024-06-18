@@ -76,7 +76,12 @@
               icon="delete"
               @click="confirmDeleteUser(props.row.id)"
             />
-            <q-btn size="md" color="positive" icon="update" />
+            <q-btn
+              size="md"
+              color="positive"
+              @click="openUpdateDialog(props.row)"
+              icon="update"
+            />
           </q-td>
         </template>
       </q-table>
@@ -100,11 +105,52 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
+  <!-- Güncelleme işlemi için dialog -->
+  <q-dialog v-model="updateDialog" persistent>
+    <q-card style="width: 700px; max-width: 80vw">
+      <q-card-section>
+        <div class="text-h6 text-center text-deep-orange">
+          Kullanıcıyı Güncelle
+        </div>
+      </q-card-section>
+      <q-card-section>
+        <q-input
+          filled
+          v-model="selectedUser.user_name"
+          label="Your name *"
+          hint="Name "
+          lazy-rules
+          :rules="[(val) => (val && val.length > 0) || 'Boş bırakılamaz']"
+        />
+        <q-input
+          filled
+          v-model="selectedUser.user_email"
+          label="Email *"
+          hint="Email adresinizi giriniz"
+          lazy-rules
+          :rules="emailRules"
+        />
+        <div class="rounded-borders q-my-md">Select User Status</div>
+        <q-option-group
+          v-model="selectedUser.user_status"
+          :options="options"
+          color="red"
+          inline
+          dense
+        >
+        </q-option-group>
+      </q-card-section>
+      <q-card-actions align="right">
+        <q-btn flat label="İptal" color="negative" @click="closeUpdateDialog" />
+        <q-btn flat label="Kaydet" color="primary" @click="updateUser" />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup lang="ts">
 import { useQuasar, QTableColumn } from 'quasar';
-import { ref, Ref, onMounted } from 'vue';
+import { ref, Ref, onMounted, watch } from 'vue';
 import { api } from 'boot/axios'; //axios instance
 import { IPerson } from 'src/models/model';
 
@@ -115,12 +161,19 @@ const name = ref<string | null>(null);
 const email = ref<string | null>(null);
 const accept = ref<boolean>(false);
 const status = ref<string[]>([]);
+// iptal durumunu belirlemek için bir değişken ekleyin
+const wasCancelled = ref(false);
+
 // tablo verileri
 const rows = ref<IPerson[]>([]); // tablo verilerini tut
 // silme işlemi için onay kutusu
 const confirm: Ref<boolean> = ref(false);
 // silinecek kullanıcının id'si
 const selectedUserId: Ref<number | null> = ref(null);
+// Partial(typesciprt değişkeni) ile sadece belirli alanları güncelleyebiliriz(isteğe bağlı)
+const selectedUser: Ref<Partial<IPerson>> = ref({});
+// güncelleme işlemi için dialog
+const updateDialog: Ref<boolean> = ref(false);
 
 //select options
 const options = [
@@ -192,7 +245,7 @@ const confirmDeleteUser = (id: number) => {
 };
 // id'si verilen kullanıcıyı sil
 const deleteUser = async (id: number) => {
-  console.log('Deleting user:', id);
+  // console.log('Deleting user:', id);
   try {
     await api.post('api.php', {
       id,
@@ -204,6 +257,94 @@ const deleteUser = async (id: number) => {
     console.error('Error deleting user:', error);
   }
 };
+
+// ...user, user objesinin tüm özelliklerinin selectedUser.value'a kopyalanmasını sağlar.
+const openUpdateDialog = (user: IPerson) => {
+  selectedUser.value = { ...user };
+  updateDialog.value = true;
+  wasCancelled.value = false; // dialog açıldığında iptal durumu resetlenir
+};
+// güncelleme işlemi için dialogu kapat
+const closeUpdateDialog = () => {
+  updateDialog.value = false;
+  wasCancelled.value = true; // dialog açıldığında iptal durumu resetlenir
+};
+
+// güncelleme işlemi için kullanıcıyı güncelle
+const updateUser = async () => {
+  if (
+    selectedUser.value.id !== undefined &&
+    selectedUser.value.user_name !== undefined &&
+    selectedUser.value.user_email !== undefined &&
+    selectedUser.value.user_status !== undefined
+  ) {
+    try {
+      const response = await api.post('api.php', {
+        id: selectedUser.value.id,
+        name: selectedUser.value.user_name,
+        email: selectedUser.value.user_email,
+        status: selectedUser.value.user_status,
+        method: 'update-user',
+      });
+      console.log('Response:', response);
+      if (response.data.success === true) {
+        // Kullanıcıyı bul ve yerel rows dizisini güncelle
+        const index = rows.value.findIndex(
+          (user) => user.id === selectedUser.value.id
+        );
+        if (index !== -1) {
+          rows.value[index] = {
+            id: selectedUser.value.id,
+            user_name: selectedUser.value.user_name,
+            user_email: selectedUser.value.user_email,
+            user_status: selectedUser.value.user_status,
+          };
+        }
+        updateDialog.value = false;
+        $q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'Kullanıcı başarıyla güncellendi',
+          position: 'top-right',
+        });
+      } else {
+        $q.notify({
+          color: 'red-5',
+          textColor: 'white',
+          icon: 'warning',
+          message: 'Kullanıcı güncellenirken bir hata oluştu',
+          position: 'top-right',
+        });
+      }
+    } catch (error) {
+      console.error('Error updating user:', error);
+      $q.notify({
+        color: 'red-5',
+        textColor: 'white',
+        icon: 'warning',
+        message: 'Kullanıcı güncellenirken bir hata oluştu',
+        position: 'top-right',
+      });
+    }
+  }
+};
+
+// Dialog kapandığında notify mesajı göstermek için watch kullan
+watch(updateDialog, (newVal, oldVal) => {
+  if (oldVal === true && newVal === false) {
+    if (wasCancelled.value) {
+      $q.notify({
+        color: 'orange-4',
+        textColor: 'white',
+        icon: 'warning',
+        message: 'İşlem iptal edildi',
+        position: 'top-right',
+      });
+    }
+  }
+});
+
 // sayfa yüklendiğinde verileri çek
 onMounted(() => {
   fetchUsers();
