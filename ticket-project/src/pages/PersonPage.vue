@@ -34,15 +34,15 @@
         />
       </div>
       <div class="col-xs-12 col-sm-6 col-md-2">
-        <q-toggle v-model="accept" label="I accept the license and terms" />
+        <q-toggle v-model="accept" label="Lisansı ve şartları kabul ediyorum" />
       </div>
       <div class="col-xs-12 col-sm-6 col-md-2 q-mt-md">
-        <q-btn label="Submit" type="submit" color="primary" />
+        <q-btn label="Kaydet" type="submit" icon-right="send" color="primary" />
       </div>
     </div>
   </q-form>
   <div class="row justify-center q-gutter-x-md q-mt-md">
-    <div class="col-xs-12 col-sm-6 col-md-10 q-mt-md">
+    <div class="col-xs-12 col-sm-6 col-md-11 q-mt-md">
       <q-table
         flat
         bordered
@@ -80,7 +80,7 @@
               size="md"
               color="positive"
               @click="openUpdateDialog(props.row)"
-              icon="update"
+              icon="edit"
             />
           </q-td>
         </template>
@@ -90,16 +90,24 @@
   <!-- Silme işlemi için dialog -->
   <q-dialog v-model="confirm" persistent>
     <q-card style="width: 700px; max-width: 80vw">
+      <div class="row justify-end">
+        <q-btn dense icon="close" flat @click="cancelDeletion" />
+      </div>
       <q-card-section class="row items-center">
         <span class="q-ml-sm">Kayıdı silmek istediğinizden emin misiniz ?</span>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn flat label="İptal" color="red" @click="cancelDeletion" />
+        <q-btn
+          label="İptal"
+          icon-right="cancel"
+          color="red"
+          @click="cancelDeletion"
+        />
         <!-- id null değilse silme işlemi çalışacak -->
         <q-btn
-          flat
           label="Evet"
           color="primary"
+          icon-right="check"
           @click="deleteUser(selectedUserId!)"
         />
       </q-card-actions>
@@ -108,6 +116,9 @@
   <!-- Güncelleme işlemi için dialog -->
   <q-dialog v-model="updateDialog" persistent>
     <q-card style="width: 700px; max-width: 80vw">
+      <div class="row justify-end">
+        <q-btn dense icon="close" flat @click="closeUpdateDialog" />
+      </div>
       <q-card-section>
         <div class="text-h6 text-center text-deep-orange">
           Kullanıcıyı Güncelle
@@ -141,8 +152,18 @@
         </q-option-group>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn flat label="İptal" color="negative" @click="closeUpdateDialog" />
-        <q-btn flat label="Kaydet" color="primary" @click="updateUser" />
+        <q-btn
+          label="İptal"
+          icon-right="cancel"
+          color="negative"
+          @click="closeUpdateDialog"
+        />
+        <q-btn
+          icon-right="check_circle"
+          label="Kaydet"
+          color="primary"
+          @click="updateUser"
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>
