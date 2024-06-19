@@ -333,20 +333,31 @@ const updateUser = async () => {
   }
 };
 
-// Dialog kapandığında notify mesajı göstermek için watch kullan
-watch(updateDialog, (newVal, oldVal) => {
-  if (oldVal === true && newVal === false) {
-    if (wasCancelled.value) {
+// Dialoglar kapanırken notify mesajı göstermek için watch kullan
+watch(
+  [updateDialog, confirm],
+  ([newUpdateDialog, newConfirm], [oldUpdateDialog, oldConfirm]) => {
+    if (
+      (oldUpdateDialog === true &&
+        newUpdateDialog === false &&
+        wasCancelled.value) ||
+      (oldConfirm === true &&
+        newConfirm === false &&
+        selectedUserId.value !== null)
+    ) {
       $q.notify({
         color: 'orange-4',
         textColor: 'white',
         icon: 'warning',
-        message: 'Vazgeçildi',
+        message: 'Vazgeçtiniz',
         position: 'top-right',
       });
+      if (oldConfirm === true && newConfirm === false) {
+        selectedUserId.value = null; // İptal edildiğinde seçili kullanıcıyı sıfırla
+      }
     }
   }
-});
+);
 
 // sayfa yüklendiğinde verileri çek
 onMounted(() => {
