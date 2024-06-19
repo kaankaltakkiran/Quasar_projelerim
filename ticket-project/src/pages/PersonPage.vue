@@ -30,7 +30,7 @@
           v-model="status"
           :options="options"
           style="width: 250px"
-          :rules="[(val) => !!val || 'Please select a status']"
+          :rules="submitted ? statusRules : []"
         />
       </div>
       <div class="col-xs-12 col-sm-6 col-md-2">
@@ -157,10 +157,11 @@ import { IPerson } from 'src/models/model';
 const $q = useQuasar();
 //form verileri
 const filter = ref('');
+const submitted = ref(false);
 const name = ref<string | null>(null);
 const email = ref<string | null>(null);
 const accept = ref<boolean>(false);
-const status = ref<string[]>([]);
+const status = ref<string | null>(null); // Null olarak başlatıldı, çünkü başlangıçta bir değer seçilmemiş olabilir
 // iptal durumunu belirlemek için bir değişken ekleyin
 const wasCancelled = ref(false);
 
@@ -194,6 +195,9 @@ const emailRules = [
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(val) || 'Geçersiz email adresi';
   },
+];
+const statusRules = [
+  (val: string | null) => !!val || 'Lütfen bir durum seçiniz',
 ];
 
 // tablo sütunlarını belirle
@@ -340,7 +344,8 @@ onMounted(() => {
 });
 //form submit edilmişse
 const onSubmit = async () => {
-  if (!accept.value) {
+  submitted.value = true; // Mark the form as submitted
+  if (!name.value || !email.value || !status.value || !accept.value) {
     triggerNotification('Lisans ve şartları kabul etmelisiniz !', 'negative');
     return;
   }
@@ -368,10 +373,11 @@ const onSubmit = async () => {
 };
 //formu sıfırla
 const onReset = () => {
+  submitted.value = false;
   name.value = null;
   email.value = null;
   accept.value = false;
-  status.value = [];
+  status.value = null;
 };
 
 //mesaj durumuna göre bildirim göster
