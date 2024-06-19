@@ -272,6 +272,7 @@ const closeUpdateDialog = () => {
 
 // güncelleme işlemi için kullanıcıyı güncelle
 const updateUser = async () => {
+  //gelen verilerin boş olup olmadığını kontrol et
   if (
     selectedUser.value.id !== undefined &&
     selectedUser.value.user_name !== undefined &&
@@ -279,6 +280,7 @@ const updateUser = async () => {
     selectedUser.value.user_status !== undefined
   ) {
     try {
+      //apiye güncelleme işlemi için verileri gönder
       const response = await api.post('api.php', {
         id: selectedUser.value.id,
         name: selectedUser.value.user_name,
@@ -286,12 +288,13 @@ const updateUser = async () => {
         status: selectedUser.value.user_status,
         method: 'update-user',
       });
-      console.log('Response:', response);
+      //console.log('Response:', response);
       if (response.data.success === true) {
         // Kullanıcıyı bul ve yerel rows dizisini güncelle
         const index = rows.value.findIndex(
           (user) => user.id === selectedUser.value.id
         );
+        //eğer kullanıcı bulunursa
         if (index !== -1) {
           rows.value[index] = {
             id: selectedUser.value.id,
@@ -338,7 +341,7 @@ watch(updateDialog, (newVal, oldVal) => {
         color: 'orange-4',
         textColor: 'white',
         icon: 'warning',
-        message: 'İşlem iptal edildi',
+        message: 'Vazgeçildi',
         position: 'top-right',
       });
     }

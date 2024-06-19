@@ -41,6 +41,10 @@ switch ($METHOD) {
         ################################### Delete User ###################################
         $response = deleteUser($DB, $data);
         break;
+    case 'update-user':
+        ################################### Update User ###################################
+        $response = updateUser($DB, $data);
+        break;
 
     default:
         ################################### default ###################################
@@ -90,4 +94,28 @@ function deleteUser($DB, $data)
     } else {
         $response['error'] = "ID parameter is missing"; //id yoksa
     }
+    return $response;
+}
+
+function updateUser($DB, $data)
+{
+
+    if (isset($data['id'])) {
+        $sql = "UPDATE users SET user_name = :name, user_email = :email, user_status = :status WHERE id = :id";
+        $SORGU = $DB->prepare($sql);
+        $SORGU->bindParam(':id', $data['id']);
+        $SORGU->bindParam(':name', $data['name']);
+        $SORGU->bindParam(':email', $data['email']);
+        // status alanının value değerini doğrudan kaydet
+        $statusValue = $data['status']['value']; //value değerini kaydet
+        $SORGU->bindParam(':status', $statusValue);
+        $SORGU->execute();
+        $response['success'] = true;
+
+    } else {
+        $response['success'] = false;
+        $response['error'] = "ID parameter is missing";
+    }
+
+    return $response; 
 }
