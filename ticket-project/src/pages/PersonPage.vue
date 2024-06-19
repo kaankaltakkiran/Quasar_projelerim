@@ -94,7 +94,7 @@
         <span class="q-ml-sm">Kayıdı silmek istediğinizden emin misiniz ?</span>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn flat label="İptal" color="red" @click="confirm = false" />
+        <q-btn flat label="İptal" color="red" @click="cancelDeletion" />
         <!-- id null değilse silme işlemi çalışacak -->
         <q-btn
           flat
@@ -243,6 +243,10 @@ const confirmDeleteUser = (id: number) => {
   selectedUserId.value = id;
   confirm.value = true;
 };
+const cancelDeletion = () => {
+  confirm.value = false;
+  triggerInfo('İşlem iptal edildi');
+};
 // id'si verilen kullanıcıyı sil
 const deleteUser = async (id: number) => {
   // console.log('Deleting user:', id);
@@ -252,6 +256,7 @@ const deleteUser = async (id: number) => {
       method: 'delete-user',
     });
     confirm.value = false;
+    triggerNotification('Kullanıcı başarıyla silindi', 'positive');
     fetchUsers(); // tabloyu güncelle
   } catch (error) {
     console.error('Error deleting user:', error);
@@ -304,60 +309,30 @@ const updateUser = async () => {
           };
         }
         updateDialog.value = false;
-        $q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message: 'Kullanıcı başarıyla güncellendi',
-          position: 'top-right',
-        });
+        triggerNotification('Kullanıcı başarıyla güncellendi', 'positive');
       } else {
-        $q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'warning',
-          message: 'Kullanıcı güncellenirken bir hata oluştu',
-          position: 'top-right',
-        });
+        triggerNotification(
+          'Kullanıcı güncellenirken bir hata oluştu',
+          'negative'
+        );
       }
     } catch (error) {
       console.error('Error updating user:', error);
-      $q.notify({
-        color: 'red-5',
-        textColor: 'white',
-        icon: 'warning',
-        message: 'Kullanıcı güncellenirken bir hata oluştu',
-        position: 'top-right',
-      });
+      triggerNotification(
+        'Kullanıcı güncellenirken bir hata oluştu',
+        'negative'
+      );
     }
   }
 };
-
-// Dialoglar kapanırken notify mesajı göstermek için watch kullan
-watch(
-  [updateDialog, confirm],
-  ([newUpdateDialog, newConfirm], [oldUpdateDialog, oldConfirm]) => {
-    if (
-      (oldUpdateDialog === true &&
-        newUpdateDialog === false &&
-        wasCancelled.value) ||
-      (oldConfirm === true &&
-        newConfirm === false &&
-        selectedUserId.value !== null)
-    ) {
-      $q.notify({
-        color: 'orange-4',
-        textColor: 'white',
-        icon: 'warning',
-        message: 'Vazgeçtiniz',
-        position: 'top-right',
-      });
-      if (oldConfirm === true && newConfirm === false) {
-        selectedUserId.value = null; // İptal edildiğinde seçili kullanıcıyı sıfırla
-      }
+// Dialog kapandığında notify mesajı göstermek için watch kullan
+watch(updateDialog, (newVal, oldVal) => {
+  if (oldVal === true && newVal === false) {
+    if (wasCancelled.value) {
+      triggerInfo('İşlem iptal edildi');
     }
   }
-);
+});
 
 // sayfa yüklendiğinde verileri çek
 onMounted(() => {
@@ -366,13 +341,7 @@ onMounted(() => {
 //form submit edilmişse
 const onSubmit = async () => {
   if (!accept.value) {
-    $q.notify({
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      message: 'You need to accept the license and terms first',
-      position: 'top-right',
-    });
+    triggerNotification('Lisans ve şartları kabul etmelisiniz !', 'negative');
     return;
   }
   try {
@@ -383,36 +352,18 @@ const onSubmit = async () => {
       status: status.value,
       method: 'add-user',
     });
-    console.log('Response:', response);
+    // console.log('Response:', response);
     //işlem başarılıysa
     if (response.data.success === true) {
-      $q.notify({
-        color: 'green-4',
-        textColor: 'white',
-        icon: 'cloud_done',
-        message: 'User added successfully',
-        position: 'top-right',
-      });
+      triggerNotification('Kullanıcı başarıyla eklendi', 'positive');
       onReset(); //formu sıfırla
       fetchUsers(); //tabloyu güncelle
     } else {
-      $q.notify({
-        color: 'red-5',
-        textColor: 'white',
-        icon: 'warning',
-        message: 'An error occurred while sending the form',
-        position: 'top-right',
-      });
+      triggerNotification('form gönderilirken bir hata oluştu', 'negative');
     }
   } catch (error) {
     console.error('Error sending form:', error);
-    $q.notify({
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      message: 'An error occurred while sending the form',
-      position: 'top-right',
-    });
+    triggerNotification('form gönderilirken bir hata oluştu', 'negative');
   }
 };
 //formu sıfırla
@@ -421,5 +372,31 @@ const onReset = () => {
   email.value = null;
   accept.value = false;
   status.value = [];
+};
+
+//mesaj durumuna göre bildirim göster
+const triggerNotification = (
+  message: string,
+  type: 'positive' | 'negative'
+) => {
+  $q.notify({
+    color: type === 'positive' ? 'green-4' : 'red-5',
+    textColor: 'white',
+    icon: type === 'positive' ? 'cloud_done' : 'warning',
+    message,
+    position: 'top-right',
+    timeout: 1000,
+  });
+};
+//bilgi mesajı göster
+const triggerInfo = (message: string) => {
+  $q.notify({
+    color: 'blue-5',
+    textColor: 'white',
+    icon: 'info',
+    message,
+    position: 'top-right',
+    timeout: 1000,
+  });
 };
 </script>
