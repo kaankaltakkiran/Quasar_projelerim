@@ -12,7 +12,10 @@
         filled
         style="width: 250px"
       />
-      Gidiş Yeri: {{ departureStation }}
+
+      <q-badge color="secondary" multi-line>
+        Gidiş Yeri: {{ departureStation }}
+      </q-badge>
     </div>
     <div class="col-lg-3 col-md-6 col-12 q-pa-md">
       <q-select
@@ -24,7 +27,10 @@
         filled
         style="width: 250px"
       />
-      Varış Yeri: {{ arrivalStation }}
+
+      <q-badge color="secondary" multi-line>
+        Varış Yeri: {{ arrivalStation }}
+      </q-badge>
     </div>
   </div>
 </template>
