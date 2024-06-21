@@ -4,7 +4,7 @@
     <!-- 1. Satır -->
     <div class="col-lg-3 col-md-6 col-12 q-pa-md">
       <q-select
-        v-model="selectedDepartureStation"
+        v-model="departureStation"
         :options="stationNames"
         label="Gidiş"
         transition-show="scale"
@@ -12,15 +12,15 @@
         filled
         style="width: 250px"
         clearable
-        @update:model-value="updateArrivalOptions"
+        @update:model-value="handleDepartureChange"
       />
       <q-badge color="secondary" multi-line>
-        Gidiş Yeri: {{ selectedDepartureStation }}
+        Gidiş Yeri: {{ departureStation }}
       </q-badge>
     </div>
     <div class="col-lg-3 col-md-6 col-12 q-pa-md">
       <q-select
-        v-model="selectedArrivalStation"
+        v-model="arrivalStation"
         :options="arrivalOptions"
         label="Dönüş"
         transition-show="scale"
@@ -30,7 +30,7 @@
         clearable
       />
       <q-badge color="secondary" multi-line>
-        Varış Yeri: {{ selectedArrivalStation }}
+        Varış Yeri: {{ arrivalStation }}
       </q-badge>
     </div>
   </div>
@@ -40,19 +40,12 @@
 import { ref } from 'vue';
 import { IStation } from 'src/models/model';
 
-// Gidiş ve dönüş yerlerini tutacak değişkenler
-const selectedDepartureStation = ref<string | null>(null);
-const selectedArrivalStation = ref<string | null>(null);
-
-// Varış yerlerini tutacak değişken
-const arrivalOptions = ref<string[]>([]);
-
 // Station bilgileri
 const stations: IStation[] = [
   { id: '9', name: 'ANKARA AŞTİ', targets: [3, 25, 12, 19, 11] },
   { id: '2', name: 'İSTANBUL( AVRUPA )', targets: [19, 11] },
   { id: '4', name: 'İSTANBUL( DUDULLU )', targets: [12, 11] },
-  { id: '3', name: 'ÇANKIRI OTOGAR', targets: [2, 11] },
+  { id: '3', name: 'ÇANKIRI OTOGAR', targets: [3, 11] },
   { id: '6', name: 'KASTAMONU OTOGAR', targets: [3, 19, 11] },
   { id: '25', name: 'ALİBEYKÖY', targets: [3, 19, 11] },
   { id: '20', name: 'ARAÇ', targets: [3, 25, 12, 19, 11] },
@@ -86,23 +79,41 @@ const stations: IStation[] = [
 // Stationdaki isimleri listeliyor
 const stationNames = stations.map((station) => station.name);
 
+// Gidiş ve varış seçeneklerini tutacak değişkenler
+const departureStation = ref<string | null>(stationNames[0]);
+const arrivalOptions = ref<string[]>([]);
+const arrivalStation = ref<string | null>(null);
+
 // Seçilen gidiş yeri değiştiğinde varış yerlerini güncelleyen fonksiyon
 const updateArrivalOptions = (selected: string | null) => {
   if (selected) {
-    // Seçilen gidiş yeri bilgilerini alıyor
+    // Seçilen istasyonu bul
     const selectedStation = stations.find(
       (station) => station.name === selected
     );
-    // Seçilen gidiş yerine göre varış yerlerini güncelliyor
+    // Seçilen istasyonun varış yerlerini bul
     if (selectedStation) {
       arrivalOptions.value = stations
         .filter(
-          (station) => selectedStation.targets.includes(parseInt(station.id)) //parseInt ile string olan id'yi number'a çeviriyor
+          (station) => selectedStation.targets.includes(parseInt(station.id)) // İstasyonun hedeflerinde varsa int'e çevirip eşleştir
         )
         .map((station) => station.name);
+    } else {
+      arrivalOptions.value = [];
     }
   } else {
     arrivalOptions.value = [];
   }
 };
+
+// Gidiş yeri değiştiğinde dönüş yerini boşaltan fonksiyon
+const handleDepartureChange = (selected: string | null) => {
+  updateArrivalOptions(selected);
+  arrivalStation.value = null;
+};
+
+// İlk yüklemede varış seçeneklerini güncelle ve ilk varış yerini ayarla
+updateArrivalOptions(departureStation.value);
+arrivalStation.value =
+  arrivalOptions.value.length > 0 ? arrivalOptions.value[0] : null;
 </script>
