@@ -11,7 +11,6 @@
         transition-hide="scale"
         filled
         style="width: 250px"
-        clearable
         @update:model-value="handleDepartureChange"
       />
       <q-badge color="secondary" multi-line>
@@ -27,7 +26,6 @@
         transition-hide="scale"
         filled
         style="width: 250px"
-        clearable
       />
       <q-badge color="secondary" multi-line>
         Varış Yeri: {{ arrivalStation }}
