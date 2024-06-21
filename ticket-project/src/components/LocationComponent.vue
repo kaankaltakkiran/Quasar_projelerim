@@ -11,6 +11,7 @@
         transition-hide="scale"
         filled
         style="width: 250px"
+        clearable
       />
 
       <q-badge color="secondary" multi-line>
@@ -26,6 +27,7 @@
         transition-hide="scale"
         filled
         style="width: 250px"
+        clearable
       />
 
       <q-badge color="secondary" multi-line>
