@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "f1412f99-5c01-4f96-b569-4b36ca3de2de",
+		"name": "Ticket Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "35946335"
+	},
+	"item": [
+		{
+			"name": "get users",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"method\": \"get-users\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost/veri/ticket_project/api.php"
+			},
+			"response": []
+		},
+		{
+			"name": "add user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"method\": \"add-user\",\n  \"name\": \"faruk\",\n  \"email\": \"faruk@gmail.com\",\n  \"status\": {\n        \"value\": \"1\"\n    }\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost/veri/ticket_project/api.php"
+			},
+			"response": []
+		},
+		{
+			"name": "delete user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"method\": \"delete-user\",\n  \"id\":1\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost/veri/ticket_project/api.php"
+			},
+			"response": []
+		},
+		{
+			"name": "update user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"method\": \"update-user\",\n  \"id\":1,\n  \"name\": \"updated kaan\",\n  \"email\": \"updatedkaan@gmail.com\",\n  \"status\": {\n        \"value\": \"0\"\n    }\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost/veri/ticket_project/api.php"
+			},
+			"response": []
+		}
+	]
+}
