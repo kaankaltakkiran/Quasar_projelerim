@@ -4,3 +4,9 @@ export interface IPerson {
   user_email: string;
   user_status: string;
 }
+
+export interface IStation {
+  id: string;
+  name: string;
+  targets: number[];
+}
