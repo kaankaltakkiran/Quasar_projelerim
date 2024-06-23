@@ -20,7 +20,7 @@
         />
       </div>
       <div class="rounded-borders col-xs-12 col-sm-6 col-md-2 q-px-md">
-        Select User Status
+        Kullanıcı Durumu Seç
         <q-option-group
           v-model="status"
           :options="options"
