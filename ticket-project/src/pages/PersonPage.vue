@@ -65,6 +65,12 @@
             </template>
           </q-input>
         </template>
+        <!-- Kullanıcı adına tıklanınca tekil kullanıcı sayfasına git -->
+        <template v-slot:body-cell-user_name="props">
+          <q-td :props="props">
+            <a :href="`/persons/${props.row.id}`">{{ props.row.user_name }}</a>
+          </q-td>
+        </template>
         <!-- Silme ve güncelleme butonları -->
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
