@@ -6,7 +6,6 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-W
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Max-Age: 86400");
 
-// Preflight isteklerini işleme
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     header("HTTP/1.1 200 OK");
     exit();
@@ -30,7 +29,12 @@ switch ($METHOD) {
     case 'get-users':
         ################################### Get Users ###################################
 
-        $response = fetchUsers($DB); // kullanıcıları getirme fonksiyonu
+        $response = fetchUsers($DB);
+        break;
+    case 'get-user':
+        ################################### Get User ###################################
+
+        $response = fetchUser($DB, $data);
         break;
     case 'add-user':
         ################################### Add User ###################################
@@ -66,6 +70,19 @@ function fetchUsers($DB)
     $rows = $SORGU->fetchAll(PDO::FETCH_ASSOC);
     $response['success'] = true; // İşlem başarılı
     $response['users'] = $rows;
+    return $response;
+}
+
+function fetchUser($DB, $data)
+{
+    ################################### get User ###################################
+    $sql = "SELECT * FROM users WHERE id = :id";
+    $SORGU = $DB->prepare($sql);
+    $SORGU->bindParam(':id', $data['id']);
+    $SORGU->execute();
+    $row = $SORGU->fetch(PDO::FETCH_ASSOC);
+    $response['success'] = true; // İşlem başarılı
+    $response['user'] = $row;
     return $response;
 }
 
@@ -117,5 +134,5 @@ function updateUser($DB, $data)
         $response['error'] = "ID parameter is missing";
     }
 
-    return $response; 
+    return $response;
 }
