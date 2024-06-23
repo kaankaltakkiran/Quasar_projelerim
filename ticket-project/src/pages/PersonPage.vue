@@ -19,28 +19,32 @@
           :rules="emailRules"
         />
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-2">
-        <q-select
-          label="Kullanıcı Durumu Seçiniz *"
-          transition-show="flip-up"
-          transition-hide="flip-down"
-          filled
+      <div class="rounded-borders col-xs-12 col-sm-6 col-md-2 q-px-md">
+        Select User Status
+        <q-option-group
           v-model="status"
           :options="options"
-          style="width: 250px"
-          :rules="submitted ? statusRules : []"
-        />
+          color="red"
+          inline
+          dense
+        >
+        </q-option-group>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-2">
-        <q-toggle v-model="accept" label="Lisansı ve şartları kabul ediyorum" />
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-2 q-mt-md">
-        <q-btn label="Kaydet" type="submit" icon-right="send" color="primary" />
-      </div>
+    </div>
+    <div
+      class="col-xs-12 col-sm-6 col-md-2 q-mt-md row justify-center justify-md-start"
+    >
+      <q-btn
+        label="Kullanıcı Ekle"
+        type="submit"
+        icon-right="send"
+        color="primary"
+        class="full-width-on-mobile"
+      />
     </div>
   </q-form>
   <div class="row justify-center q-gutter-x-md q-mt-md">
-    <div class="col-xs-12 col-sm-6 col-md-11 q-mt-md">
+    <div class="col-xs-12 col-sm-6 col-md-9 q-mt-md">
       <q-table
         flat
         bordered
@@ -143,15 +147,17 @@
           lazy-rules
           :rules="emailRules"
         />
-        <div class="rounded-borders q-my-md">Select User Status</div>
-        <q-option-group
-          v-model="selectedUser.user_status"
-          :options="options"
-          color="red"
-          inline
-          dense
-        >
-        </q-option-group>
+        <div class="rounded-borders q-my-md">
+          Select User Status
+          <q-option-group
+            v-model="selectedUser.user_status"
+            :options="options"
+            color="red"
+            inline
+            dense
+          >
+          </q-option-group>
+        </div>
       </q-card-section>
       <q-card-actions align="right">
         <q-btn
@@ -180,11 +186,9 @@ import { IPerson } from 'src/models/model';
 const $q = useQuasar();
 //form verileri
 const filter = ref('');
-const submitted = ref(false);
 const name = ref<string | null>(null);
 const email = ref<string | null>(null);
-const accept = ref<boolean>(false);
-const status = ref<string | null>(null); // Null olarak başlatıldı, çünkü başlangıçta bir değer seçilmemiş olabilir
+const status = ref<string | null>('0');
 // iptal durumunu belirlemek için bir değişken ekleyin
 const wasCancelled = ref(false);
 
@@ -219,10 +223,6 @@ const emailRules = [
     return emailPattern.test(val) || 'Geçersiz email adresi';
   },
 ];
-const statusRules = [
-  (val: string | null) => !!val || 'Lütfen bir durum seçiniz',
-];
-
 // tablo sütunlarını belirle
 const columns: QTableColumn[] = [
   { name: 'id', align: 'left', label: 'Kayıt No', field: 'id', sortable: true },
@@ -272,7 +272,7 @@ const confirmDeleteUser = (id: number) => {
 };
 const cancelDeletion = () => {
   confirm.value = false;
-  triggerInfo('İşlem iptal edildi');
+  triggerInfo('Silme işlemi iptal edildi !');
 };
 // id'si verilen kullanıcıyı sil
 const deleteUser = async (id: number) => {
@@ -314,11 +314,11 @@ const updateUser = async () => {
     try {
       //apiye güncelleme işlemi için verileri gönder
       const response = await api.post('api.php', {
+        method: 'update-user',
         id: selectedUser.value.id,
         name: selectedUser.value.user_name,
         email: selectedUser.value.user_email,
         status: selectedUser.value.user_status,
-        method: 'update-user',
       });
       //console.log('Response:', response);
       if (response.data.success === true) {
@@ -356,7 +356,7 @@ const updateUser = async () => {
 watch(updateDialog, (newVal, oldVal) => {
   if (oldVal === true && newVal === false) {
     if (wasCancelled.value) {
-      triggerInfo('İşlem iptal edildi');
+      triggerInfo('Güncelleme işlemi iptal edildi !');
     }
   }
 });
@@ -367,18 +367,13 @@ onMounted(() => {
 });
 //form submit edilmişse
 const onSubmit = async () => {
-  submitted.value = true; // Mark the form as submitted
-  if (!name.value || !email.value || !status.value || !accept.value) {
-    triggerNotification('Lisans ve şartları kabul etmelisiniz !', 'negative');
-    return;
-  }
   try {
     //form verilerini apiye gönder
     const response = await api.post('api.php', {
+      method: 'add-user',
       name: name.value,
       email: email.value,
       status: status.value,
-      method: 'add-user',
     });
     // console.log('Response:', response);
     //işlem başarılıysa
@@ -396,11 +391,9 @@ const onSubmit = async () => {
 };
 //formu sıfırla
 const onReset = () => {
-  submitted.value = false;
   name.value = null;
   email.value = null;
-  accept.value = false;
-  status.value = null;
+  status.value = '0';
 };
 
 //mesaj durumuna göre bildirim göster
