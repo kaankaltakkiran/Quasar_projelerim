@@ -5,8 +5,7 @@
         <q-input
           filled
           v-model="name"
-          label="Your name *"
-          hint="Name "
+          label="İsim *"
           lazy-rules
           :rules="[(val) => (val && val.length > 0) || 'Boş bırakılamaz']"
         />
@@ -16,7 +15,6 @@
           filled
           v-model="email"
           label="Email *"
-          hint="Email adresinizi giriniz"
           lazy-rules
           :rules="emailRules"
         />
@@ -134,8 +132,7 @@
         <q-input
           filled
           v-model="selectedUser.user_name"
-          label="Your name *"
-          hint="Name "
+          label="İsim *"
           lazy-rules
           :rules="[(val) => (val && val.length > 0) || 'Boş bırakılamaz']"
         />
@@ -143,7 +140,6 @@
           filled
           v-model="selectedUser.user_email"
           label="Email *"
-          hint="Email adresinizi giriniz"
           lazy-rules
           :rules="emailRules"
         />
