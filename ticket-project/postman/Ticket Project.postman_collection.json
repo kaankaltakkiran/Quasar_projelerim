@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "f1412f99-5c01-4f96-b569-4b36ca3de2de",
 		"name": "Ticket Project",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "35946335"
 	},
 	"item": [
@@ -20,7 +20,18 @@
 						}
 					}
 				},
-				"url": "http://localhost/veri/ticket_project/api.php"
+				"url": {
+					"raw": "http://localhost/veri/ticket_project/api.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"veri",
+						"ticket_project",
+						"api.php"
+					]
+				}
 			},
 			"response": []
 		},
@@ -38,7 +49,18 @@
 						}
 					}
 				},
-				"url": "http://localhost/veri/ticket_project/api.php"
+				"url": {
+					"raw": "http://localhost/veri/ticket_project/api.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"veri",
+						"ticket_project",
+						"api.php"
+					]
+				}
 			},
 			"response": []
 		},
@@ -56,7 +78,18 @@
 						}
 					}
 				},
-				"url": "http://localhost/veri/ticket_project/api.php"
+				"url": {
+					"raw": "http://localhost/veri/ticket_project/api.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"veri",
+						"ticket_project",
+						"api.php"
+					]
+				}
 			},
 			"response": []
 		},
@@ -74,7 +107,47 @@
 						}
 					}
 				},
-				"url": "http://localhost/veri/ticket_project/api.php"
+				"url": {
+					"raw": "http://localhost/veri/ticket_project/api.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"veri",
+						"ticket_project",
+						"api.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"method\":\"get-user\",\n    \"id\":1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/veri/ticket_project/api.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"veri",
+						"ticket_project",
+						"api.php"
+					]
+				}
 			},
 			"response": []
 		}
