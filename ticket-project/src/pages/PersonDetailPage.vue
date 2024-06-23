@@ -2,7 +2,9 @@
   <div class="q-pa-md" v-if="user">
     <q-card style="max-width: 400px; margin: auto">
       <q-card-section>
-        <div class="text-h6">Detaylı Kullanıcı Bilgileri</div>
+        <div class="text-h6 text-red text-center">
+          Detaylı Kullanıcı Bilgileri
+        </div>
       </q-card-section>
       <q-card-section>
         <q-list>
@@ -21,7 +23,9 @@
           <q-item>
             <q-item-section>
               <q-item-label>Durum</q-item-label>
-              <q-item-label caption>{{ user.user_status }}</q-item-label>
+              <q-item-label caption>
+                {{ Number(user.user_status) === 1 ? 'Aktif' : 'Pasif' }}
+              </q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
