@@ -50,7 +50,7 @@ import { IPerson } from 'src/models/model';
 const route = useRoute();
 const router = useRouter();
 // Kullanıcı bilgileri
-const user = ref<IPerson | null>(null); // Changed from array to single object
+const user = ref<IPerson | null>(null);
 
 // Kullanıcıyı çek
 const fetchUser = async (id: number) => {
@@ -61,7 +61,7 @@ const fetchUser = async (id: number) => {
     });
     //console.log('response:', response);
     if (response.data.success === true && response.data.user) {
-      user.value = response.data.user; // Changed to access the user object directly
+      user.value = response.data.user;
     } else {
       router.push('/404'); // User yoksa 404 sayfasına yönlendir
     }
