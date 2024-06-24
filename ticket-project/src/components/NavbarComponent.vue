@@ -40,6 +40,15 @@
           <q-route-tab to="/calendar" exact name="calendar" label="Takvim" />
           <q-route-tab to="/persons" exact name="persons" label="Kişiler" />
           <q-route-tab to="/locations" exact name="locations" label="Konum" />
+          <q-btn
+            flat
+            dense
+            @click="$q.dark.toggle()"
+            :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
+            :label="$q.dark.isActive ? 'Koyu' : 'Açık'"
+            :no-caps="true"
+            class="q-mx-md"
+          />
         </q-tabs>
         <!--Navbar menu end-->
       </q-toolbar>
