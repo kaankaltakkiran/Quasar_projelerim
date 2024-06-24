@@ -57,7 +57,7 @@
         row-key="id"
         :filter="filter"
       >
-        <template v-slot:top-right>
+        <template v-slot:top-right="props">
           <q-input
             borderless
             dense
@@ -69,6 +69,14 @@
               <q-icon name="search" />
             </template>
           </q-input>
+          <q-btn
+            flat
+            round
+            dense
+            :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+            @click="props.toggleFullscreen"
+            class="q-ml-md"
+          />
           <!-- Export butonu-->
           <q-btn
             color="secondary"
