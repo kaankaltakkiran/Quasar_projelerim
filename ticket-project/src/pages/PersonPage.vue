@@ -1,4 +1,7 @@
 <template>
+  <h1 class="text-h4 text-center text-red">
+    Kişi Ekleme, Listeleme, Silme ,Güncelleme Sayfası
+  </h1>
   <q-form @submit="onSubmit" @reset="onReset">
     <div class="row justify-center q-gutter-x-md q-mt-md">
       <div class="col-xs-12 col-sm-6 col-md-2">
@@ -70,7 +73,7 @@
           <q-btn
             color="secondary"
             icon-right="archive"
-            label="Export to csv"
+            label="Kişi Listesini İndir"
             no-caps
             class="q-mx-md"
             @click="exportTable"
@@ -257,7 +260,12 @@ const columns: QTableColumn[] = [
     sortable: true,
     format: (val) => (val === '1' ? 'Aktif' : 'Pasif'), // durum değerini yazıya çevir
   },
-  { name: 'actions', align: 'center', label: 'İşlemler', field: 'actions' },
+  {
+    name: 'actions',
+    align: 'center',
+    label: 'Sil /Güncelle',
+    field: 'actions',
+  },
 ];
 
 //gelen get adına göre veri çekme
