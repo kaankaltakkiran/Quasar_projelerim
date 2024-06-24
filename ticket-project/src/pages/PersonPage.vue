@@ -37,7 +37,7 @@
       <q-btn
         label="Kullanıcı Ekle"
         type="submit"
-        icon-right="send"
+        icon-right="add"
         color="primary"
         class="full-width-on-mobile"
       />
