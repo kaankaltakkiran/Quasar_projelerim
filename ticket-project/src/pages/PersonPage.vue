@@ -187,7 +187,7 @@
 </template>
 
 <script setup lang="ts">
-import { useQuasar, QTableColumn, exportFile } from 'quasar';
+import { useQuasar, QTableColumn, exportFile, QSpinnerFacebook } from 'quasar';
 import { ref, Ref, onMounted, watch } from 'vue';
 import { api } from 'boot/axios'; //axios instance
 import { IPerson } from 'src/models/model';
@@ -263,6 +263,7 @@ const columns: QTableColumn[] = [
 //gelen get adına göre veri çekme
 const fetchUsers = async () => {
   try {
+    showLoading(); //loading göster
     const response = await api.post('api.php', {
       method: 'get-users',
     });
@@ -272,6 +273,8 @@ const fetchUsers = async () => {
     }
   } catch (error) {
     console.error('Error fetching data:', error);
+  } finally {
+    $q.loading.hide(); //loading gizle
   }
 };
 // silme işlemi için onay verilirse id'si verilen kullanıcıyı sil
@@ -287,6 +290,7 @@ const cancelDeletion = () => {
 const deleteUser = async (id: number) => {
   // console.log('Deleting user:', id);
   try {
+    showLoading(); //loading göster
     await api.post('api.php', {
       id,
       method: 'delete-user',
@@ -296,6 +300,8 @@ const deleteUser = async (id: number) => {
     fetchUsers(); // tabloyu güncelle
   } catch (error) {
     console.error('Error deleting user:', error);
+  } finally {
+    $q.loading.hide(); //loading gizle
   }
 };
 
@@ -321,6 +327,7 @@ const updateUser = async () => {
     selectedUser.value.user_status !== undefined
   ) {
     try {
+      showLoading(); //loading göster
       //apiye güncelleme işlemi için verileri gönder
       const response = await api.post('api.php', {
         method: 'update-user',
@@ -358,6 +365,8 @@ const updateUser = async () => {
         'Kullanıcı güncellenirken bir hata oluştu',
         'negative'
       );
+    } finally {
+      $q.loading.hide(); //loading gizle
     }
   }
 };
@@ -378,6 +387,7 @@ onMounted(() => {
 const onSubmit = async () => {
   try {
     //form verilerini apiye gönder
+    showLoading(); //loading göster
     const response = await api.post('api.php', {
       method: 'add-user',
       name: name.value,
@@ -396,6 +406,8 @@ const onSubmit = async () => {
   } catch (error) {
     console.error('Error sending form:', error);
     triggerNotification('form gönderilirken bir hata oluştu', 'negative');
+  } finally {
+    $q.loading.hide(); //loading gizle
   }
 };
 //formu sıfırla
@@ -448,9 +460,11 @@ const exportTable = () => {
   const status = exportFile('table-export.csv', content, 'text/csv');
 
   if (status !== true) {
+    showLoading();
     triggerNotification('Export işlemi başarısız oldu', 'negative');
   } else {
     triggerNotification('Export işlemi başarılı oldu', 'positive');
+    $q.loading.hide();
   }
 };
 
@@ -477,6 +491,18 @@ const triggerInfo = (message: string) => {
     message,
     position: 'top-right',
     timeout: 1000,
+  });
+};
+
+//loading göster
+const showLoading = () => {
+  $q.loading.show({
+    spinner: QSpinnerFacebook,
+    spinnerColor: 'primary',
+    spinnerSize: 140,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    message: 'Yükleniyor...',
+    messageColor: 'white',
   });
 };
 </script>
