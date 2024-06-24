@@ -66,6 +66,15 @@
               <q-icon name="search" />
             </template>
           </q-input>
+          <!-- Export butonu-->
+          <q-btn
+            color="secondary"
+            icon-right="archive"
+            label="Export to csv"
+            no-caps
+            class="q-mx-md"
+            @click="exportTable"
+          />
         </template>
         <!-- Kullanıcı adına tıklanınca tekil kullanıcı sayfasına git -->
         <template v-slot:body-cell-user_name="props">
@@ -178,7 +187,7 @@
 </template>
 
 <script setup lang="ts">
-import { useQuasar, QTableColumn } from 'quasar';
+import { useQuasar, QTableColumn, exportFile } from 'quasar';
 import { ref, Ref, onMounted, watch } from 'vue';
 import { api } from 'boot/axios'; //axios instance
 import { IPerson } from 'src/models/model';
@@ -394,6 +403,55 @@ const onReset = () => {
   name.value = null;
   email.value = null;
   status.value = '0';
+};
+
+// Export işlemleri
+
+type FormatFunction = (val: string, row: IPerson) => string;
+
+const wrapCsvValue = (
+  val: string,
+  formatFn: FormatFunction | undefined,
+  row: IPerson
+) => {
+  let formatted = formatFn !== undefined ? formatFn(val, row) : val;
+
+  formatted =
+    formatted === undefined || formatted === null ? '' : String(formatted);
+
+  formatted = formatted.split('"').join('""');
+
+  return `"${formatted}"`;
+};
+
+const exportTable = () => {
+  const content = [
+    columns.map((col) => wrapCsvValue(col.label, undefined, rows.value[0])),
+  ]
+    .concat(
+      rows.value.map((row) =>
+        columns
+          .map((col) =>
+            wrapCsvValue(
+              typeof col.field === 'function'
+                ? col.field(row)
+                : row[col.field as keyof IPerson],
+              col.format,
+              row
+            )
+          )
+          .join(',')
+      )
+    )
+    .join('\r\n');
+
+  const status = exportFile('table-export.csv', content, 'text/csv');
+
+  if (status !== true) {
+    triggerNotification('Export işlemi başarısız oldu', 'negative');
+  } else {
+    triggerNotification('Export işlemi başarılı oldu', 'positive');
+  }
 };
 
 //mesaj durumuna göre bildirim göster
