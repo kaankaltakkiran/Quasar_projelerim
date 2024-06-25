@@ -4,7 +4,7 @@
       <h5 class="text-center">Ödeme Bilgileri</h5>
       <q-separator />
       <!-- Kart -->
-      <div class="button-container q-mt-md">
+      <div class="button-container">
         <q-btn
           color="white"
           class="text-center text-red-14 text-caption q-mt-md"
@@ -19,7 +19,7 @@
         spinner-color="white"
       />
       <!-- Kart Bilgileri -->
-      <div class="q-pa-md" style="max-width: 400px">
+      <div class="q-pa-md">
         <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
           <q-input
             filled
@@ -27,7 +27,7 @@
             label="Kart Numarası *"
             hint="Kart Numarasını giriniz"
             lazy-rules
-            mask="#### #### #### ####"
+            mask="####  ####  ####  ####"
             :rules="kartNoRules"
           />
           <q-card-section class="row q-col-gutter-md">
@@ -50,12 +50,13 @@
               hint="Kartınızın arkasındaki 3 haneli numara"
               mask="###"
               :rules="cvcRules"
+              lazy-rules
               class="col"
             >
               <!-- Ccv info -->
               <template v-slot:append>
                 <q-icon
-                  name="info"
+                  name="help_outline"
                   class="cursor-pointer"
                   @click="showDialog = true"
                 />
@@ -138,7 +139,6 @@ const isValidCreditCard = (val: string) => {
   return sum % 10 === 0;
 };
 
-// Son kullanma tarihi doğrulama kuralları
 const expiryDateRules = [
   (val: string) => !!val || 'Boş bırakılamaz',
   (val: string) =>
@@ -148,6 +148,18 @@ const expiryDateRules = [
     return (
       (month >= 1 && month <= 12 && year >= 20 && year <= 30) ||
       'Geçersiz tarih, MM/YY formatında giriniz'
+    );
+  },
+  (val: string) => {
+    const [month, year] = val.split('/').map(Number);
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1; // getMonth() 0-11 arasında değer döner, bu yüzden +1 ekliyoruz
+    const currentYear = currentDate.getFullYear() % 100; // Son iki rakamı almak için mod 100
+
+    return (
+      year > currentYear ||
+      (year === currentYear && month > currentMonth) ||
+      'Geçersiz son kullanma tarihi'
     );
   },
 ];

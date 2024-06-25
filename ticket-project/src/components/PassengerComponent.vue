@@ -3,16 +3,12 @@
     <q-card-section>
       <h5 class="text-center">Kişisel Bilgiler</h5>
       <q-separator />
-      <div class="q-pa-md" style="max-width: 400px">
+      <div>
         <div v-for="(index, key) in 3" :key="key">
           <div class="text-center">
             <span class="text-caption">Koltuk: {{ index }}</span>
           </div>
-          <q-form
-            @submit="onSubmit(index)"
-            @reset="onReset(index)"
-            class="q-gutter-md"
-          >
+          <q-form @submit="onSubmit(index)" @reset="onReset(index)">
             <q-input
               filled
               v-model="nameSurnames[index]"
@@ -20,17 +16,18 @@
               hint="Ad ve soyadınızı giriniz"
               :rules="nameSurnameRules"
             />
-            <q-checkbox
-              v-model="isNonCitizens[index]"
-              label="T.C vatandaşı değilim"
-              class="q-mt-md"
-            />
+            <div class="row justify-end">
+              <q-checkbox
+                v-model="isNonCitizens[index]"
+                label="T.C vatandaşı değilim"
+                class="text-caption"
+              />
+            </div>
             <div v-if="!isNonCitizens[index]">
               <q-input
                 filled
                 type="tel"
                 v-model="tcNos[index]"
-                class="q-mt-md"
                 :label="`${index}. Yolcu T.C kimlik no *`"
                 hint="T.C kimlik numarası giriniz"
                 lazy-rules
@@ -44,7 +41,6 @@
                 v-model="selectedCountries[index]"
                 :label="`${index}. Yolcu ülke ${index}`"
                 :options="countryOptions"
-                class="q-mt-md"
               />
               <q-input
                 filled
