@@ -1,66 +1,62 @@
 <template>
-  <div class="q-mt-md row justify-center q-gutter-x-md">
-    <div class="col-lg-3 col-md-6 col-12 q-pa-md">
-      <q-input
-        filled
-        v-model="selectedDate"
-        mask="date"
+  <q-input
+    filled
+    v-model="selectedDate"
+    mask="date"
+    @click="showDatepicker = true"
+  >
+    <template v-slot:append>
+      <q-icon
+        name="event"
+        class="cursor-pointer"
         @click="showDatepicker = true"
-      >
-        <template v-slot:append>
-          <q-icon
-            name="event"
-            class="cursor-pointer"
-            @click="showDatepicker = true"
-          />
-        </template>
-      </q-input>
-      <q-date
-        v-model="selectedDate"
-        :navigation-min-year-month="minYearMonth"
-        :navigation-max-year-month="maxYearMonth"
-        :options="options"
-        @update:model-value="onDateUpdate"
-        @navigation="onNavigation"
-        :events="eventDates"
-        :event-color="getEventColor"
-        :modal="true"
-        :persistent="true"
-        v-if="showDatepicker"
-        class="custom-q-date"
-      >
-        <template v-slot:default>
-          <div class="row items-center justify-end q-mt-md">
-            <q-btn
-              @click="showDatepicker = false"
-              label="Close"
-              color="primary"
-              flat
-            />
-          </div>
-          <!-- Tatil günleri listesi (o ayda tatil günü yoksa gözükme) -->
-          <div v-if="filteredHolidays.length" class="q-mt-md">
-            <template v-for="holiday in filteredHolidays" :key="holiday.date">
-              <span class="text-caption">- {{ formatHoliday(holiday) }}</span>
-              <br />
-            </template>
-          </div>
-        </template>
-      </q-date>
-    </div>
-    <div class="q-mt-md">
-      <q-btn
-        label="Bugün"
-        color="primary"
-        @click="setSelectedDate(todayDate)"
-        class="q-mr-sm"
       />
-      <q-btn
-        label="Yarın"
-        color="secondary"
-        @click="setSelectedDate(tomorrowDate)"
-      />
-    </div>
+    </template>
+  </q-input>
+  <q-date
+    v-model="selectedDate"
+    :navigation-min-year-month="minYearMonth"
+    :navigation-max-year-month="maxYearMonth"
+    :options="options"
+    @update:model-value="onDateUpdate"
+    @navigation="onNavigation"
+    :events="eventDates"
+    :event-color="getEventColor"
+    :modal="true"
+    :persistent="true"
+    v-if="showDatepicker"
+    class="custom-q-date"
+  >
+    <template v-slot:default>
+      <div class="row items-center justify-end q-mt-md">
+        <q-btn
+          @click="showDatepicker = false"
+          label="Close"
+          color="primary"
+          flat
+        />
+      </div>
+      <!-- Tatil günleri listesi (o ayda tatil günü yoksa gözükme) -->
+      <div v-if="filteredHolidays.length" class="q-mt-md">
+        <template v-for="holiday in filteredHolidays" :key="holiday.date">
+          <span class="text-caption">- {{ formatHoliday(holiday) }}</span>
+          <br />
+        </template>
+      </div>
+    </template>
+  </q-date>
+  <div class="q-mt-md q-mb-md">
+    <q-btn
+      label="Bugün"
+      color="primary"
+      @click="setSelectedDate(todayDate)"
+      class="q-mr-sm"
+    />
+    <q-btn
+      label="Yarın"
+      color="secondary"
+      @click="setSelectedDate(tomorrowDate)"
+    />
   </div>
 </template>
 
