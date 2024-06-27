@@ -9,11 +9,7 @@
           v-model:arrivalStation="arrivalStation"
         />
         <!-- Travel Info Component -->
-        <TravelInfoComponent
-          v-model:name="name"
-          v-model:age="age"
-          v-model:select="select"
-        />
+        <TravelInfoComponent v-model:name="name" v-model:select="select" />
 
         <!--Calendar Component-->
         <CalendarComponent />
@@ -44,13 +40,11 @@ const $q = useQuasar();
 const departureStation = ref<string | undefined>(undefined);
 const arrivalStation = ref<string | undefined>(undefined);
 const name = ref<string | undefined>(undefined);
-const age = ref<number | undefined>(undefined);
 const select = ref<string | undefined>(undefined);
 
 const onSubmit = () => {
   if (
     !name.value ||
-    !age.value ||
     !select.value ||
     !departureStation.value ||
     !arrivalStation.value
@@ -75,7 +69,6 @@ const onSubmit = () => {
 
 const onReset = () => {
   name.value = undefined;
-  age.value = undefined;
   select.value = undefined;
   departureStation.value = undefined;
   arrivalStation.value = undefined;
