@@ -21,7 +21,13 @@
         <CalendarComponent v-model="selectedDate" />
         <!--Tarih Componenti Bitiş-->
         <div>
-          <q-btn label="Submit" type="submit" color="primary" />
+          <q-btn
+            label="Submit"
+            class="q-mt-md"
+            type="submit"
+            icon-right="send"
+            color="deep-orange"
+          />
         </div>
       </q-form>
     </div>

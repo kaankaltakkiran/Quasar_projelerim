@@ -50,12 +50,14 @@
       color="primary"
       @click="setSelectedDate(todayDate)"
       class="q-mr-sm q-mb-md"
+      icon-right="today"
     />
     <q-btn
       label="Yarın"
       color="secondary"
       @click="setSelectedDate(tomorrowDate)"
       class="q-mb-md"
+      icon-right="date_range"
     />
   </div>
 </template>
