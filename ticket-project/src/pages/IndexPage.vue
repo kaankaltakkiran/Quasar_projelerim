@@ -11,7 +11,7 @@
         <!--Gidiş Dönüş Componenti Bitiş-->
 
         <!--Yolcu Sayısı Componenti Başlangıç-->
-        <PassengerCountComponent
+        <TravelInfoComponent
           v-model:passengerCount="passengerCount"
           v-model:busName="busName"
         />
@@ -32,7 +32,7 @@
 import { useQuasar } from 'quasar';
 import { ref } from 'vue';
 //component import
-import PassengerCountComponent from '../components/PassengerCountComponent.vue';
+import TravelInfoComponent from '../components/TravelInfoComponent.vue';
 import LocationComponent from '../components/LocationComponent.vue';
 import CalendarComponent from '../components/CalendarComponent.vue';
 
