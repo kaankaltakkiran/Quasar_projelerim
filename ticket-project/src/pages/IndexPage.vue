@@ -11,7 +11,10 @@
         <!--Gidiş Dönüş Componenti Bitiş-->
 
         <!--Yolcu Sayısı Componenti Başlangıç-->
-        <PassengerCountComponent v-model:passengerCount="passengerCount" />
+        <PassengerCountComponent
+          v-model:passengerCount="passengerCount"
+          v-model:busName="busName"
+        />
         <!--Yolcu Sayısı Componenti Bitiş-->
 
         <!--Tarih Componenti Başlangıç-->
@@ -34,6 +37,7 @@ import LocationComponent from '../components/LocationComponent.vue';
 import CalendarComponent from '../components/CalendarComponent.vue';
 
 //form elamanları için ref tanımlamaları
+const busName = ref<string | undefined>(undefined);
 const passengerCount = ref<string | undefined>(undefined);
 const departureStation = ref<string | undefined>(undefined);
 const arrivalStation = ref<string | undefined>(undefined);
@@ -46,6 +50,7 @@ const onSubmit = () => {
   if (
     !departureStation.value ||
     !arrivalStation.value ||
+    !busName.value ||
     !passengerCount.value ||
     !selectedDate.value
   ) {
@@ -59,7 +64,7 @@ const onSubmit = () => {
     console.log(
       departureStation.value,
       arrivalStation.value,
-      passengerCount.value,
+      busName.value || passengerCount.value,
       selectedDate.value
     );
     $q.notify({
@@ -74,6 +79,7 @@ const onSubmit = () => {
 
 //form reset işlemi
 const onReset = () => {
+  busName.value = undefined;
   passengerCount.value = undefined;
   // departureStation.value = undefined;
   //arrivalStation.value = undefined;
