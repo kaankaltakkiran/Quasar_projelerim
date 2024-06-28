@@ -12,7 +12,9 @@
         </q-item-section>
         <!--Side:yana al-->
         <q-item-section side>
-          <q-item-label header class="text-caption">Metro Turizm </q-item-label>
+          <q-item-label header class="text-caption">{{
+            travelStore.travelInfo.busName
+          }}</q-item-label>
         </q-item-section>
       </q-item>
 
@@ -21,23 +23,29 @@
       <q-item>
         <q-item-section>
           <q-item-label>Kalkış:</q-item-label>
-          <q-item-label caption>İstanbul</q-item-label>
+          <q-item-label caption>{{
+            travelStore.travelInfo.departureStation
+          }}</q-item-label>
         </q-item-section>
 
         <q-item-section>
           <q-item-label>Varış:</q-item-label>
-          <q-item-label caption>Ankara</q-item-label>
+          <q-item-label caption>{{
+            travelStore.travelInfo.arrivalStation
+          }}</q-item-label>
         </q-item-section>
       </q-item>
 
       <q-item>
         <q-item-section>
           <q-item-label>Hareket Zamanı:</q-item-label>
-          <q-item-label caption>15 Haziran Perşembe,Saat: 02:00</q-item-label>
+          <q-item-label caption>{{ formattedDate }}</q-item-label>
         </q-item-section>
         <q-item-section>
-          <q-item-label>Koltuk No:</q-item-label>
-          <q-item-label caption>1,2,3</q-item-label>
+          <q-item-label>Yolcu Sayısı:</q-item-label>
+          <q-item-label caption>{{
+            travelStore.travelInfo.passengerCount
+          }}</q-item-label>
         </q-item-section>
       </q-item>
 
@@ -55,7 +63,8 @@
         <q-item-section>
           <q-item-label>Uyarı:</q-item-label>
           <q-item-label caption
-            >Otobüs,Perşembe'yi Cuma'ya bağlayan gece hareket edecektir.
+            >Biletinizi iptal etmek için 0850 222 34 55 numaralı çağrı
+            merkezimizi arayabilirsiniz.
           </q-item-label>
         </q-item-section>
       </q-item>
@@ -63,4 +72,36 @@
   </q-card>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useTravelStore } from 'src/stores/travel-info-store';
+
+// Store'u kullan
+const travelStore = useTravelStore();
+
+// Tarih formatlama
+const formattedDate = computed(() => {
+  if (!travelStore.travelInfo.selectedDate) {
+    return '';
+  }
+
+  let dateToShow: Date | string = travelStore.travelInfo.selectedDate;
+
+  if (dateToShow === 'Seçilen Tarih') {
+    return 'Seçilen Tarih';
+  }
+
+  // Eğer tarih string ise Date nesnesine çevir
+  if (typeof dateToShow === 'string') {
+    dateToShow = new Date(dateToShow.replace(/\//g, '-'));
+  }
+
+  const options: Intl.DateTimeFormatOptions = {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  };
+
+  return dateToShow.toLocaleDateString('tr-TR', options);
+});
+</script>

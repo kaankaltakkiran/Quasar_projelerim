@@ -31,6 +31,12 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
 import { ref } from 'vue';
+
+import { useTravelStore } from 'src/stores/travel-info-store';
+
+// Store'u kullan
+const travelStore = useTravelStore();
+
 //component import
 import TravelInfoComponent from '../components/TravelInfoComponent.vue';
 import LocationComponent from '../components/LocationComponent.vue';
@@ -58,20 +64,24 @@ const onSubmit = () => {
       color: 'red-5',
       textColor: 'white',
       icon: 'warning',
-      message: 'All fields are required',
+      message: 'Tüm alanları doldurunuz',
     });
   } else {
-    console.log(
-      departureStation.value,
-      arrivalStation.value,
-      busName.value || passengerCount.value,
-      selectedDate.value
-    );
+    // Store'a verileri güncelle
+    travelStore.updateTravelInfo({
+      busName: busName.value,
+      departureStation: departureStation.value,
+      arrivalStation: arrivalStation.value,
+      passengerCount: passengerCount.value,
+      selectedDate: selectedDate.value,
+    });
+    console.log('travelStore.travelInfo', travelStore.travelInfo);
+
     $q.notify({
       color: 'green-4',
       textColor: 'white',
       icon: 'cloud_done',
-      message: 'Submitted',
+      message: 'Bilgileriniz başarıyla kaydedildi',
     });
     onReset();
   }

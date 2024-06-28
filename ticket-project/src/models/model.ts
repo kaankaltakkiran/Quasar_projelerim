@@ -10,3 +10,11 @@ export interface IStation {
   name: string;
   targets: number[];
 }
+
+export interface ITravelİnfo {
+  busName: string;
+  departureStation: string;
+  arrivalStation: string;
+  passengerCount: string;
+  selectedDate: string;
+}
