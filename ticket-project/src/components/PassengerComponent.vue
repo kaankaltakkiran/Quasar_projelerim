@@ -4,32 +4,34 @@
       <h5 class="text-center">Kişisel Bilgiler</h5>
       <q-separator />
       <div>
-        <div v-for="(index, key) in 3" :key="key">
+        <div v-for="index in passengerCount" :key="index">
           <div class="text-center">
             <span class="text-caption">Koltuk: {{ index }}</span>
           </div>
           <q-form @submit="onSubmit(index)" @reset="onReset(index)">
+            <!-- index - 1 kullanımı listelerde 0'dan başladığı için -->
             <q-input
               filled
-              v-model="nameSurnames[index]"
+              v-model="nameSurnames[index - 1]"
               :label="`${index}. Yolcu adı ve soyadı * `"
               hint="Ad ve soyadınızı giriniz"
               :rules="nameSurnameRules"
             />
             <div class="row justify-end">
               <q-checkbox
-                v-model="isNonCitizens[index]"
+                v-model="isNonCitizens[index - 1]"
                 label="T.C vatandaşı değilim"
                 class="text-caption"
               />
             </div>
-            <div v-if="!isNonCitizens[index]">
+            <div v-if="!isNonCitizens[index - 1]">
               <q-input
                 filled
                 type="tel"
-                v-model="tcNos[index]"
+                v-model="tcNos[index - 1]"
                 :label="`${index}. Yolcu T.C kimlik no *`"
-                hint="T.C kimlik numarası giriniz"
+                hint="T.C kimlik
+              numarası giriniz"
                 lazy-rules
                 :rules="tcNoRules"
                 mask="###########"
@@ -38,13 +40,13 @@
             <div v-else>
               <q-select
                 filled
-                v-model="selectedCountries[index]"
-                :label="`${index}. Yolcu ülke ${index}`"
+                v-model="selectedCountries[index - 1]"
+                :label="`${index}. Yolcu Ülke * `"
                 :options="countryOptions"
               />
               <q-input
                 filled
-                v-model="passportNos[index]"
+                v-model="passportNos[index - 1]"
                 class="q-mt-md"
                 :label="`${index}. Yolcu Pasaport Numarası *`"
                 hint="Pasaport numaranızı giriniz"
@@ -60,20 +62,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useTravelStore } from 'src/stores/travel-info-store';
 
 // T.C kimlik no
-const tcNos = ref<string[]>(['', '', '']);
+const tcNos = ref<string[]>([]);
 // Ad ve soyad
-const nameSurnames = ref<(string | null)[]>([null, null, null]);
+const nameSurnames = ref<(string | null)[]>([]);
 // Pasaport no
-const passportNos = ref<string[]>(['', '', '']);
+const passportNos = ref<string[]>([]);
 
 // T.C vatandaşı değilim checkbox durumu
-const isNonCitizens = ref<boolean[]>([false, false, false, false]);
+const isNonCitizens = ref<boolean[]>([false, false, false, false, false]);
 
 // Seçilen ülke
-const selectedCountries = ref<string[]>(['', '', '']);
+const selectedCountries = ref<string[]>([]);
 
 // Ülke seçenekleri
 const countryOptions = [
@@ -127,22 +130,31 @@ const passportNoRules = [
     val.length >= 5 || 'Pasaport numarası en az 5 karakter olmalıdır',
 ];
 
+// Store'u kullan
+const travelStore = useTravelStore();
+
+// Passenger count'ı computed property olarak ayarla
+const passengerCount = computed(() => {
+  const count = parseInt(travelStore.travelInfo.passengerCount, 10);
+  return isNaN(count) || count <= 0 ? 1 : count;
+});
+
 const onSubmit = (index: number) => {
   // Formu gönderme işlemleri burada yapılabilir
   console.log({
-    nameSurname: nameSurnames.value[index],
-    tcNo: tcNos.value[index],
-    passportNo: passportNos.value[index],
-    isNonCitizen: isNonCitizens.value[index],
-    selectedCountry: selectedCountries.value[index],
+    nameSurname: nameSurnames.value[index - 1],
+    tcNo: tcNos.value[index - 1],
+    passportNo: passportNos.value[index - 1],
+    isNonCitizen: isNonCitizens.value[index - 1],
+    selectedCountry: selectedCountries.value[index - 1],
   });
 };
 
 const onReset = (index: number) => {
-  nameSurnames.value[index] = null;
-  tcNos.value[index] = '';
-  passportNos.value[index] = '';
+  nameSurnames.value[index - 1] = null;
+  tcNos.value[index - 1] = '';
+  passportNos.value[index - 1] = '';
   isNonCitizens.value[index] = false;
-  selectedCountries.value[index] = '';
+  selectedCountries.value[index - 1] = '';
 };
 </script>

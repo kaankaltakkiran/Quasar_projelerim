@@ -8,7 +8,7 @@ export const useTravelStore = defineStore('travel', {
       companyName: 'Otobüs Firma Adı',
       departureStation: 'Yolculuk Başlangıç Noktası',
       arrivalStation: 'Yolculuk Varış Noktası',
-      passengerCount: 'Yolcu Sayısı',
+      passengerCount: '1',
       selectedDate: 'Seçilen Tarih',
     } as ITravelİnfo,
   }),
