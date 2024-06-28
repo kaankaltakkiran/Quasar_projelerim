@@ -1,58 +1,73 @@
 <template>
-  <div>
-    <q-input
-      filled
-      v-model="localName"
-      label="Otobüs Firması Adı"
-      lazy-rules
-      :rules="[ (val: any) => val && val.length > 0 || 'Otobüs firması adınızı giriniz' ]"
-    />
-    <q-select
-      label="Yolcu Sayısı *"
-      transition-show="flip-up"
-      transition-hide="flip-down"
-      filled
-      v-model="localSelect"
-      :options="options"
-      lazy-rules
-      :rules="[ (val: any) => val && val.length > 0 || 'Lütfen bir seçim yapınız' ]"
-    />
+  <div class="q-pa-md" style="max-width: 400px">
+    <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+      <q-input
+        filled
+        v-model="name"
+        label="Your name *"
+        hint="Name and surname"
+        lazy-rules
+        :rules="[ (val: any) => val && val.length > 0 || 'Please type something']"
+      />
+
+      <q-input
+        filled
+        type="number"
+        v-model="age"
+        label="Your age *"
+        lazy-rules
+        :rules="[
+          (val: any) => val !== null && val !== '' || 'Please type your age',
+          (val: any) => val > 0 && val < 100 || 'Please type a real age'
+        ]"
+      />
+
+      <q-toggle v-model="accept" label="I accept the license and terms" />
+
+      <div>
+        <q-btn label="Submit" type="submit" color="primary" />
+        <q-btn
+          label="Reset"
+          type="reset"
+          color="primary"
+          flat
+          class="q-ml-sm"
+        />
+      </div>
+    </q-form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { useQuasar } from 'quasar';
+import { ref } from 'vue';
 
-//props tanımlama
-const props = defineProps({
-  name: {
-    type: String,
-    default: undefined,
-  },
-  select: {
-    type: String,
-    default: undefined,
-  },
-});
-//emit ile değişiklikleri dışarıya bildirme
-const emits = defineEmits(['update:name', 'update:select']);
+const $q = useQuasar();
+const name = ref<string | null>(null);
+const age = ref<number | null>(null);
+const accept = ref<boolean>(false);
 
-//localSelect ile props.select değerini izleme
-const localName = ref(props.name);
-const localSelect = ref(props.select);
+const onSubmit = () => {
+  if (!accept.value) {
+    $q.notify({
+      color: 'red-5',
+      textColor: 'white',
+      icon: 'warning',
+      message: 'You need to accept the license and terms first',
+    });
+  } else {
+    $q.notify({
+      color: 'green-4',
+      textColor: 'white',
+      icon: 'cloud_done',
+      message: 'Submitted',
+    });
+  }
+};
 
-watch(localName, (newValue) => {
-  emits('update:name', newValue);
-});
-watch(localSelect, (newValue) => {
-  emits('update:select', newValue);
-});
-
-//props.select değiştiğinde localSelect değerini güncelleme
-watch(props, (newProps) => {
-  localSelect.value = newProps.select;
-  localName.value = newProps.name;
-});
-//select seçenekleri
-const options = ['1', '2', '3', '4', '5'];
+const onReset = () => {
+  name.value = null;
+  age.value = null;
+  accept.value = false;
+};
 </script>
