@@ -1,72 +1,75 @@
 <template>
-  <div class="q-mt-md row justify-center q-gutter-x-md">
-    <div class="col-lg-3 col-md-6 col-12 q-pa-md">
-      <q-input
-        filled
-        v-model="selectedDate"
-        mask="date"
+  <q-input
+    filled
+    v-model="localSelectedDate"
+    mask="date"
+    @click="showDatepicker = true"
+  >
+    <template v-slot:append>
+      <q-icon
+        name="event"
+        class="cursor-pointer"
         @click="showDatepicker = true"
-      >
-        <template v-slot:append>
-          <q-icon
-            name="event"
-            class="cursor-pointer"
-            @click="showDatepicker = true"
-          />
-        </template>
-      </q-input>
-      <q-date
-        v-model="selectedDate"
-        :navigation-min-year-month="minYearMonth"
-        :navigation-max-year-month="maxYearMonth"
-        :options="options"
-        @update:model-value="onDateUpdate"
-        @navigation="onNavigation"
-        :events="eventDates"
-        :event-color="getEventColor"
-        :modal="true"
-        :persistent="true"
-        v-if="showDatepicker"
-        class="custom-q-date"
-      >
-        <template v-slot:default>
-          <div class="row items-center justify-end q-mt-md">
-            <q-btn
-              @click="showDatepicker = false"
-              label="Close"
-              color="primary"
-              flat
-            />
-          </div>
-          <!-- Tatil günleri listesi (o ayda tatil günü yoksa gözükme) -->
-          <div v-if="filteredHolidays.length" class="q-mt-md">
-            <template v-for="holiday in filteredHolidays" :key="holiday.date">
-              <span class="text-caption">- {{ formatHoliday(holiday) }}</span>
-              <br />
-            </template>
-          </div>
-        </template>
-      </q-date>
-    </div>
-    <div class="q-mt-md">
-      <q-btn
-        label="Bugün"
-        color="primary"
-        @click="setSelectedDate(todayDate)"
-        class="q-mr-sm"
       />
-      <q-btn
-        label="Yarın"
-        color="secondary"
-        @click="setSelectedDate(tomorrowDate)"
-      />
-    </div>
+    </template>
+  </q-input>
+  <q-date
+    v-model="localSelectedDate"
+    :navigation-min-year-month="minYearMonth"
+    :navigation-max-year-month="maxYearMonth"
+    :options="options"
+    @update:model-value="onDateUpdate"
+    @navigation="onNavigation"
+    :events="eventDates"
+    :event-color="getEventColor"
+    :modal="true"
+    :persistent="true"
+    v-if="showDatepicker"
+    class="custom-q-date"
+  >
+    <template v-slot:default>
+      <div class="row items-center justify-end q-mt-md">
+        <q-btn
+          @click="showDatepicker = false"
+          label="Close"
+          color="primary"
+          flat
+        />
+      </div>
+      <div v-if="filteredHolidays.length" class="q-mt-md">
+        <template v-for="holiday in filteredHolidays" :key="holiday.date">
+          <span class="text-caption">- {{ formatHoliday(holiday) }}</span>
+          <br />
+        </template>
+      </div>
+    </template>
+  </q-date>
+  <div class="q-mt-md">
+    <q-btn
+      label="Bugün"
+      color="primary"
+      @click="setSelectedDate(todayDate)"
+      class="q-mr-sm q-mb-md"
+    />
+    <q-btn
+      label="Yarın"
+      color="secondary"
+      @click="setSelectedDate(tomorrowDate)"
+      class="q-mb-md"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import { date } from 'quasar'; // Quasar'dan date modülünü içe aktar
+import { date } from 'quasar';
+
+//emit ile parent component'e veri göndermek için kullanılır
+const emits = defineEmits(['update:modelValue']);
+//props tanımlanır
+const props = defineProps({
+  modelValue: String,
+});
 
 const holidays = [
   { date: '2024/01/01', label: 'Yılbaşı' },
@@ -89,29 +92,31 @@ const holidays = [
   { date: '2024/12/31', label: 'Yılbaşı Gecesi' },
 ];
 
-// Tatil günlerinin tarihlerini al
+//tüm tatil tarihlerini alır
 const eventDates = holidays.map((event) => event.date);
 
-// Event color getter function
+//tatil tarihlerine göre renk belirler
 const getEventColor = (date: string): string => {
   return eventDates.includes(date) ? 'teal' : '';
 };
 
+//datepicker'ın gösterilip gösterilmeyeceğini belirler
 const showDatepicker = ref(false);
-const selectedDate = ref<string>(date.formatDate(new Date(), 'YYYY/MM/DD')); // Geçerli tarihi seçili tarih olarak ayarla
+const localSelectedDate = ref<string>(
+  props.modelValue || date.formatDate(new Date(), 'YYYY/MM/DD')
+);
 
-// Geçerli yıl ve ayı al
+//şu anki yıl ve ayı alır
 const currentYear = new Date().getFullYear();
-const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0'); // Ay değerini iki haneli yapmak için padStart kullanılır
-
-// Min ve max yıl-ay değerlerini ayarla
+const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+//min ve max yıl ve ayı belirler
 const minYearMonth = ref<string>(`${currentYear}/${currentMonth}`);
 const maxYearMonth = ref<string>(`${currentYear}/12`);
 
-// Options fonksiyonu ile seçilebilir tarihleri tanımla
+//tüm tarih seçeneklerini alır
 const options = computed<string[]>(() => {
   const today = new Date();
-  const endDate = new Date(2025, 0, 1); // 2024/12/31 tarihine kadar seçilir
+  const endDate = new Date(2025, 0, 1);
 
   const optionsArray: string[] = [];
   let dateToCheck = new Date(today);
@@ -123,8 +128,7 @@ const options = computed<string[]>(() => {
 
   return optionsArray;
 });
-
-// Bugün ve Yarın butonları için fonksiyonlar
+//bugün ve yarın tarihlerini alır
 const todayDate: string = date.formatDate(new Date(), 'YYYY/MM/DD');
 const tomorrowDate: string = (() => {
   const tomorrow = new Date();
@@ -132,7 +136,7 @@ const tomorrowDate: string = (() => {
   return date.formatDate(tomorrow, 'YYYY/MM/DD');
 })();
 
-// Seçili aydaki tatil günlerini filtreleyen fonksiyon
+//seçilen yıl ve aydaki tatil tarihlerini alır
 const getMonthEvents = (
   year: number,
   month: number
@@ -144,22 +148,22 @@ const getMonthEvents = (
     );
   });
 };
-
-// Seçili tarihi izleyen ve tatil günlerini filtreleyen watch komutu
+//filtrelenmiş tatil tarihlerini alır
 const filteredHolidays = ref<{ date: string; label: string }[]>([]);
 const selectedMonthYear = ref<string>('');
 
+//seçilen tarihi günceller
 watch(
-  selectedDate,
+  localSelectedDate,
   (newDate) => {
+    emits('update:modelValue', newDate);
     const [year, month] = newDate.split('/').map(Number);
     selectedMonthYear.value = `${year} / ${String(month).padStart(2, '0')}`;
     filteredHolidays.value = getMonthEvents(year, month - 1);
   },
   { immediate: true }
 );
-
-// Navigasyon (ay veya yıl değişikliği) olduğunda çalışacak fonksiyon
+//navigasyon işlemlerini yapar
 const onNavigation = (view: { year: number; month: number }) => {
   selectedMonthYear.value = `${view.year} / ${String(view.month).padStart(
     2,
@@ -168,28 +172,29 @@ const onNavigation = (view: { year: number; month: number }) => {
   filteredHolidays.value = getMonthEvents(view.year, view.month - 1);
 };
 
-// Bugün ve Yarın butonlarına tıklandığında çalışacak fonksiyonlar
+//seçilen tarihi günceller
 const setSelectedDate = (dateString: string) => {
-  selectedDate.value = dateString;
-  showDatepicker.value = false; // Tarih seçildikten sonra datepicker'ı kapat
+  localSelectedDate.value = dateString;
+  showDatepicker.value = false;
 };
 
+//tarihi günceller
 const onDateUpdate = (value: string) => {
-  selectedDate.value = value;
-  showDatepicker.value = false; // Tarih seçildikten sonra datepicker'ı kapat
+  localSelectedDate.value = value;
+  showDatepicker.value = false;
 };
 
-// Tatil günlerini formatlayan fonksiyon
+//tatil tarihini biçimler
 const formatHoliday = (holiday: { date: string; label: string }): string => {
   const dateObj = new Date(holiday.date);
   const day = dateObj.getDate();
-  const monthName = date.formatDate(dateObj, 'MMMM'); // Ay adını al
+  const monthName = date.formatDate(dateObj, 'MMMM');
   return `${day} ${monthName} - ${holiday.label}`;
 };
 </script>
 
 <style>
 .custom-q-date .q-date__header {
-  display: none; /* q-date headerı gizler */
+  display: none;
 }
 </style>
