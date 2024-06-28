@@ -85,7 +85,6 @@ const onSubmit = () => {
     console.log('travelStore.travelInfo', travelStore.travelInfo);
 
     showLoadingAndRedirect(); //loading göster ve yönlendir
-    onReset(); //form reset
   }
 };
 
