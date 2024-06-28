@@ -13,7 +13,7 @@
         <!--Yolcu Sayısı Componenti Başlangıç-->
         <TravelInfoComponent
           v-model:passengerCount="passengerCount"
-          v-model:busName="busName"
+          v-model:companyName="companyName"
         />
         <!--Yolcu Sayısı Componenti Bitiş-->
 
@@ -30,20 +30,21 @@
 
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
-import { ref } from 'vue';
-
+import { ref, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
 import { useTravelStore } from 'src/stores/travel-info-store';
-
-// Store'u kullan
-const travelStore = useTravelStore();
-
 //component import
 import TravelInfoComponent from '../components/TravelInfoComponent.vue';
 import LocationComponent from '../components/LocationComponent.vue';
 import CalendarComponent from '../components/CalendarComponent.vue';
 
+// Store'u kullan
+const travelStore = useTravelStore();
+
+const router = useRouter();
+
 //form elamanları için ref tanımlamaları
-const busName = ref<string | undefined>(undefined);
+const companyName = ref<string | undefined>(undefined);
 const passengerCount = ref<string | undefined>(undefined);
 const departureStation = ref<string | undefined>(undefined);
 const arrivalStation = ref<string | undefined>(undefined);
@@ -56,7 +57,7 @@ const onSubmit = () => {
   if (
     !departureStation.value ||
     !arrivalStation.value ||
-    !busName.value ||
+    !companyName.value ||
     !passengerCount.value ||
     !selectedDate.value
   ) {
@@ -69,7 +70,7 @@ const onSubmit = () => {
   } else {
     // Store'a verileri güncelle
     travelStore.updateTravelInfo({
-      busName: busName.value,
+      companyName: companyName.value,
       departureStation: departureStation.value,
       arrivalStation: arrivalStation.value,
       passengerCount: passengerCount.value,
@@ -77,19 +78,38 @@ const onSubmit = () => {
     });
     console.log('travelStore.travelInfo', travelStore.travelInfo);
 
-    $q.notify({
-      color: 'green-4',
-      textColor: 'white',
-      icon: 'cloud_done',
-      message: 'Bilgileriniz başarıyla kaydedildi',
-    });
-    onReset();
+    showLoadingAndRedirect(); //loading göster ve yönlendir
+    onReset(); //form reset
   }
 };
 
+//loading ve yönlendirme işlemi
+let timer: ReturnType<typeof setTimeout> | undefined;
+
+const showLoadingAndRedirect = () => {
+  $q.loading.show({
+    message:
+      'Lütfen Bekleyin !<br><span class="text-amber text-italic">Ödeme sayfasına yönlendiriliyorsunuz...</span>',
+    html: true,
+  });
+
+  timer = setTimeout(() => {
+    $q.loading.hide();
+    timer = undefined;
+    router.push('/payment');
+  }, 4000);
+};
+
+onBeforeUnmount(() => {
+  if (timer !== undefined) {
+    clearTimeout(timer);
+    $q.loading.hide();
+  }
+});
+
 //form reset işlemi
 const onReset = () => {
-  busName.value = undefined;
+  companyName.value = undefined;
   passengerCount.value = undefined;
   // departureStation.value = undefined;
   //arrivalStation.value = undefined;

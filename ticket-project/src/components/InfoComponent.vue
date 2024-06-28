@@ -13,7 +13,7 @@
         <!--Side:yana al-->
         <q-item-section side>
           <q-item-label header class="text-caption">{{
-            travelStore.travelInfo.busName
+            travelStore.travelInfo.companyName
           }}</q-item-label>
         </q-item-section>
       </q-item>

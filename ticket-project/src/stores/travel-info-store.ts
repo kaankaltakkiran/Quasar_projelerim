@@ -5,7 +5,7 @@ export const useTravelStore = defineStore('travel', {
   //seyhat bilgileri
   state: () => ({
     travelInfo: {
-      busName: 'Otobüs Firması',
+      companyName: 'Otobüs Firma Adı',
       departureStation: 'Yolculuk Başlangıç Noktası',
       arrivalStation: 'Yolculuk Varış Noktası',
       passengerCount: 'Yolcu Sayısı',

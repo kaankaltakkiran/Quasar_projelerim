@@ -12,7 +12,7 @@ export interface IStation {
 }
 
 export interface ITravelİnfo {
-  busName: string;
+  companyName: string;
   departureStation: string;
   arrivalStation: string;
   passengerCount: string;

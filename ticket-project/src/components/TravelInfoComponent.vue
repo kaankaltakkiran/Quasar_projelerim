@@ -4,8 +4,8 @@
   <div>
     <q-input
       filled
-      v-model="localBusName"
-      label="Otobüs Adı *"
+      v-model="localCompanyName"
+      label="Firma Adı *"
       lazy-rules
       :rules="[ (val: any) => val && val.length > 0 || 'Lütfen boş bırakmayınız']"
     />
@@ -30,7 +30,7 @@ const options = ['1', '2', '3', '4', '5'];
 
 // Props tanımlama
 const props = defineProps({
-  busName: {
+  companyName: {
     type: String,
     default: undefined,
   },
@@ -40,17 +40,17 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits(['update:passengerCount', 'update:busName']);
+const emits = defineEmits(['update:passengerCount', 'update:companyName']);
 // Yerel değişken
 const localSelect = ref(props.passengerCount);
-const localBusName = ref(props.busName);
+const localCompanyName = ref(props.companyName);
 
 // Props değiştiğinde yerel değeri güncelle
 watch(localSelect, (newValue) => {
   emits('update:passengerCount', newValue);
 });
-watch(localBusName, (newValue) => {
-  emits('update:busName', newValue);
+watch(localCompanyName, (newValue) => {
+  emits('update:companyName', newValue);
 });
 
 //props.select değiştiğinde localSelect değerini güncelleme
@@ -58,6 +58,6 @@ watch(props, (newProps) => {
   localSelect.value = newProps.passengerCount;
 });
 watch(props, (newProps) => {
-  localBusName.value = newProps.busName;
+  localCompanyName.value = newProps.companyName;
 });
 </script>
