@@ -22,7 +22,7 @@
         <!--Tarih Componenti Bitiş-->
         <div>
           <q-btn
-            label="Submit"
+            label="Yolculuk Bilgilerini Kaydet"
             class="q-mt-md"
             type="submit"
             icon-right="send"

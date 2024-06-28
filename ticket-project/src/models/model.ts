@@ -18,3 +18,8 @@ export interface ITravelİnfo {
   passengerCount: string;
   selectedDate: string;
 }
+
+export interface ICountry {
+  label: string;
+  value: string;
+}

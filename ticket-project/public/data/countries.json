@@ -1,0 +1,42 @@
+[
+  {
+    "label": "Almanya",
+    "value": "DE"
+  },
+  {
+    "label": "Fransa",
+    "value": "FR"
+  },
+  {
+    "label": "İngiltere",
+    "value": "UK"
+  },
+  {
+    "label": "Amerika",
+    "value": "US"
+  },
+  {
+    "label": "İtalya",
+    "value": "IT"
+  },
+  {
+    "label": "İspanya",
+    "value": "ES"
+  },
+  {
+    "label": "Kanada",
+    "value": "CA"
+  },
+  {
+    "label": "Avustralya",
+    "value": "AU"
+  },
+  {
+    "label": "Hollanda",
+    "value": "NL"
+  },
+  {
+    "label": "Belçika",
+    "value": "BE"
+  }
+]

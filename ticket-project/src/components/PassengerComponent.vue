@@ -42,7 +42,7 @@
                 filled
                 v-model="selectedCountries[index - 1]"
                 :label="`${index}. Yolcu Ülke * `"
-                :options="countryOptions"
+                :options="travelStore.countryOptions"
               />
               <q-input
                 filled
@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useTravelStore } from 'src/stores/travel-info-store';
 
 // T.C kimlik no
@@ -77,20 +77,6 @@ const isNonCitizens = ref<boolean[]>([false, false, false, false, false]);
 
 // Seçilen ülke
 const selectedCountries = ref<string[]>([]);
-
-// Ülke seçenekleri
-const countryOptions = [
-  { label: 'Almanya', value: 'DE' },
-  { label: 'Fransa', value: 'FR' },
-  { label: 'İngiltere', value: 'UK' },
-  { label: 'Amerika', value: 'US' },
-  { label: 'İtalya', value: 'IT' },
-  { label: 'İspanya', value: 'ES' },
-  { label: 'Kanada', value: 'CA' },
-  { label: 'Avustralya', value: 'AU' },
-  { label: 'Hollanda', value: 'NL' },
-  { label: 'Belçika', value: 'BE' },
-];
 
 // Ad ve soyad doğrulama kuralları
 const nameSurnameRules = [
@@ -157,4 +143,9 @@ const onReset = (index: number) => {
   isNonCitizens.value[index] = false;
   selectedCountries.value[index - 1] = '';
 };
+
+// JSON verisini almak için onMounted kullanarak fetchCountries fonksiyonunu çağır
+onMounted(async () => {
+  await travelStore.fetchCountries();
+});
 </script>
