@@ -38,6 +38,9 @@ const props = defineProps({
   },
 });
 
+// Emits tanımlandı
+const emits = defineEmits(['update:departureStation', 'update:arrivalStation']);
+
 // Store tanımlandı
 const stationStore = useStationStore();
 
@@ -47,36 +50,58 @@ const localArrivalStation = ref<string>(props.arrivalStation ?? '');
 
 // Store'dan istasyon isimleri ve varış seçenekleri alındı
 const stationNames = computed(() => stationStore.stationNames);
-const arrivalOptions = computed(() => stationStore.arrivalOptions);
+const arrivalOptions = ref<Array<{ label: string; value: string }>>([]);
 
 // Gidiş istasyonu değiştiğinde store güncelleniyor
 const handleDepartureChange = (selected: string) => {
   stationStore.handleDepartureChange(selected);
-  localArrivalStation.value = stationStore.arrivalStation ?? '';
+  localArrivalStation.value = ''; // Dönüş istasyonunu sıfırla
+  updateArrivalStationOptions();
+};
+
+// Varış istasyon seçeneklerini güncelle
+const updateArrivalStationOptions = () => {
+  stationStore.updateArrivalOptions(localDepartureStation.value);
+  arrivalOptions.value = stationStore.arrivalOptions.map((option) => ({
+    label: option,
+    value: option,
+  }));
 };
 
 // Bileşen mount edildiğinde store'dan veriler çekildi
 onMounted(async () => {
   await stationStore.fetchStations();
-  localDepartureStation.value = stationNames.value[0] ?? '';
-  stationStore.updateArrivalOptions(localDepartureStation.value);
-  localArrivalStation.value =
-    arrivalOptions.value.length > 0 ? arrivalOptions.value[0] : '';
+  if (!props.departureStation) {
+    localDepartureStation.value = stationNames.value[0] ?? ''; // İlk değeri ayarla
+    handleDepartureChange(localDepartureStation.value); // Gidiş istasyonunu değiştir
+  }
+  updateArrivalStationOptions();
 });
-
-// Emits tanımlandı
-const emits = defineEmits(['update:departureStation', 'update:arrivalStation']);
 
 // Watchers tanımlandı
-watch(localDepartureStation, (newValue) =>
-  emits('update:departureStation', newValue)
-);
-watch(localArrivalStation, (newValue) =>
-  emits('update:arrivalStation', newValue)
-);
-// Reset için
-watch(props, (newProps) => {
-  localDepartureStation.value = newProps.departureStation ?? '';
-  localArrivalStation.value = newProps.arrivalStation ?? '';
+watch(localDepartureStation, (newValue) => {
+  emits('update:departureStation', newValue);
+  updateArrivalStationOptions();
 });
+watch(localArrivalStation, (newValue) => {
+  emits('update:arrivalStation', newValue);
+});
+
+// Props değişikliklerini izleyin
+watch(
+  () => props.departureStation,
+  (newDeparture) => {
+    localDepartureStation.value = newDeparture ?? '';
+    if (!newDeparture) {
+      localArrivalStation.value = '';
+    }
+  }
+);
+
+watch(
+  () => props.arrivalStation,
+  (newArrival) => {
+    localArrivalStation.value = newArrival ?? '';
+  }
+);
 </script>
