@@ -38,7 +38,7 @@
 
         <q-item tag="label" v-ripple>
           <q-item-section avatar>
-            <q-radio v-model="color" val="teal" />
+            <q-radio v-model="theme" val="light" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Light</q-item-label>
@@ -47,7 +47,7 @@
 
         <q-item tag="label" v-ripple>
           <q-item-section avatar>
-            <q-radio v-model="color" val="orange" />
+            <q-radio v-model="theme" val="dark" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Dark</q-item-label>
@@ -56,7 +56,7 @@
 
         <q-item tag="label" v-ripple>
           <q-item-section avatar top>
-            <q-radio v-model="color" val="cyan" />
+            <q-radio v-model="theme" val="auto" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Auto</q-item-label>
@@ -71,10 +71,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { useQuasar } from 'quasar';
 
+//dark mode için
+const $q = useQuasar();
+
+//değişkenler
 const notif1 = ref(true);
 const notif2 = ref(false);
 const Currency = ref('$');
-const color = ref('teal');
+const theme = ref('light');
+
+//dark mode durumuna göre değişiklik yapma
+watch(theme, (newVal) => {
+  switch (newVal) {
+    case 'light':
+      $q.dark.set(false);
+      break;
+    case 'dark':
+      $q.dark.set(true);
+      break;
+    case 'auto':
+      $q.dark.set('auto');
+      break;
+  }
+});
 </script>
