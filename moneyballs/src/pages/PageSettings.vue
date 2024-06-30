@@ -9,13 +9,13 @@
             <q-item-label>Prompt to delete</q-item-label>
           </q-item-section>
           <q-item-section side>
-            <q-toggle color="blue" v-model="notif1" val="battery" />
+            <q-toggle color="blue" v-model="isDelete" />
           </q-item-section>
         </q-item>
 
         <q-item tag="label" v-ripple>
           <q-item-section>
-            <q-item-label>Show Runnig Balance</q-item-label>
+            <q-item-label>Show Running Balance</q-item-label>
             <q-item-label caption>Allow notification</q-item-label>
           </q-item-section>
           <q-item-section side top>
@@ -34,7 +34,7 @@
           </q-item-section>
         </q-item>
         <q-separator spaced />
-        <q-item-label header>Apperance</q-item-label>
+        <q-item-label header>Appearance</q-item-label>
 
         <q-item tag="label" v-ripple>
           <q-item-section avatar>
@@ -71,21 +71,47 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { useQuasar } from 'quasar';
+import { ref, watch, onMounted } from 'vue';
+import { useQuasar, LocalStorage } from 'quasar';
 
-//dark mode için
 const $q = useQuasar();
 
-//değişkenler
-const notif1 = ref(true);
-const notif2 = ref(false);
-const Currency = ref('$');
-const theme = ref('light');
+// Değişkenler
+const isDelete = ref<boolean>(
+  LocalStorage.getItem('isDelete') === true || false
+);
+const notif2 = ref<boolean>(LocalStorage.getItem('notif2') === true || false);
+const Currency = ref<string>(LocalStorage.getItem('Currency') || '$');
+const theme = ref<string>(LocalStorage.getItem('theme') || 'light');
 
-//dark mode durumuna göre değişiklik yapma
+console.log(isDelete.value);
+
+// Tema değişikliğine göre ayarları kaydetme ve uygulama
 watch(theme, (newVal) => {
+  LocalStorage.set('theme', newVal);
   switch (newVal) {
+    case 'light':
+      $q.dark.set(false);
+      break;
+    case 'dark':
+      $q.dark.set(true);
+      break;
+    case 'auto':
+      $q.dark.set('auto');
+      break;
+  }
+});
+
+// Diğer ayarları izleme ve kaydetme
+watch([isDelete, notif2, Currency], ([newisDelete, newNotif2, newCurrency]) => {
+  LocalStorage.set('isDelete', newisDelete);
+  LocalStorage.set('notif2', newNotif2);
+  LocalStorage.set('Currency', newCurrency);
+});
+
+// Bileşen yüklendiğinde temayı ayarlama
+onMounted(() => {
+  switch (theme.value) {
     case 'light':
       $q.dark.set(false);
       break;
