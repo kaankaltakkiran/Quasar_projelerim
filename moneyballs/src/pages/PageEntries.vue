@@ -5,7 +5,7 @@
         <q-slide-item
           v-for="entry in entries"
           :key="entry.id"
-          @right="onEntrySlideRight($event, entry.id)"
+          @right="onEntrySlideRight($event, entry)"
           left-color="positive"
           right-color="negative"
         >
@@ -155,13 +155,18 @@ const addEntry = () => {
 };
 /* Silme işlemi */
 
-const onEntrySlideRight: (
+const onEntrySlideRight = (
   { reset }: { reset: () => void },
-  entryId: string // entryId, silinecek girdinin id'sini temsil eder
-) => void = ({ reset }, entryId) => {
+  entry: { id: string; name: string; amount: number }
+) => {
   $q.dialog({
     title: 'Delete Entry',
-    message: 'Are you sure you want to delete this entry?',
+    message: `Are you sure you want to delete this entry?
+<div class="q-mt-md text-weight-bold ${useAmountColorClass(entry.amount)}">
+${entry.name}  ${useCurrencify(entry.amount)}
+</div>
+    `,
+    html: true,
     cancel: {
       color: 'primary',
       noCaps: true,
@@ -174,11 +179,9 @@ const onEntrySlideRight: (
     },
   })
     .onOk(() => {
-      // console.log('>>>> OK')
-      deleteEntry(entryId);
+      deleteEntry(entry.id); // Delete entry by its id
     })
     .onCancel(() => {
-      // console.log('>>>> Cancel')
       reset(); // Call the reset function
     });
 };
