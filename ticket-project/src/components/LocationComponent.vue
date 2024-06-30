@@ -33,7 +33,7 @@ const props = defineProps({
     default: undefined,
   },
   arrivalStation: {
-    type: String,
+    type: Object as () => { label: string; value: string } | undefined,
     default: undefined,
   },
 });
@@ -46,7 +46,9 @@ const stationStore = useStationStore();
 
 // Reaktif değişkenler tanımlandı
 const localDepartureStation = ref<string>(props.departureStation ?? '');
-const localArrivalStation = ref<string>(props.arrivalStation ?? '');
+const localArrivalStation = ref<{ label: string; value: string } | undefined>(
+  props.arrivalStation ?? undefined
+);
 
 // Store'dan istasyon isimleri ve varış seçenekleri alındı
 const stationNames = computed(() => stationStore.stationNames);
@@ -55,7 +57,7 @@ const arrivalOptions = ref<Array<{ label: string; value: string }>>([]);
 // Gidiş istasyonu değiştiğinde store güncelleniyor
 const handleDepartureChange = (selected: string) => {
   stationStore.handleDepartureChange(selected);
-  localArrivalStation.value = ''; // Dönüş istasyonunu sıfırla
+  localArrivalStation.value = undefined; // Dönüş istasyonunu sıfırla
   updateArrivalStationOptions();
 };
 
@@ -93,7 +95,7 @@ watch(
   (newDeparture) => {
     localDepartureStation.value = newDeparture ?? '';
     if (!newDeparture) {
-      localArrivalStation.value = '';
+      localArrivalStation.value = undefined;
     }
   }
 );
@@ -101,7 +103,7 @@ watch(
 watch(
   () => props.arrivalStation,
   (newArrival) => {
-    localArrivalStation.value = newArrival ?? '';
+    localArrivalStation.value = newArrival ?? undefined;
   }
 );
 </script>

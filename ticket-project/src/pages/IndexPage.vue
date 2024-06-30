@@ -53,7 +53,9 @@ const router = useRouter();
 const companyName = ref<string | undefined>(undefined);
 const passengerCount = ref<string | undefined>(undefined);
 const departureStation = ref<string | undefined>(undefined);
-const arrivalStation = ref<string | undefined>(undefined);
+const arrivalStation = ref<{ label: string; value: string } | undefined>(
+  undefined
+);
 const selectedDate = ref<string | undefined>(undefined);
 
 const $q = useQuasar();
@@ -78,7 +80,7 @@ const onSubmit = () => {
     travelStore.updateTravelInfo({
       companyName: companyName.value,
       departureStation: departureStation.value,
-      arrivalStation: arrivalStation.value,
+      arrivalStation: arrivalStation.value?.value,
       passengerCount: passengerCount.value,
       selectedDate: selectedDate.value,
     });
