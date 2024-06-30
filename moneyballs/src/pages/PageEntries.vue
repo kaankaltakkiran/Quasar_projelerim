@@ -192,5 +192,11 @@ const deleteEntry = (entryId: string) => {
   //console.log('Deleting entry with id:', entryId);
   const index = entries.value.findIndex((entry) => entry.id === entryId); // entryId'ye göre girdinin index'ini bul
   entries.value.splice(index, 1); // girdiyi sil
+  // kullanıcıya bildirim göster
+  $q.notify({
+    color: 'negative',
+    position: 'top',
+    message: 'Entry deleted',
+  });
 };
 </script>
