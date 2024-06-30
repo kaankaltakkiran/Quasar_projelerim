@@ -29,12 +29,15 @@
           {{ useCurrencify(balance) }}
         </div>
       </div>
-      <div class="row q-px-sm q-pb-sm q-col-gutter-sm bg-primary">
+      <q-form
+        @submit="addEntry"
+        class="row q-px-sm q-pb-sm q-col-gutter-sm bg-primary"
+      >
         <div class="col">
           <q-input
             outlined
             dense
-            v-model="text"
+            v-model="addEntryForm.name"
             placeholder="Name"
             bg-color="white"
           />
@@ -46,27 +49,25 @@
             dense
             type="number"
             step="0.01"
-            v-model="amount"
+            v-model="addEntryForm.amount"
             placeholder="Amount"
             bg-color="white"
           />
         </div>
         <div class="col col-auto">
-          <q-btn color="primary" round icon="add" />
+          <q-btn color="primary" type="submit" round icon="add" />
         </div>
-      </div>
+      </q-form>
     </q-footer>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, reactive } from 'vue';
+import { uid } from 'quasar';
 // use importları
 import { useCurrencify } from 'src/use/useCurrencify';
 import { useAmountColorClass } from 'src/use/useAmountColorClass';
-
-const text = ref('');
-const amount = ref();
 
 const entries = ref([
   {
@@ -98,4 +99,22 @@ const balance = computed(() => {
     return accumulator + amount;
   }, 0);
 });
+
+/* Ekleme işlemi */
+
+const addEntryForm = reactive({
+  name: '',
+  amount: null as number | null, // amount alanı number veya null olabilir
+});
+
+const addEntry = () => {
+  const newEntry = {
+    id: uid(),
+    name: addEntryForm.name,
+    amount: addEntryForm.amount ?? 0, // null kontrolü ve varsayılan değer atanması
+  };
+  entries.value.push(newEntry);
+  addEntryForm.name = '';
+  addEntryForm.amount = null;
+};
 </script>
