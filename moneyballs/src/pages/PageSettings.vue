@@ -6,7 +6,7 @@
 
         <q-item tag="label" v-ripple>
           <q-item-section>
-            <q-item-label>Prompt to delete</q-item-label>
+            <q-item-label>Prompt To Delete</q-item-label>
           </q-item-section>
           <q-item-section side>
             <q-toggle color="blue" v-model="isDelete" />
@@ -77,14 +77,10 @@ import { useQuasar, LocalStorage } from 'quasar';
 const $q = useQuasar();
 
 // Değişkenler
-const isDelete = ref<boolean>(
-  LocalStorage.getItem('isDelete') === true || false
-);
+const isDelete = ref<boolean>(LocalStorage.getItem('isDelete') !== 'false');
 const notif2 = ref<boolean>(LocalStorage.getItem('notif2') === true || false);
 const Currency = ref<string>(LocalStorage.getItem('Currency') || '$');
 const theme = ref<string>(LocalStorage.getItem('theme') || 'light');
-
-console.log(isDelete.value);
 
 // Tema değişikliğine göre ayarları kaydetme ve uygulama
 watch(theme, (newVal) => {
@@ -103,10 +99,11 @@ watch(theme, (newVal) => {
 });
 
 // Diğer ayarları izleme ve kaydetme
+// Diğer ayarları izleme ve kaydetme
 watch([isDelete, notif2, Currency], ([newisDelete, newNotif2, newCurrency]) => {
-  LocalStorage.set('isDelete', newisDelete);
-  LocalStorage.set('notif2', newNotif2);
-  LocalStorage.set('Currency', newCurrency);
+  LocalStorage.set('isDelete', newisDelete.toString()); // isDelete değerini string olarak yaz
+  LocalStorage.set('notif2', newNotif2.toString()); // notif2 değerini string olarak yaz
+  LocalStorage.set('Currency', newCurrency); // Currency değeri string olduğu için otomatik olarak string olarak yazılır
 });
 
 // Bileşen yüklendiğinde temayı ayarlama

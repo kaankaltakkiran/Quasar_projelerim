@@ -79,6 +79,7 @@
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue';
 import { uid, useQuasar } from 'quasar';
+import { LocalStorage } from 'quasar';
 // use importları
 import { useCurrencify } from 'src/use/useCurrencify';
 import { useAmountColorClass } from 'src/use/useAmountColorClass';
@@ -155,37 +156,45 @@ const addEntry = () => {
 };
 /* Silme işlemi */
 
+// // localStorage'dan alınan değeri isDelete değişkenine ata
+const isDeleteValue = LocalStorage.getItem('isDelete');
+console.log(isDeleteValue);
 const onEntrySlideRight = (
   { reset }: { reset: () => void },
   entry: { id: string; name: string; amount: number }
 ) => {
-  $q.dialog({
-    title: 'Delete Entry',
-    message: `Are you sure you want to delete this entry?
-<div class="q-mt-md text-weight-bold ${useAmountColorClass(entry.amount)}">
-${entry.name}  ${useCurrencify(entry.amount)}
-</div>
-    `,
-    html: true,
-    cancel: {
-      color: 'primary',
-      noCaps: true,
-    },
-    persistent: true,
-    ok: {
-      label: 'delete',
-      color: 'negative',
-      noCaps: true,
-    },
-  })
-    .onOk(() => {
-      deleteEntry(entry.id); // Delete entry by its id
+  // isDeleteValue false ise q-dialog gösterme
+  if (isDeleteValue === 'false') {
+    deleteEntry(entry.id);
+  } else {
+    $q.dialog({
+      title: 'Delete Entry',
+      message: `Are you sure you want to delete this entry?
+      <div class="q-mt-md text-weight-bold ${useAmountColorClass(
+        entry.amount
+      )}">
+      ${entry.name}  ${useCurrencify(entry.amount)}
+      </div>`,
+      html: true,
+      cancel: {
+        color: 'primary',
+        noCaps: true,
+      },
+      persistent: true,
+      ok: {
+        label: 'delete',
+        color: 'negative',
+        noCaps: true,
+      },
     })
-    .onCancel(() => {
-      reset(); // Call the reset function
-    });
+      .onOk(() => {
+        deleteEntry(entry.id);
+      })
+      .onCancel(() => {
+        reset();
+      });
+  }
 };
-
 /* Silme fonksiyonu */
 
 const deleteEntry = (entryId: string) => {
