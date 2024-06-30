@@ -47,9 +47,8 @@
             outlined
             input-class="text-right"
             dense
-            type="number"
             step="0.01"
-            v-model="addEntryForm.amount"
+            v-model.number="addEntryForm.amount"
             placeholder="Amount"
             bg-color="white"
           />
@@ -102,19 +101,34 @@ const balance = computed(() => {
 
 /* Ekleme işlemi */
 
-const addEntryForm = reactive({
+// addEntryFormDefault objesi, formun varsayılan değerlerini içerir
+const addEntryFormDefault = {
   name: '',
   amount: null as number | null, // amount alanı number veya null olabilir
+};
+
+// addEntryForm objesi, formun değerlerini içerir
+const addEntryForm = reactive({
+  ...addEntryFormDefault,
 });
 
+// addEntryFormReset fonksiyonu, formu sıfırlar
+const addEntryFormReset = () => {
+  Object.assign(addEntryForm, addEntryFormDefault);
+};
+
+//Object.assign() metodu, bir veya daha fazla kaynaktan hedefe özellikleri kopyalar.
 const addEntry = () => {
-  const newEntry = {
-    id: uid(),
-    name: addEntryForm.name,
-    amount: addEntryForm.amount ?? 0, // null kontrolü ve varsayılan değer atanması
-  };
-  entries.value.push(newEntry);
-  addEntryForm.name = '';
-  addEntryForm.amount = null;
+  const newEntry = Object.assign(
+    {},
+    {
+      id: uid(),
+      name: addEntryForm.name,
+      amount: addEntryForm.amount !== null ? addEntryForm.amount : 0,
+    }
+  );
+
+  entries.value.push(newEntry); // yeni girdiyi ekle
+  addEntryFormReset(); // formu sıfırla
 };
 </script>
