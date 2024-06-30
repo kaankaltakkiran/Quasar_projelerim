@@ -19,6 +19,38 @@
         </q-item>
       </q-list>
     </div>
+    <q-footer class="bg-transparent">
+      <div class="row q-mb-sm q-px-md q-my-sm shadow-up-3">
+        <div class="col text-grey-7 text-h6">Balance:</div>
+        <div class="row text-grey-7 text-h6 text-right">+ $3,999.00</div>
+      </div>
+      <div class="row q-px-sm q-pb-sm q-col-gutter-sm bg-primary">
+        <div class="col">
+          <q-input
+            outlined
+            dense
+            v-model="text"
+            placeholder="Name"
+            bg-color="white"
+          />
+        </div>
+        <div class="col">
+          <q-input
+            outlined
+            input-class="text-right"
+            dense
+            type="number"
+            step="0.01"
+            v-model="amount"
+            placeholder="Amount"
+            bg-color="white"
+          />
+        </div>
+        <div class="col col-auto">
+          <q-btn color="primary" round icon="add" />
+        </div>
+      </div>
+    </q-footer>
   </q-page>
 </template>
 
@@ -27,6 +59,9 @@ import { ref } from 'vue';
 // use importları
 import { useCurrencify } from 'src/use/useCurrencify';
 import { useAmountColorClass } from 'src/use/useAmountColorClass';
+
+const text = ref('');
+const amount = ref();
 
 const entries = ref([
   {
