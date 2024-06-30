@@ -38,6 +38,7 @@
             outlined
             dense
             v-model="addEntryForm.name"
+            ref="nameRef"
             placeholder="Name"
             bg-color="white"
           />
@@ -101,6 +102,9 @@ const balance = computed(() => {
 
 /* Ekleme işlemi */
 
+// nameRef, name alanını referans alır
+const nameRef = ref<HTMLElement | null>(null);
+
 // addEntryFormDefault objesi, formun varsayılan değerlerini içerir
 const addEntryFormDefault = {
   name: '',
@@ -115,6 +119,7 @@ const addEntryForm = reactive({
 // addEntryFormReset fonksiyonu, formu sıfırlar
 const addEntryFormReset = () => {
   Object.assign(addEntryForm, addEntryFormDefault);
+  nameRef.value?.focus(); // name alanına odaklan
 };
 
 //Object.assign() metodu, bir veya daha fazla kaynaktan hedefe özellikleri kopyalar.
