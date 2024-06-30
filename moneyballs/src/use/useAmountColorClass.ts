@@ -1,10 +1,10 @@
 // paranın rengini belirlemek için kullanılır
 export function useAmountColorClass(amount: number) {
   if (amount < 0) {
-    return 'text-negative'; // Apply negative color class
+    return 'text-negative';
   } else if (amount > 0) {
-    return 'text-positive'; // Apply positive color class
+    return 'text-positive';
   } else {
-    return ''; // Return empty string for zero (no color change)
+    return 'text-grey-6';
   }
 }
