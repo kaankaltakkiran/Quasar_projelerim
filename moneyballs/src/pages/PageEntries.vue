@@ -158,7 +158,7 @@ const addEntry = () => {
 
 // // localStorage'dan alınan değeri isDelete değişkenine ata
 const isDeleteValue = LocalStorage.getItem('isDelete');
-console.log(isDeleteValue);
+
 const onEntrySlideRight = (
   { reset }: { reset: () => void },
   entry: { id: string; name: string; amount: number }

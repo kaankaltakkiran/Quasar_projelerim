@@ -30,6 +30,7 @@
               dense
               v-model="Currency"
               label="Currency Symbol"
+              @blur="updateCurrencySymbol"
             />
           </q-item-section>
         </q-item>
@@ -98,7 +99,11 @@ watch(theme, (newVal) => {
   }
 });
 
-// Diğer ayarları izleme ve kaydetme
+// Currency input değişikliğini güncelleme
+const updateCurrencySymbol = () => {
+  LocalStorage.set('Currency', Currency.value);
+};
+
 // Diğer ayarları izleme ve kaydetme
 watch([isDelete, notif2, Currency], ([newisDelete, newNotif2, newCurrency]) => {
   LocalStorage.set('isDelete', newisDelete.toString()); // isDelete değerini string olarak yaz
