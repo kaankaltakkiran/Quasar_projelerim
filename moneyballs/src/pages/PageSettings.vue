@@ -25,12 +25,15 @@
 
         <q-item tag="label" v-ripple>
           <q-item-section>
-            <q-input
-              outlined
-              dense
-              v-model="Currency"
+            <q-select
               label="Currency Symbol"
+              transition-show="flip-up"
+              transition-hide="flip-down"
+              filled
+              v-model="Currency"
+              :options="currencySymbolOptions"
               @blur="updateCurrencySymbol"
+              emit-value
             />
           </q-item-section>
         </q-item>
@@ -83,6 +86,15 @@ const notif2 = ref<boolean>(LocalStorage.getItem('notif2') === true || false);
 const Currency = ref<string>(LocalStorage.getItem('Currency') || '$');
 const theme = ref<string>(LocalStorage.getItem('theme') || 'light');
 
+const currencySymbolOptions = [
+  { label: 'Dollar ($)', value: '$' },
+  { label: 'Turkish Lira (₺)', value: '₺' },
+  { label: 'Euro (€)', value: '€' },
+  { label: 'Pound (£)', value: '£' },
+  { label: 'Yen (¥)', value: '¥' },
+  { label: 'Rupee (₹)', value: '₹' },
+];
+
 // Tema değişikliğine göre ayarları kaydetme ve uygulama
 watch(theme, (newVal) => {
   LocalStorage.set('theme', newVal);
@@ -101,14 +113,18 @@ watch(theme, (newVal) => {
 
 // Currency input değişikliğini güncelleme
 const updateCurrencySymbol = () => {
-  LocalStorage.set('Currency', Currency.value);
+  if (Currency.value) {
+    localStorage.setItem('Currency', Currency.value);
+  }
 };
 
 // Diğer ayarları izleme ve kaydetme
 watch([isDelete, notif2, Currency], ([newisDelete, newNotif2, newCurrency]) => {
-  LocalStorage.set('isDelete', newisDelete.toString()); // isDelete değerini string olarak yaz
-  LocalStorage.set('notif2', newNotif2.toString()); // notif2 değerini string olarak yaz
-  LocalStorage.set('Currency', newCurrency); // Currency değeri string olduğu için otomatik olarak string olarak yazılır
+  localStorage.setItem('isDelete', newisDelete.toString());
+  localStorage.setItem('notif2', newNotif2.toString());
+  if (newCurrency) {
+    localStorage.setItem('Currency', newCurrency);
+  }
 });
 
 // Bileşen yüklendiğinde temayı ayarlama
