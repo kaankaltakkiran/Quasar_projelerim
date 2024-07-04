@@ -20,8 +20,9 @@
             v-model="formattedPhoneNumber"
             class="q-mt-md"
             label="Telefon Numarası *"
-            hint="Telefon Numaranızı giriniz"
+            hint="Telefon Numaranızı giriniz (Örnek: 0 5XX XXX XX XX)"
             mask="# ### ### ####"
+            unmasked-value
             lazy-rules
             :rules="phoneRules"
             @input="formatPhoneNumber"

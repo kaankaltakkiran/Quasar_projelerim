@@ -25,9 +25,9 @@
             filled
             v-model="kartNo"
             label="Kart Numarası *"
-            hint="Kart Numarasını giriniz"
-            lazy-rules
             mask="####  ####  ####  ####"
+            lazy-rules
+            fill-mask="#"
             :rules="kartNoRules"
           />
           <q-card-section class="row q-col-gutter-md">
@@ -38,6 +38,7 @@
               label="AA/YY"
               hint="AA/YY formatında giriniz"
               mask="##/##"
+              fill-mask
               :rules="expiryDateRules"
               class="col"
             />
