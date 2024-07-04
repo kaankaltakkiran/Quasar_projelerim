@@ -70,6 +70,8 @@
             bg-color="white"
             :rules="enableRules ? [validateAmount] : []"
             @blur="checkInput('amount')"
+            mask="#"
+            reverse-fill-mask
           />
         </div>
         <div class="col col-auto">
