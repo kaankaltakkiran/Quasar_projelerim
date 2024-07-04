@@ -55,6 +55,8 @@
             ref="nameRef"
             placeholder="Name"
             bg-color="white"
+            :rules="enableRules ? [validateName] : []"
+            @blur="checkInput('name')"
           />
         </div>
         <div class="col">
@@ -66,6 +68,8 @@
             v-model.number="addEntryForm.amount"
             placeholder="Amount"
             bg-color="white"
+            :rules="enableRules ? [validateAmount] : []"
+            @blur="checkInput('amount')"
           />
         </div>
         <div class="col col-auto">
@@ -133,11 +137,26 @@ const addEntryFormDefault = {
 const addEntryForm = reactive({
   ...addEntryFormDefault,
 });
+// kural geçerlilik
+const enableRules = ref(true);
 
 // addEntryFormReset fonksiyonu, formu sıfırlar
 const addEntryFormReset = () => {
+  // Kuralları geçici olarak devre dışı bırak
+  enableRules.value = false;
+
   Object.assign(addEntryForm, addEntryFormDefault);
   nameRef.value?.focus(); // name alanına odaklan
+  // Kuralları yeniden etkinleştir
+  setTimeout(() => {
+    enableRules.value = true;
+    $q.notify({
+      icon: 'check',
+      color: 'positive',
+      position: 'top',
+      message: 'Entry added successfully',
+    });
+  }, 0);
 };
 
 //Object.assign() metodu, bir veya daha fazla kaynaktan hedefe özellikleri kopyalar.
@@ -150,7 +169,6 @@ const addEntry = () => {
       amount: addEntryForm.amount !== null ? addEntryForm.amount : 0,
     }
   );
-
   entries.value.push(newEntry); // yeni girdiyi ekle
   addEntryFormReset(); // formu sıfırla
 };
@@ -203,9 +221,49 @@ const deleteEntry = (entryId: string) => {
   entries.value.splice(index, 1); // girdiyi sil
   // kullanıcıya bildirim göster
   $q.notify({
+    icon: 'delete',
     color: 'negative',
     position: 'top',
     message: 'Entry deleted',
   });
+};
+
+/* Doğrulama ve Bildirim Gösterimi */
+
+const validateName = (val: string) => {
+  if (val && val.length > 0) {
+    return true;
+  } else {
+    $q.notify({
+      icon: 'warning',
+      color: 'negative',
+      position: 'top',
+      message: 'Please enter a name for the entry',
+    });
+    return false;
+  }
+};
+
+const validateAmount = (val: number | null) => {
+  if (val !== null) {
+    return true;
+  } else {
+    $q.notify({
+      icon: 'warning',
+      color: 'negative',
+      position: 'top',
+      message: 'Please enter an amount for the entry',
+    });
+    return false;
+  }
+};
+// checkInput fonksiyonu, alanın doğruluğunu kontrol eder
+const checkInput = (field: string) => {
+  if (field === 'name') {
+    validateName(addEntryForm.name);
+  }
+  if (field === 'amount') {
+    validateAmount(addEntryForm.amount);
+  }
 };
 </script>
