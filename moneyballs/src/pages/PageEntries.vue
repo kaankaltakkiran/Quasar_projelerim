@@ -86,7 +86,6 @@
             bg-color="white"
             :rules="enableRules ? [validateAmount] : []"
             @blur="checkInput('amount')"
-            mask="#"
             reverse-fill-mask
           />
         </div>
