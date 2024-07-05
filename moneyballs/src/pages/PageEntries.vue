@@ -2,7 +2,7 @@
   <q-page>
     <div class="q-pa-md">
       <!-- Data yoksa -->
-      <div class="q-mt-md" v-if="entries.length == 0">
+      <div class="q-mt-md" v-if="entryStore.entries.length == 0">
         <div class="row justify-center">
           <q-icon class="text-grey-6 q-mb-md" name="savings" size="100px" />
         </div>
@@ -10,9 +10,9 @@
           No entries yet. Add your first entry.
         </div>
       </div>
-      <q-list bordered separator v-if="entries.length >= 1">
+      <q-list bordered separator v-if="entryStore.entries.length >= 1">
         <q-slide-item
-          v-for="(entry, index) in entries"
+          v-for="(entry, index) in entryStore.entries"
           :key="entry.id"
           @right="onEntrySlideRight($event, entry)"
           left-color="positive"
@@ -99,8 +99,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive, watch } from 'vue';
+import { ref, computed, reactive, watch, onMounted } from 'vue';
 import { uid, useQuasar, LocalStorage } from 'quasar';
+import { useEntryStore } from 'src/stores/entries-store';
 // use importları
 import { useCurrencify } from 'src/use/useCurrencify';
 import { useAmountColorClass } from 'src/use/useAmountColorClass';
@@ -108,28 +109,13 @@ import { useAmountColorClass } from 'src/use/useAmountColorClass';
 // useQuasar fonksiyonu, Quasar fonksiyonlarını kullanmamızı sağlar
 const $q = useQuasar();
 
-const entries = ref([
-  {
-    id: '1',
-    name: 'Salary',
-    amount: 4999.99,
-  },
-  {
-    id: '2',
-    name: 'Rent',
-    amount: -900,
-  },
-  {
-    id: '3',
-    name: 'Phone Bill',
-    amount: -14.99,
-  },
-  {
-    id: '4',
-    name: 'Unknown',
-    amount: 0,
-  },
-]);
+// EntryStore'u kullanma
+const entryStore = useEntryStore();
+
+//mounted olduğunda entryStore'dan verileri çekme
+onMounted(() => {
+  entryStore.fetchEntries();
+});
 
 // Props tanımlama
 const props = defineProps({
@@ -156,7 +142,7 @@ watch(props, (newProps) => {
 
 /* Bakiye hesaplama */
 const balance = computed(() => {
-  return entries.value.reduce((accumulator, { amount }) => {
+  return entryStore.entries.reduce((accumulator, { amount }) => {
     return accumulator + amount;
   }, 0);
 });
@@ -170,12 +156,14 @@ const addEntryFormDefault = {
 const addEntryForm = reactive({
   ...addEntryFormDefault,
 });
+
+// Kuralların etkinleştirilmesi
 const enableRules = ref(true);
 
 const addEntryFormReset = () => {
   enableRules.value = false;
   Object.assign(addEntryForm, addEntryFormDefault);
-  nameRef.value?.focus();
+  // nameRef.value?.focus(); // İlk inputa odaklan
   setTimeout(() => {
     enableRules.value = true;
     $q.notify({
@@ -197,7 +185,7 @@ const addEntry = () => {
       amount: addEntryForm.amount !== null ? addEntryForm.amount : 0,
     }
   );
-  entries.value.push(newEntry);
+  entryStore.entries.push(newEntry);
   addEntryFormReset();
 };
 
@@ -241,8 +229,8 @@ const onEntrySlideRight = (
 };
 
 const deleteEntry = (entryId: string) => {
-  const index = entries.value.findIndex((entry) => entry.id === entryId);
-  entries.value.splice(index, 1);
+  const index = entryStore.entries.findIndex((entry) => entry.id === entryId);
+  entryStore.entries.splice(index, 1);
   $q.notify({
     icon: 'delete',
     color: 'negative',
@@ -308,8 +296,11 @@ const onDrop = (e: DragEvent, index: number) => {
   e.preventDefault();
   const draggedIndex = e.dataTransfer?.getData('index');
   if (draggedIndex !== undefined) {
-    const draggedEntry = entries.value.splice(parseInt(draggedIndex), 1)[0];
-    entries.value.splice(index, 0, draggedEntry);
+    const draggedEntry = entryStore.entries.splice(
+      parseInt(draggedIndex),
+      1
+    )[0];
+    entryStore.entries.splice(index, 0, draggedEntry);
   }
 };
 </script>
