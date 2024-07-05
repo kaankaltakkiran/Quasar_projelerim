@@ -1,7 +1,16 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <q-list bordered separator>
+      <!-- Data yoksa -->
+      <div class="q-mt-md" v-if="entries.length == 0">
+        <div class="row justify-center">
+          <q-icon class="text-grey-6 q-mb-md" name="savings" size="100px" />
+        </div>
+        <div class="text-h6 text-center text-grey-8">
+          No entries yet. Add your first entry.
+        </div>
+      </div>
+      <q-list bordered separator v-if="entries.length >= 1">
         <q-slide-item
           v-for="entry in entries"
           :key="entry.id"
