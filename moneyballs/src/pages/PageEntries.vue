@@ -166,6 +166,7 @@ const addEntryFormReset = () => {
       color: 'positive',
       position: 'top',
       message: 'Entry added successfully',
+      group: false,
     });
   }, 0);
 };
@@ -236,6 +237,7 @@ const deleteEntry = (entryId: string) => {
     color: 'negative',
     position: 'top',
     message: 'Entry deleted',
+    group: false,
   });
 };
 
@@ -250,6 +252,7 @@ const validateName = (val: string) => {
       color: 'negative',
       position: 'top',
       message: 'Please enter a name for the entry',
+      group: false,
     });
     return false;
   }
@@ -264,6 +267,7 @@ const validateAmount = (val: number | null) => {
       color: 'negative',
       position: 'top',
       message: 'Please enter an amount for the entry',
+      group: false,
     });
     return false;
   }
