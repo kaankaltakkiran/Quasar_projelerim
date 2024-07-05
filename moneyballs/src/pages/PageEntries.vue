@@ -12,16 +12,19 @@
       </div>
       <q-list bordered separator v-if="entries.length >= 1">
         <q-slide-item
-          v-for="entry in entries"
+          v-for="(entry, index) in entries"
           :key="entry.id"
           @right="onEntrySlideRight($event, entry)"
           left-color="positive"
           right-color="negative"
+          :draggable="isEditMode"
+          @dragstart="onDragStart($event, index)"
+          @dragover="onDragOver"
+          @drop="onDrop($event, index)"
         >
           <template v-slot:right>
             <q-icon name="delete" />
           </template>
-
           <q-item>
             <q-item-section
               class="text-weight-bold"
@@ -35,6 +38,10 @@
               :class="useAmountColorClass(entry.amount)"
             >
               {{ useCurrencify(entry.amount) }}
+            </q-item-section>
+            <!-- Edit Mode -->
+            <q-item-section side>
+              <q-icon v-if="isEditMode" name="menu" />
             </q-item-section>
           </q-item>
         </q-slide-item>
@@ -92,9 +99,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive } from 'vue';
-import { uid, useQuasar } from 'quasar';
-import { LocalStorage } from 'quasar';
+import { ref, computed, reactive, watch } from 'vue';
+import { uid, useQuasar, LocalStorage } from 'quasar';
 // use importları
 import { useCurrencify } from 'src/use/useCurrencify';
 import { useAmountColorClass } from 'src/use/useAmountColorClass';
@@ -124,9 +130,31 @@ const entries = ref([
     amount: 0,
   },
 ]);
-/* Bakiye hesaplama */
 
-/* reduce metodu, bir dizi üzerinde döngü yaparak her bir öğeyi birikimciye (accumulator) ekler. İlk olarak accumulator 0 olarak başlatılır ve her amount değeri accumulator'a eklenir. Sonuç olarak, balance hesaplanır. */
+// Props tanımlama
+const props = defineProps({
+  isEditMode: {
+    type: Boolean,
+    default: false,
+  },
+});
+//emits ile editMode prop'unu güncelleme
+const emits = defineEmits(['update:editMode']);
+
+// Yerel editMode değeri
+const localEditMode = ref(props.isEditMode);
+
+// Props değiştiğinde yerel değeri güncelle
+watch(localEditMode, (newValue) => {
+  emits('update:editMode', newValue);
+});
+
+//props.select değiştiğinde localEditMode değerini güncelleme
+watch(props, (newProps) => {
+  localEditMode.value = newProps.isEditMode;
+});
+
+/* Bakiye hesaplama */
 const balance = computed(() => {
   return entries.value.reduce((accumulator, { amount }) => {
     return accumulator + amount;
@@ -134,31 +162,20 @@ const balance = computed(() => {
 });
 
 /* Ekleme işlemi */
-
-// nameRef, name alanını referans alır
 const nameRef = ref<HTMLElement | null>(null);
-
-// addEntryFormDefault objesi, formun varsayılan değerlerini içerir
 const addEntryFormDefault = {
   name: '',
-  amount: null as number | null, // amount alanı number veya null olabilir
+  amount: null as number | null,
 };
-
-// addEntryForm objesi, formun değerlerini içerir
 const addEntryForm = reactive({
   ...addEntryFormDefault,
 });
-// kural geçerlilik
 const enableRules = ref(true);
 
-// addEntryFormReset fonksiyonu, formu sıfırlar
 const addEntryFormReset = () => {
-  // Kuralları geçici olarak devre dışı bırak
   enableRules.value = false;
-
   Object.assign(addEntryForm, addEntryFormDefault);
-  nameRef.value?.focus(); // name alanına odaklan
-  // Kuralları yeniden etkinleştir
+  nameRef.value?.focus();
   setTimeout(() => {
     enableRules.value = true;
     $q.notify({
@@ -171,7 +188,6 @@ const addEntryFormReset = () => {
   }, 0);
 };
 
-//Object.assign() metodu, bir veya daha fazla kaynaktan hedefe özellikleri kopyalar.
 const addEntry = () => {
   const newEntry = Object.assign(
     {},
@@ -181,19 +197,17 @@ const addEntry = () => {
       amount: addEntryForm.amount !== null ? addEntryForm.amount : 0,
     }
   );
-  entries.value.push(newEntry); // yeni girdiyi ekle
-  addEntryFormReset(); // formu sıfırla
+  entries.value.push(newEntry);
+  addEntryFormReset();
 };
-/* Silme işlemi */
 
-// // localStorage'dan alınan değeri isDelete değişkenine ata
+/* Silme işlemi */
 const isDeleteValue = LocalStorage.getItem('isDelete');
 
 const onEntrySlideRight = (
   { reset }: { reset: () => void },
   entry: { id: string; name: string; amount: number }
 ) => {
-  // isDeleteValue false ise q-dialog gösterme
   if (isDeleteValue === 'false') {
     deleteEntry(entry.id);
   } else {
@@ -225,13 +239,10 @@ const onEntrySlideRight = (
       });
   }
 };
-/* Silme fonksiyonu */
 
 const deleteEntry = (entryId: string) => {
-  //console.log('Deleting entry with id:', entryId);
-  const index = entries.value.findIndex((entry) => entry.id === entryId); // entryId'ye göre girdinin index'ini bul
-  entries.value.splice(index, 1); // girdiyi sil
-  // kullanıcıya bildirim göster
+  const index = entries.value.findIndex((entry) => entry.id === entryId);
+  entries.value.splice(index, 1);
   $q.notify({
     icon: 'delete',
     color: 'negative',
@@ -242,7 +253,6 @@ const deleteEntry = (entryId: string) => {
 };
 
 /* Doğrulama ve Bildirim Gösterimi */
-
 const validateName = (val: string) => {
   if (val && val.length > 0) {
     return true;
@@ -272,13 +282,34 @@ const validateAmount = (val: number | null) => {
     return false;
   }
 };
-// checkInput fonksiyonu, alanın doğruluğunu kontrol eder
+
 const checkInput = (field: string) => {
   if (field === 'name') {
     validateName(addEntryForm.name);
   }
   if (field === 'amount') {
     validateAmount(addEntryForm.amount);
+  }
+};
+
+/* Drag & Drop İşlemleri */
+
+//onnDragStart sürükleme işlemi başladığında veriyi ayarlar
+const onDragStart = (e: DragEvent, index: number) => {
+  e.dataTransfer?.setData('index', index.toString());
+};
+//onDragOver tarayıcı davranışını durdurur
+const onDragOver = (e: DragEvent) => {
+  e.preventDefault();
+};
+
+//onDrop sürükleme işlemi bittiğinde veriyi ayarlar
+const onDrop = (e: DragEvent, index: number) => {
+  e.preventDefault();
+  const draggedIndex = e.dataTransfer?.getData('index');
+  if (draggedIndex !== undefined) {
+    const draggedEntry = entries.value.splice(parseInt(draggedIndex), 1)[0];
+    entries.value.splice(index, 0, draggedEntry);
   }
 };
 </script>

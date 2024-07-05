@@ -17,6 +17,10 @@
             Moneyballs
           </div>
         </q-toolbar-title>
+        <!-- Edit Mode -->
+        <q-btn flat round @click="toggleEditMode">
+          <q-icon :name="isEditMode ? 'done' : 'edit'" />
+        </q-btn>
       </q-toolbar>
     </q-header>
 
@@ -36,7 +40,11 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <!-- Props ile veri gönderme -->
+      <router-view
+        :is-edit-mode="isEditMode"
+        @update:is-edit-mode="updateEditMode"
+      />
     </q-page-container>
   </q-layout>
 </template>
@@ -62,9 +70,20 @@ const NavLinks: NavLinkProps[] = [
   },
 ];
 
+// sol drawer açık mı kapalı mı
 const leftDrawerOpen = ref(false);
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
+// edit modu açık mı kapalı mı
+const isEditMode = ref(false);
+
+const toggleEditMode = () => {
+  isEditMode.value = !isEditMode.value;
+};
+// edit modu güncelleme
+const updateEditMode = (value: boolean) => {
+  isEditMode.value = value;
+};
 </script>
