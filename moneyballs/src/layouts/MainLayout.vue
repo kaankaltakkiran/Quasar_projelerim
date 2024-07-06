@@ -18,7 +18,12 @@
           </div>
         </q-toolbar-title>
         <!-- Edit Mode -->
-        <q-btn v-if="isEntriesPage" flat round @click="toggleEditMode">
+        <q-btn
+          v-if="isEntriesPage && hasEntries"
+          flat
+          round
+          @click="toggleEditMode"
+        >
           <q-icon :name="isEditMode ? 'done' : 'edit'" />
         </q-btn>
       </q-toolbar>
@@ -50,9 +55,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import NavLink, { NavLinkProps } from 'components/Nav/NavLink.vue';
 import { useRoute } from 'vue-router';
+import { useEntryStore } from '../stores/entries-store';
+
+//store kullanımı
+const entryStore = useEntryStore();
+
+onMounted(() => {
+  entryStore.fetchEntries();
+});
 
 defineOptions({
   name: 'MainLayout',
@@ -90,4 +103,7 @@ const updateEditMode = (value: boolean) => {
 //sayfa kontrolü ile edit modu kontrolü
 const route = useRoute();
 const isEntriesPage = computed(() => route.path === '/');
+
+// entries kontrolü
+const hasEntries = computed(() => entryStore.entries.length > 0);
 </script>
