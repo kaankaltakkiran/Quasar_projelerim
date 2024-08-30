@@ -30,5 +30,6 @@ const localeOptions = [
   { value: "de", label: "German" },
   { value: "fr", label: "French" },
   { value: "it", label: "Italian" },
+  { value: "tr", label: "Turkish" },
 ];
 </script>

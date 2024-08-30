@@ -5,6 +5,7 @@ import fr from './fr'
 import de from './de'
 import ru from './ru'
 import it from './it'
+import tr from './tr'
 
 export default { 
 	'en-US': enUS, // English
@@ -12,4 +13,5 @@ export default {
 	'de': de, // German
 	'ru': ru, // Russian
 	'it': it, // Italian
+	'tr': tr, // Turkish
 }
