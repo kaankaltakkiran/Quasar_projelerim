@@ -17,3 +17,9 @@ Key,"English, en-US","Turkish, tr","French, fr","German, de"
 """Auto""","Auto","Otomatik","Auto","Auto"
 """Follow the preference of your device""","Follow the preference of your device","Cihazınızın tercihini kullan","Suivez les préférences de votre appareil","Befolgen Sie die Einstellungen Ihres Geräts"
 """Select Language""","Select Language","Dil Seçiniz","Sélectionnez la langue","Wählen Sie Sprache aus"
+,,,,
+# Entries Page
+"  ""No entries yet. Add your first entry.""","  No entries yet. Add your first entry.","Henüz giriş yok. İlk girişinizi ekleyin.","Aucune entrée pour l'instant. Ajoutez votre première entrée.","Aucune entrée pour l'instant. Ajoutez votre première entrée."
+"""Balance""","Balance","Tutar","équilibre","Gleichgewicht"
+"""Name""","Name","İsim","Nom","Name"
+"""Amount""","Amount","Miktar","Montant","Menge"

@@ -20,4 +20,10 @@ export default {
 	"Auto": `Auto`,
 	"Follow the preference of your device": `Suivez les préférences de votre appareil`,
 	"Select Language": `Sélectionnez la langue`,
+
+	// Entries Page
+	  "No entries yet. Add your first entry.": `Aucune entrée pour l'instant. Ajoutez votre première entrée.`,
+	"Balance": `équilibre`,
+	"Name": `Nom`,
+	"Amount": `Montant`,
 }

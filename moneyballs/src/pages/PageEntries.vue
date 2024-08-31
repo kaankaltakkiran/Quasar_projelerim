@@ -7,7 +7,7 @@
           <q-icon class="text-grey-6 q-mb-md" name="savings" size="100px" />
         </div>
         <div class="text-h6 text-center text-grey-8">
-          No entries yet. Add your first entry.
+          {{ $t('No entries yet. Add your first entry.') }}
         </div>
       </div>
       <q-list bordered separator v-if="entryStore.entries.length >= 1">
@@ -50,7 +50,7 @@
     <!-- Footer Section -->
     <q-footer class="bg-transparent">
       <div class="row q-mb-sm q-px-md q-my-sm shadow-up-3">
-        <div class="col text-grey-7 text-h6">Balance:</div>
+        <div class="col text-grey-7 text-h6">{{ $t('Balance') }}:</div>
         <div
           :class="useAmountColorClass(balance)"
           class="row text-h6 text-right"
@@ -69,7 +69,7 @@
             dense
             v-model="addEntryForm.name"
             ref="nameRef"
-            placeholder="Name"
+            :placeholder="$t('Name')"
             bg-color="white"
             :rules="enableRules ? [validateName] : []"
             @blur="checkInput('name')"
@@ -82,7 +82,7 @@
             dense
             step="0.01"
             v-model.number="addEntryForm.amount"
-            placeholder="Amount"
+            :placeholder="$t('Amount')"
             bg-color="white"
             :rules="enableRules ? [validateAmount] : []"
             @blur="checkInput('amount')"

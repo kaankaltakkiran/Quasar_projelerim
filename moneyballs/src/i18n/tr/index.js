@@ -20,4 +20,10 @@ export default {
 	"Auto": `Otomatik`,
 	"Follow the preference of your device": `Cihazınızın tercihini kullan`,
 	"Select Language": `Dil Seçiniz`,
+
+	// Entries Page
+	  "No entries yet. Add your first entry.": `Henüz giriş yok. İlk girişinizi ekleyin.`,
+	"Balance": `Tutar`,
+	"Name": `İsim`,
+	"Amount": `Miktar`,
 }
