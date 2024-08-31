@@ -1,0 +1,19 @@
+Key,"English, en-US","Turkish, tr","French, fr","German, de"
+,,,,
+# Navbar
+"""Navigation""","Navigation","Navigasyon","Navigation","Navigation"
+"""Entries""","Entries","Girişler","Entrées","Einträge"
+"""Settings""","Settings","Ayarlar","Paramètres","Einstellungen"
+,,,,
+# Settings Page
+"""Notifications""","Notifications","Bildirimler","Notifications","Benachrichtigungen"
+"""Prompt To Delete""","Prompt To Delete","Silme işlemi Onayı","Invite à supprimer","Zum Löschen auffordern"
+"""Show Running Balance""","Show Running Balance","İşlem Bildirimi","Afficher le solde courant","Laufbilanz anzeigen"
+"""Allow notification""","Allow notification","Bildirime izin ver","Autoriser les notifications","Benachrichtigung zulassen"
+"""Currency Symbol""","Currency Symbol","Para Birimi Sembolü","Symbole monétaire","Währungssymbol"
+"""Appearance""","Appearance","Görünüm","Apparence","Aussehen"
+"""Light""","Light","Açık","Lumière","Licht"
+"""Dark""","Dark","Koyu","Sombre","Dunkel"
+"""Auto""","Auto","Otomatik","Auto","Auto"
+"""Follow the preference of your device""","Follow the preference of your device","Cihazınızın tercihini kullan","Suivez les préférences de votre appareil","Befolgen Sie die Einstellungen Ihres Geräts"
+"""Select Language""","Select Language","Dil Seçiniz","Sélectionnez la langue","Wählen Sie Sprache aus"

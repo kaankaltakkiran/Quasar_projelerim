@@ -2,11 +2,11 @@
   <q-page>
     <div class="q-pa-md q-mt-md">
       <q-list bordered padding>
-        <q-item-label header>Notifications</q-item-label>
+        <q-item-label header>{{ $t('Notifications') }}</q-item-label>
 
         <q-item tag="label" v-ripple>
           <q-item-section>
-            <q-item-label>Prompt To Delete</q-item-label>
+            <q-item-label>{{ $t('Prompt To Delete') }}</q-item-label>
           </q-item-section>
           <q-item-section side>
             <q-toggle color="blue" v-model="isDelete" />
@@ -15,8 +15,8 @@
 
         <q-item tag="label" v-ripple>
           <q-item-section>
-            <q-item-label>Show Running Balance</q-item-label>
-            <q-item-label caption>Allow notification</q-item-label>
+            <q-item-label>{{ $t('Show Running Balance') }}</q-item-label>
+            <q-item-label caption>{{ $t('Allow notification') }}</q-item-label>
           </q-item-section>
           <q-item-section side top>
             <q-toggle color="blue" v-model="notif2" val="friend" />
@@ -26,7 +26,7 @@
         <q-item tag="label" v-ripple>
           <q-item-section>
             <q-select
-              label="Currency Symbol"
+              :label="$t('Currency Symbol')"
               transition-show="flip-up"
               transition-hide="flip-down"
               filled
@@ -38,14 +38,14 @@
           </q-item-section>
         </q-item>
         <q-separator spaced />
-        <q-item-label header>Appearance</q-item-label>
+        <q-item-label header>{{ $t('Appearance') }}</q-item-label>
 
         <q-item tag="label" v-ripple>
           <q-item-section avatar>
             <q-radio v-model="theme" val="light" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Light</q-item-label>
+            <q-item-label>{{ $t('Light') }}</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -54,7 +54,7 @@
             <q-radio v-model="theme" val="dark" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Dark</q-item-label>
+            <q-item-label>{{ $t('Dark') }}</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -63,12 +63,26 @@
             <q-radio v-model="theme" val="auto" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Auto</q-item-label>
-            <q-item-label caption
-              >Follow the preference of your device</q-item-label
-            >
+            <q-item-label>{{ $t('Auto') }}</q-item-label>
+            <q-item-label caption>{{
+              $t('Follow the preference of your device')
+            }}</q-item-label>
           </q-item-section>
         </q-item>
+        <q-select
+          transition-show="flip-up"
+          transition-hide="flip-down"
+          class="q-mt-md"
+          v-model="locale"
+          :options="localeOptions"
+          :label="$t('Select Language')"
+          dense
+          borderless
+          emit-value
+          map-options
+          options-dense
+          filled
+        />
       </q-list>
     </div>
   </q-page>
@@ -77,6 +91,17 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
 import { useQuasar, LocalStorage } from 'quasar';
+//i18n import
+import { useI18n } from 'vue-i18n';
+//i18n kullanımı
+const { locale } = useI18n({ useScope: 'global' });
+//dil seçenekleri
+const localeOptions = ref([
+  { label: 'English', value: 'en-US' },
+  { label: 'Turkish', value: 'tr' },
+  { label: 'French', value: 'fr' },
+  { label: 'German', value: 'de' },
+]);
 
 const $q = useQuasar();
 

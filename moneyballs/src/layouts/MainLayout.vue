@@ -38,9 +38,17 @@
       bordered
     >
       <q-list>
-        <q-item-label class="text-white" header> Navigation </q-item-label>
+        <q-item-label class="text-white" header>
+          {{ navigationLabel }}
+        </q-item-label>
 
-        <NavLink v-for="link in NavLinks" :key="link.title" v-bind="link" />
+        <NavLink
+          v-for="link in navLinks"
+          :key="link.link"
+          :title="link.title"
+          :icon="link.icon"
+          :link="link.link"
+        />
       </q-list>
     </q-drawer>
 
@@ -56,11 +64,16 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
+
 import NavLink, { NavLinkProps } from 'components/Nav/NavLink.vue';
 import { useRoute } from 'vue-router';
 import { useEntryStore } from '../stores/entries-store';
+import { useI18n } from 'vue-i18n'; // useI18n fonksiyonunu ekleyin
 
-//store kullanımı
+// i18n kullanımı
+const { t } = useI18n();
+
+// store kullanımı
 const entryStore = useEntryStore();
 
 onMounted(() => {
@@ -71,18 +84,21 @@ defineOptions({
   name: 'MainLayout',
 });
 
-const NavLinks: NavLinkProps[] = [
+// Çevrilmiş metni bir değişkende saklayın
+const navigationLabel = computed(() => t('Navigation'));
+//dinamik olarak çeviri yapmak için computed kullandım
+const navLinks = computed((): NavLinkProps[] => [
   {
-    title: 'Entries',
+    title: t('Entries'), // Çeviri burada yapılır
     icon: 'savings',
     link: '/',
   },
   {
-    title: 'Settings',
+    title: t('Settings'), // Çeviri burada yapılır
     icon: 'settings',
     link: '/settings',
   },
-];
+]);
 
 // sol drawer açık mı kapalı mı
 const leftDrawerOpen = ref(false);
@@ -90,17 +106,20 @@ const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
+
 // edit modu açık mı kapalı mı
 const isEditMode = ref(false);
 
 const toggleEditMode = () => {
   isEditMode.value = !isEditMode.value;
 };
+
 // edit modu güncelleme
 const updateEditMode = (value: boolean) => {
   isEditMode.value = value;
 };
-//sayfa kontrolü ile edit modu kontrolü
+
+// sayfa kontrolü ile edit modu kontrolü
 const route = useRoute();
 const isEntriesPage = computed(() => route.path === '/');
 
