@@ -5,3 +5,5 @@
 /node_modules
 .eslintrc.cjs
 /quasar.config.*.temporary.compiled*
+/src/i18n/**/*.ts
+/src/i18n/**/*.js
