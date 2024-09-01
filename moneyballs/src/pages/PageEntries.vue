@@ -105,6 +105,11 @@ import { useEntryStore } from 'src/stores/entries-store';
 import { useCurrencify } from 'src/use/useCurrencify';
 import { useAmountColorClass } from 'src/use/useAmountColorClass';
 
+import { useI18n } from 'vue-i18n'; // useI18n fonksiyonunu ekleyin
+
+// i18n kullanımı
+const { t } = useI18n();
+
 // useQuasar fonksiyonu, Quasar fonksiyonlarını kullanmamızı sağlar
 const $q = useQuasar();
 
@@ -199,21 +204,22 @@ const onEntrySlideRight = (
     deleteEntry(entry.id);
   } else {
     $q.dialog({
-      title: 'Delete Entry',
-      message: `Are you sure you want to delete this entry?
-      <div class="q-mt-md text-weight-bold ${useAmountColorClass(
-        entry.amount
-      )}">
-      ${entry.name}  ${useCurrencify(entry.amount)}
-      </div>`,
+      title: t('Delete Entry'),
+      message:
+        t('Are you sure you want to delete this entry?') +
+        `
+  <div class="q-mt-md text-weight-bold ${useAmountColorClass(entry.amount)}">
+    ${entry.name} ${useCurrencify(entry.amount)}
+  </div>`,
       html: true,
       cancel: {
+        label: t('Cancel'),
         color: 'primary',
         noCaps: true,
       },
       persistent: true,
       ok: {
-        label: 'delete',
+        label: t('Delete'),
         color: 'negative',
         noCaps: true,
       },
@@ -234,7 +240,7 @@ const deleteEntry = (entryId: string) => {
     icon: 'delete',
     color: 'negative',
     position: 'top',
-    message: 'Entry deleted',
+    message: t('Entry deleted'),
     group: false,
   });
 };

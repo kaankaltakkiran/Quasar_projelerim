@@ -26,4 +26,12 @@ export default {
 	"Balance": `équilibre`,
 	"Name": `Nom`,
 	"Amount": `Montant`,
+
+	// Delete Modal
+	"Delete Entry": `Supprimer l'entrée`,
+	"Are you sure you want to delete this entry?"
+: `Etes-vous sûr de vouloir supprimer cette entrée ?`,
+	"Cancel": `Annuler`,
+	"Delete": `Supprimer`,
+	"Entry deleted": `Entrée supprimée`,
 }

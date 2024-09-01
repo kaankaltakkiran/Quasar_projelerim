@@ -26,4 +26,12 @@ export default {
 	"Balance": `Gleichgewicht`,
 	"Name": `Name`,
 	"Amount": `Menge`,
+
+	// Delete Modal
+	"Delete Entry": `Eintrag löschen`,
+	"Are you sure you want to delete this entry?"
+: `Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?`,
+	"Cancel": `Stornieren`,
+	"Delete": `Löschen`,
+	"Entry deleted": `Eintrag gelöscht`,
 }

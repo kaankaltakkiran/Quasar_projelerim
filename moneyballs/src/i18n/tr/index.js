@@ -26,4 +26,12 @@ export default {
 	"Balance": `Tutar`,
 	"Name": `İsim`,
 	"Amount": `Miktar`,
+
+	// Delete Modal
+	"Delete Entry": `Girişi Sil`,
+	"Are you sure you want to delete this entry?"
+: `Bu girişi silmek istediğinizden emin misiniz?`,
+	"Cancel": `İptal`,
+	"Delete": `Sil`,
+	"Entry deleted": `Giriş silindi`,
 }

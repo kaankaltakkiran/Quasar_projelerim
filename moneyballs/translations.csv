@@ -23,3 +23,11 @@ Key,"English, en-US","Turkish, tr","French, fr","German, de"
 """Balance""","Balance","Tutar","équilibre","Gleichgewicht"
 """Name""","Name","İsim","Nom","Name"
 """Amount""","Amount","Miktar","Montant","Menge"
+,,,,
+# Delete Modal
+"""Delete Entry""","Delete Entry","Girişi Sil","Supprimer l'entrée","Eintrag löschen"
+"""Are you sure you want to delete this entry?""
+","Are you sure you want to delete this entry?","Bu girişi silmek istediğinizden emin misiniz?","Etes-vous sûr de vouloir supprimer cette entrée ?","Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?"
+"""Cancel""","Cancel","İptal","Annuler","Stornieren"
+"""Delete""","Delete","Sil","Supprimer","Löschen"
+"""Entry deleted""","Entry deleted","Giriş silindi","Entrée supprimée","Eintrag gelöscht"
