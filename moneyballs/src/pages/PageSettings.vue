@@ -101,6 +101,12 @@ const localeOptions = ref([
   { label: 'Turkish', value: 'tr' },
   { label: 'French', value: 'fr' },
   { label: 'German', value: 'de' },
+  { label: 'Japanese', value: 'ja' },
+  { label: 'Hindi', value: 'hi' },
+  { label: 'Korean', value: 'ko' },
+  { label: 'Spanish', value: 'es' },
+  { label: 'Portuguese', value: 'pt' },
+  { label: 'Chinese', value: 'zh' },
 ]);
 
 const $q = useQuasar();

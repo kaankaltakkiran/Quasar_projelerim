@@ -4,10 +4,22 @@ import enUS from './en-US'
 import tr from './tr'
 import fr from './fr'
 import de from './de'
+import ja from './ja'
+import hi from './hi'
+import ko from './ko'
+import es from './es'
+import pt from './pt'
+import zh from './zh'
 
 export default { 
 	'en-US': enUS, // English
 	'tr': tr, // Turkish
 	'fr': fr, // French
 	'de': de, // German
+	'ja': ja, // Japanese
+	'hi': hi, // Hindi
+	'ko': ko, // Korean
+	'es': es, // Spanish
+	'pt': pt, // Portuguese
+	'zh': zh, // Chinese
 }
