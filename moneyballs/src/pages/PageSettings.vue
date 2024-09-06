@@ -109,6 +109,11 @@ const localeOptions = ref([
   { label: 'Chinese', value: 'zh' },
 ]);
 
+// Dil seçimi değiştiğinde locale değerini kaydetme
+watch(locale, (newLocale) => {
+  LocalStorage.set('locale', newLocale);
+});
+
 const $q = useQuasar();
 
 // Değişkenler
@@ -170,6 +175,11 @@ onMounted(() => {
     case 'auto':
       $q.dark.set('auto');
       break;
+  }
+  //uygulama yüklendiğinde locale değerini kontrol etme
+  const savedLocale = LocalStorage.getItem('locale');
+  if (savedLocale && typeof savedLocale === 'string') {
+    locale.value = savedLocale;
   }
 });
 </script>
