@@ -17,9 +17,9 @@
             Moneyballs
           </div>
         </q-toolbar-title>
-        <!-- Edit Mode -->
+        <!-- Edit Mode(lg ve xl ekranda görün) -->
         <q-btn
-          v-if="isEntriesPage && hasEntries"
+          v-if="$q.screen.lg || ($q.screen.xl && isEntriesPage && hasEntries)"
           flat
           round
           @click="toggleEditMode"
