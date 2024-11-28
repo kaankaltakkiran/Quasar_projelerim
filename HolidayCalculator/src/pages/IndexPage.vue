@@ -4,7 +4,12 @@
       <h3>İzin Hesaplama</h3>
       <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
         <div class="q-gutter-md">
-          <q-date v-model="date" :events="events" :options="validDates" />
+          <q-date
+            v-model="date"
+            :navigation-min-year-month="minYearMonth"
+            :navigation-max-year-month="maxYearMonth"
+            :events="events"
+          />
         </div>
         <q-checkbox
           v-model="official"
@@ -98,16 +103,12 @@ const onReset = () => {
   accept.value = false;
 };
 
-// Geçerli tarih aralığını kontrol eden fonksiyon
-const validDates = (date: string) => {
-  const today = new Date();
-  const formattedToday = `${today.getFullYear()}/${String(
-    today.getMonth() + 1
-  ).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`;
-
-  const endOf2025 = '2025/12/31'; // 2025 yılı sonu
-  return date >= formattedToday && date <= endOf2025;
-};
+//şu anki yıl ve ayı alır
+const currentYear = new Date().getFullYear();
+const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+// min ve max yıl ve ayı belirler
+const minYearMonth = ref<string>(`${currentYear}/${currentMonth}`);
+const maxYearMonth = ref<string>('2025/12'); // son tarih 2025 yılının sonu
 
 // Güncel tarihi 'yyyy/mm/dd' formatında almak için fonksiyon
 const getToday = (): string => {
