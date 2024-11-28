@@ -83,11 +83,14 @@ const events = ref<string[]>([]); // Resmi tatil tarihleri buraya yüklenecek
 // EntruseHolidayStore'u kullanma
 const holidayStore = useHolidayStore();
 
-// Mounted olduğunda entryStore'dan verileri çekme
-onMounted(() => {
-  holidayStore.fetchEntries();
-  events.value = holidayStore.officalHolidays.map((holiday) => holiday.date); // Tatil tarihlerini al ve `events` dizisine ata
-  console.log(events.value);
+onMounted(async () => {
+  await holidayStore.fetchEntries(); // fetchEntries'in tamamlanmasını bekle
+  if (holidayStore.officalHolidays.length > 0) {
+    events.value = holidayStore.officalHolidays.map((holiday) => holiday.date);
+    console.log('Resmi tatil sayısı ' + events.value.length);
+  } else {
+    console.error('Holidays are empty after fetchEntries');
+  }
 });
 
 // Define the onReset function
