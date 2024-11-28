@@ -5,6 +5,7 @@
       <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
         <div class="q-gutter-md">
           <q-date
+            subtitle="İzin Aralığını Seçiniz"
             v-model="localSelectedDate"
             :navigation-min-year-month="minYearMonth"
             :navigation-max-year-month="maxYearMonth"
@@ -13,6 +14,7 @@
             @update:model-value="onDateUpdate"
             @navigation="onNavigation"
           >
+            <!-- takvim içine resmi tatil günleri -->
             <template v-slot:default>
               <div class="row items-center justify-end q-mt-md"></div>
 
