@@ -7,6 +7,7 @@
           <q-date
             subtitle="İzin Aralığını Seçiniz"
             v-model="localSelectedDate"
+            range
             :navigation-min-year-month="minYearMonth"
             :navigation-max-year-month="maxYearMonth"
             :events="events"
@@ -16,9 +17,35 @@
           >
             <!-- takvim içine resmi tatil günleri -->
             <template v-slot:default>
-              <div class="row items-center justify-end q-mt-md"></div>
-
-              <!--    resmi tatil günü ve tarihi eşleşen veriler -->
+              <div v-if="totalDays > 0" class="q-pa-md text-center">
+                <div>
+                  <span class="text-h6 text-primary"
+                    >İzin Başlangıç Tarihi: <br />
+                  </span>
+                  <span>{{
+                    localSelectedDate.from
+                      ? formatToFullDate(localSelectedDate.from)
+                      : 'Seçilmedi'
+                  }}</span>
+                </div>
+                <div>
+                  <span class="text-h6 text-red"
+                    >İzin Bitiş Tarihi: <br
+                  /></span>
+                  <span>{{
+                    localSelectedDate.to
+                      ? formatToFullDate(localSelectedDate.to)
+                      : 'Seçilmedi'
+                  }}</span>
+                </div>
+                <div v-if="totalDays > 0" class="q-mt-md">
+                  <span class="text-h6 text-amber">
+                    Toplam Gün Sayısı: <br />
+                  </span>
+                  <span>{{ totalDays }}</span>
+                </div>
+              </div>
+              <!-- resmi tatil günü ve tarihi eşleşen veriler -->
               <div v-if="filteredHolidays.length" class="q-mt-md">
                 <template
                   v-for="holiday in filteredHolidays"
@@ -65,19 +92,14 @@ defineOptions({
   name: 'IndexPage',
 });
 
-// props tanımlama
-const props = defineProps({
-  modelValue: String,
-});
-
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useQuasar } from 'quasar';
 import { date as quasarDate } from 'quasar';
 
 // Store'u import etme
 import { useHolidayStore } from 'src/stores/officalHoliday-store';
 
-// reakitf değişkenler
+// reaktif değişkenler
 const accept = ref<boolean>(false);
 const official = ref<boolean>(true);
 const weekend = ref<boolean>(true);
@@ -85,10 +107,11 @@ const weekend = ref<boolean>(true);
 // store'u kullanma
 const holidayStore = useHolidayStore();
 
-// Seçilen tarihi tutan değişken
-const localSelectedDate = ref<string>(
-  props.modelValue || quasarDate.formatDate(new Date(), 'YYYY/MM/DD')
-);
+// Seçilen tarih aralığını tutan değişken (range özelliği için)
+const localSelectedDate = ref<{ from: string; to: string }>({
+  from: '',
+  to: '',
+});
 
 // Emit ile parent component'e veri göndermek için kullanılır
 const emits = defineEmits(['update:modelValue']);
@@ -128,11 +151,12 @@ const getMonthEvents = (
 watch(
   localSelectedDate,
   (newDate) => {
-    emits('update:modelValue', newDate);
-    const [year, month] = newDate.split('/').map(Number);
+    emits('update:modelValue', `${newDate.from} - ${newDate.to}`);
+    const [year, month] = newDate.from.split('/').map(Number);
     selectedMonthYear.value = `${year} / ${String(month).padStart(2, '0')}`;
     filteredHolidays.value = getMonthEvents(year, month - 1);
   },
+  // immediate: true ile başlangıçta çalışmasını sağlar
   { immediate: true }
 );
 
@@ -147,7 +171,10 @@ const onNavigation = (view: { year: number; month: number }) => {
 
 // Seçilen tarihi günceller
 const onDateUpdate = (value: string) => {
-  localSelectedDate.value = value;
+  localSelectedDate.value = {
+    from: value.split(' - ')[0], // from tarihini ayır
+    to: value.split(' - ')[1], // to tarihini ayır
+  };
   showDatepicker.value = false;
 };
 
@@ -172,7 +199,7 @@ const onSubmit = () => {
   }
 };
 
-// reakitf değişkenler
+// reaktif değişkenler
 const date = ref<string>(''); // Başlangıçta boş bırakıyoruz günümüz tarihini
 const events = ref<string[]>([]); // Resmi tatil tarihleri buraya yüklenecek
 
@@ -190,6 +217,7 @@ onMounted(async () => {
 // Reset the form
 const onReset = () => {
   accept.value = false;
+  localSelectedDate.value = { from: '', to: '' }; // Tarih aralığını sıfırlar
 };
 
 // min ve max yıl ve ay aralığını ayarlar
@@ -218,6 +246,32 @@ const getToday = (): string => {
     2,
     '0'
   )}/${String(today.getDate()).padStart(2, '0')}`;
+};
+
+/* const formatToDDMMYYYY = (date: string) => {
+  return quasarDate.formatDate(date, 'DD/MM/YYYY');
+}; */
+
+// Toplam gün sayısını hesaplayan `computed` değişken
+const totalDays = computed(() => {
+  if (!localSelectedDate.value.from || !localSelectedDate.value.to) return 0;
+  const fromDate = new Date(localSelectedDate.value.from);
+  const toDate = new Date(localSelectedDate.value.to);
+  const diffTime = toDate.getTime() - fromDate.getTime();
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // İzin günlerini dahil eder
+});
+
+//seçilen tarihi tam tarih formatına çevirir
+const formatToFullDate = (dateString: string) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+
+  return new Intl.DateTimeFormat('tr-TR', {
+    weekday: 'long', // Haftanın günü
+    day: 'numeric', // Gün (1-31)
+    month: 'long', // Ay adı
+    year: 'numeric', // Yıl (2024)
+  }).format(date);
 };
 
 // Bugün tarihini alır
