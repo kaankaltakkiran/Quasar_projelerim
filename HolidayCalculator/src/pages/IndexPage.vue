@@ -17,6 +17,11 @@
           label="Hafta Sonlarını Dahil Et"
           color="cyan"
         />
+        <div v-if="holidayStore.officalHolidays.length > 0">
+          <p v-for="holiday in holidayStore.officalHolidays" :key="holiday.id">
+            {{ holiday.name }}
+          </p>
+        </div>
 
         <q-toggle v-model="accept" label="I accept the license and terms" />
 
@@ -40,8 +45,10 @@ defineOptions({
   name: 'IndexPage',
 });
 
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
+//store'u import etme
+import { useHolidayStore } from 'src/stores/officalHoliday-store';
 
 // Define reactive variables with appropriate types
 const accept = ref<boolean>(false);
@@ -78,6 +85,14 @@ const events = ref<string[]>([
   '2019/02/09',
   '2019/02/23',
 ]);
+
+// EntruseHolidayStore'u kullanma
+const holidayStore = useHolidayStore();
+
+//mounted olduğunda entryStore'dan verileri çekme
+onMounted(() => {
+  holidayStore.fetchEntries();
+});
 
 // Define the onReset function
 const onReset = () => {
