@@ -4,7 +4,7 @@
       <h3>İzin Hesaplama</h3>
       <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
         <div class="q-gutter-md">
-          <q-date v-model="date" :events="events" />
+          <q-date v-model="date" :events="events" :options="validDates" />
         </div>
         <q-checkbox
           v-model="official"
@@ -47,7 +47,7 @@ defineOptions({
 
 import { ref, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
-//store'u import etme
+// Store'u import etme
 import { useHolidayStore } from 'src/stores/officalHoliday-store';
 
 // Define reactive variables with appropriate types
@@ -77,9 +77,9 @@ const onSubmit = () => {
 };
 
 // Define reactive variables with appropriate types
-const date = ref<string>('2019/02/01');
+const date = ref<string>(''); // Başlangıçta boş bırakıyoruz günümüz tarihini
 const events = ref<string[]>([
-  '2019/02/01',
+  '2025/01/01',
   '2019/02/05',
   '2019/02/06',
   '2019/02/09',
@@ -89,7 +89,7 @@ const events = ref<string[]>([
 // EntruseHolidayStore'u kullanma
 const holidayStore = useHolidayStore();
 
-//mounted olduğunda entryStore'dan verileri çekme
+// Mounted olduğunda entryStore'dan verileri çekme
 onMounted(() => {
   holidayStore.fetchEntries();
 });
@@ -98,4 +98,27 @@ onMounted(() => {
 const onReset = () => {
   accept.value = false;
 };
+
+// Geçerli tarih aralığını kontrol eden fonksiyon
+const validDates = (date: string) => {
+  const today = new Date();
+  const formattedToday = `${today.getFullYear()}/${String(
+    today.getMonth() + 1
+  ).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`;
+
+  const endOf2025 = '2025/12/31'; // 2025 yılı sonu
+  return date >= formattedToday && date <= endOf2025;
+};
+
+// Güncel tarihi 'yyyy/mm/dd' formatında almak için fonksiyon
+const getToday = (): string => {
+  const today = new Date();
+  return `${today.getFullYear()}/${String(today.getMonth() + 1).padStart(
+    2,
+    '0'
+  )}/${String(today.getDate()).padStart(2, '0')}`;
+};
+
+// Başlangıç olarak bugünün tarihini belirleyelim
+date.value = getToday();
 </script>
