@@ -2,6 +2,6 @@
 export interface IOfficalHoliday {
   id: number;
   name: string;
-  date: Date;
+  date: string;
   day: string;
 }

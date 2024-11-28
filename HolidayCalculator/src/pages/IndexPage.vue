@@ -78,13 +78,7 @@ const onSubmit = () => {
 
 // Define reactive variables with appropriate types
 const date = ref<string>(''); // Başlangıçta boş bırakıyoruz günümüz tarihini
-const events = ref<string[]>([
-  '2025/01/01',
-  '2019/02/05',
-  '2019/02/06',
-  '2019/02/09',
-  '2019/02/23',
-]);
+const events = ref<string[]>([]); // Resmi tatil tarihleri buraya yüklenecek
 
 // EntruseHolidayStore'u kullanma
 const holidayStore = useHolidayStore();
@@ -92,6 +86,8 @@ const holidayStore = useHolidayStore();
 // Mounted olduğunda entryStore'dan verileri çekme
 onMounted(() => {
   holidayStore.fetchEntries();
+  events.value = holidayStore.officalHolidays.map((holiday) => holiday.date); // Tatil tarihlerini al ve `events` dizisine ata
+  console.log(events.value);
 });
 
 // Define the onReset function
