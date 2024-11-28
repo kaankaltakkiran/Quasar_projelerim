@@ -1,0 +1,104 @@
+[
+  {
+    "id": 1,
+    "name": "Yılbaşı",
+    "date": "2025-01-01",
+    "day": "Çarşamba"
+  },
+  {
+    "id": 2,
+    "name": "Ramazan Bayramı Arifesi",
+    "date": "2025-03-29",
+    "day": "Cumartesi"
+  },
+  {
+    "id": 3,
+    "name": "Ramazan Bayramı 1. Gün",
+    "date": "2025-03-30",
+    "day": "Pazar"
+  },
+  {
+    "id": 4,
+    "name": "Ramazan Bayramı 2. Gün",
+    "date": "2025-03-31",
+    "day": "Pazartesi"
+  },
+  {
+    "id": 5,
+    "name": "Ramazan Bayramı 3. Gün",
+    "date": "2025-04-01",
+    "day": "Salı"
+  },
+  {
+    "id": 6,
+    "name": "Ulusal Egemenlik ve Çocuk Bayramı",
+    "date": "2025-04-23",
+    "day": "Çarşamba"
+  },
+  {
+    "id": 7,
+    "name": "Emek ve Dayanışma Günü",
+    "date": "2025-05-01",
+    "day": "Perşembe"
+  },
+  {
+    "id": 8,
+    "name": "Atatürk'ü Anma, Gençlik ve Spor Bayramı",
+    "date": "2025-05-19",
+    "day": "Pazartesi"
+  },
+  {
+    "id": 9,
+    "name": "Kurban Bayramı Arifesi",
+    "date": "2025-06-05",
+    "day": "Perşembe"
+  },
+  {
+    "id": 10,
+    "name": "Kurban Bayramı 1. Gün",
+    "date": "2025-06-06",
+    "day": "Cuma"
+  },
+  {
+    "id": 11,
+    "name": "Kurban Bayramı 2. Gün",
+    "date": "2025-06-07",
+    "day": "Cumartesi"
+  },
+  {
+    "id": 12,
+    "name": "Kurban Bayramı 3. Gün",
+    "date": "2025-06-08",
+    "day": "Pazar"
+  },
+  {
+    "id": 13,
+    "name": "Kurban Bayramı 4. Gün",
+    "date": "2025-06-09",
+    "day": "Pazartesi"
+  },
+  {
+    "id": 14,
+    "name": "Demokrasi ve Millî Birlik Günü",
+    "date": "2025-07-15",
+    "day": "Salı"
+  },
+  {
+    "id": 15,
+    "name": "Zafer Bayramı",
+    "date": "2025-08-30",
+    "day": "Cumartesi"
+  },
+  {
+    "id": 16,
+    "name": "Cumhuriyet Bayramı Arifesi",
+    "date": "2025-10-28",
+    "day": "Salı"
+  },
+  {
+    "id": 17,
+    "name": "Cumhuriyet Bayramı",
+    "date": "2025-10-29",
+    "day": "Çarşamba"
+  }
+]
