@@ -10,6 +10,8 @@
           type="number"
           filled
           style="max-width: 290px"
+          :rules="[(val) => val > 0 || 'Gün sayısı 0\'dan büyük olmalıdır !']"
+          :min="1"
         />
 
         <q-date
@@ -106,7 +108,7 @@ import { useHolidayStore } from 'src/stores/officalHoliday-store';
 const accept = ref<boolean>(false);
 const official = ref<boolean>(true);
 const weekend = ref<boolean>(true);
-const dayNumber = ref<number>(0);
+const dayNumber = ref<number>(1);
 
 // store'u kullanma
 const holidayStore = useHolidayStore();
