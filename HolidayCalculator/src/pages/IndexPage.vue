@@ -3,63 +3,66 @@
     <div class="q-pa-md" style="max-width: 400px">
       <h3>İzin Hesaplama</h3>
       <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
-        <div class="q-gutter-md">
-          <q-date
-            subtitle="İzin Aralığını Seçiniz"
-            v-model="localSelectedDate"
-            range
-            :navigation-min-year-month="minYearMonth"
-            :navigation-max-year-month="maxYearMonth"
-            :events="events"
-            :options="validDates"
-            @update:model-value="onDateUpdate"
-            @navigation="onNavigation"
-          >
-            <!-- takvim içine resmi tatil günleri -->
-            <template v-slot:default>
-              <div v-if="totalDays > 0" class="q-pa-md text-center">
-                <div>
-                  <span class="text-h6 text-primary"
-                    >İzin Başlangıç Tarihi: <br />
-                  </span>
-                  <span>{{
-                    localSelectedDate.from
-                      ? formatToFullDate(localSelectedDate.from)
-                      : 'Seçilmedi'
-                  }}</span>
-                </div>
-                <div>
-                  <span class="text-h6 text-red"
-                    >İzin Bitiş Tarihi: <br
-                  /></span>
-                  <span>{{
-                    localSelectedDate.to
-                      ? formatToFullDate(localSelectedDate.to)
-                      : 'Seçilmedi'
-                  }}</span>
-                </div>
-                <div v-if="totalDays > 0" class="q-mt-md">
-                  <span class="text-h6 text-amber">
-                    Toplam Gün Sayısı: <br />
-                  </span>
-                  <span>{{ totalDays }}</span>
-                </div>
+        <q-input
+          v-model.number="dayNumber"
+          outlined
+          label="İzin Gün Sayısı"
+          type="number"
+          filled
+          style="max-width: 290px"
+        />
+
+        <q-date
+          subtitle="İzin Aralığını Seçiniz"
+          v-model="localSelectedDate"
+          range
+          :navigation-min-year-month="minYearMonth"
+          :navigation-max-year-month="maxYearMonth"
+          :events="events"
+          :options="validDates"
+          @update:model-value="onDateUpdate"
+          @navigation="onNavigation"
+        >
+          <!-- takvim içine resmi tatil günleri -->
+          <template v-slot:default>
+            <div v-if="totalDays > 0" class="q-pa-md text-center">
+              <div>
+                <span class="text-h6 text-primary"
+                  >İzin Başlangıç Tarihi: <br />
+                </span>
+                <span>{{
+                  localSelectedDate.from
+                    ? formatToFullDate(localSelectedDate.from)
+                    : 'Seçilmedi'
+                }}</span>
               </div>
-              <!-- resmi tatil günü ve tarihi eşleşen veriler -->
-              <div v-if="filteredHolidays.length" class="q-mt-md">
-                <template
-                  v-for="holiday in filteredHolidays"
-                  :key="holiday.date"
+              <div>
+                <span class="text-h6 text-red">İzin Bitiş Tarihi: <br /></span>
+                <span>{{
+                  localSelectedDate.to
+                    ? formatToFullDate(localSelectedDate.to)
+                    : 'Seçilmedi'
+                }}</span>
+              </div>
+              <div v-if="totalDays > 0" class="q-mt-md">
+                <span class="text-h6 text-amber">
+                  Toplam Gün Sayısı: <br />
+                </span>
+                <span>{{ totalDays }}</span>
+              </div>
+            </div>
+            <!-- resmi tatil günü ve tarihi eşleşen veriler -->
+            <div v-if="filteredHolidays.length" class="q-mt-md">
+              <template v-for="holiday in filteredHolidays" :key="holiday.date">
+                <span class="text-caption text-teal"
+                  >- {{ holiday.label }}</span
                 >
-                  <span class="text-caption text-teal"
-                    >- {{ holiday.label }}</span
-                  >
-                  <br />
-                </template>
-              </div>
-            </template>
-          </q-date>
-        </div>
+                <br />
+              </template>
+            </div>
+          </template>
+        </q-date>
+
         <q-checkbox
           v-model="official"
           label="Resmi Tatilleri Dahil Et"
@@ -72,7 +75,7 @@
         />
         <q-toggle v-model="accept" label="I accept the license and terms" />
 
-        <div>
+        <div class="q-gutter-md">
           <q-btn label="Submit" type="submit" color="primary" />
           <q-btn
             label="Reset"
@@ -103,6 +106,7 @@ import { useHolidayStore } from 'src/stores/officalHoliday-store';
 const accept = ref<boolean>(false);
 const official = ref<boolean>(true);
 const weekend = ref<boolean>(true);
+const dayNumber = ref<number>(0);
 
 // store'u kullanma
 const holidayStore = useHolidayStore();
