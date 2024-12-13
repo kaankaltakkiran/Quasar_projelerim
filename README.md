@@ -1,4 +1,4 @@
-# Quasar_projelerim
+# Quasar projelerim
 
 [Local Json ile navbar](https://quasar-navbar.netlify.app/)
 
