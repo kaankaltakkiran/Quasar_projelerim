@@ -52,7 +52,7 @@ switch ($METHOD) {
         break;
 
     default:
-        $response['error'] = "Geçersiz metod";
+        $response['error'] = "invalid method";
 }
 
 // JSON formatında yanıt döndürme
@@ -71,7 +71,7 @@ function registerUser($DB, $data) {
 
         if ($stmt->execute()) {
             $response['success'] = true;
-            $response['message'] = "Kayıt başarılı";
+            $response['message'] = "Users registered successfully";
             $response['user_id'] = $stmt->insert_id;
         }
     } catch (Exception $e) {
@@ -96,16 +96,16 @@ function loginUser($DB, $data) {
             $user = $result->fetch_assoc();
             if (password_verify($data['password'], $user['password'])) {
                 $response['success'] = true;
-                $response['message'] = "Giriş başarılı";
+                $response['message'] = "Logged in successfully";
                 $response['user'] = [
                     'id' => $user['id'],
                     'username' => $user['username']
                 ];
             } else {
-                $response['error'] = "Geçersiz bilgiler";
+                $response['error'] = "Wrong password or username";
             }
         } else {
-            $response['error'] = "Kullanıcı bulunamadı";
+            $response['error'] = "User not found";
         }
     } catch (Exception $e) {
         $response['error'] = $e->getMessage();
@@ -146,7 +146,7 @@ function getUser($DB, $data) {
             $response['success'] = true;
             $response['user'] = $result->fetch_assoc();
         } else {
-            $response['error'] = "Kullanıcı bulunamadı";
+            $response['error'] = "User not found";
         }
     } catch (Exception $e) {
         $response['error'] = $e->getMessage();
@@ -165,9 +165,9 @@ function updateUser($DB, $data) {
 
         if ($stmt->execute()) {
             $response['success'] = true;
-            $response['message'] = "Kullanıcı güncellendi";
+            $response['message'] = "User updated successfully";
         } else {
-            $response['error'] = "Güncelleme başarısız";
+            $response['error'] = "User update failed";
         }
     } catch (Exception $e) {
         $response['error'] = $e->getMessage();
@@ -186,9 +186,9 @@ function deleteUser($DB, $data) {
 
         if ($stmt->execute()) {
             $response['success'] = true;
-            $response['message'] = "Kullanıcı silindi";
+            $response['message'] = "User deleted successfully";
         } else {
-            $response['error'] = "Silme başarısız";
+            $response['error'] = "User delete failed";
         }
     } catch (Exception $e) {
         $response['error'] = $e->getMessage();
