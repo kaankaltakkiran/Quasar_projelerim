@@ -71,7 +71,7 @@ function registerUser($DB, $data) {
 
         if ($stmt->execute()) {
             $response['success'] = true;
-            $response['message'] = "Users registered successfully";
+            $response['message'] = "User registered successfully";
             $response['user_id'] = $stmt->insert_id;
         }
     } catch (Exception $e) {
