@@ -1,14 +1,14 @@
 <?php
 // CORS tanımları
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Origin, Accept");
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Max-Age: 86400");
+header("Access-Control-Allow-Origin: *"); // Herkese açık (tüm domainlerden erişim izni)
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS"); // Desteklenen HTTP metodları
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Origin, Accept"); // Kullanılan header'lar
+header("Access-Control-Allow-Credentials: true"); // Kimlik doğrulama bilgileriyle erişime izin
+header("Access-Control-Max-Age: 86400"); // CORS önbellek süresi (24 saat)
 
 // JWT için gerekli sabitler
 define('JWT_SECRET_KEY', 'your-256-bit-secret'); // Güvenli bir secret key kullanın
-define('JWT_EXPIRE_TIME', 3600); // Token geçerlilik süresi (1 saat)
+define('JWT_EXPIRE_TIME', 3600); // Token geçerlilik süresi (saniye cinsinden, 1 saat)
 
 // Preflight (OPTIONS) isteğine yanıt verin
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -21,28 +21,28 @@ require_once 'db_connection.php';
 
 // JWT fonksiyonları
 function generateJWT($user) {
-    $issuedAt = time();
-    $expire = $issuedAt + JWT_EXPIRE_TIME;
+    $issuedAt = time(); // Token oluşturulma zamanı
+    $expire = $issuedAt + JWT_EXPIRE_TIME; // Token son geçerlilik süresi
 
     $payload = [
-        'iat' => $issuedAt,
-        'exp' => $expire,
-        'user_id' => $user['id'],
-        'username' => $user['username'],
-        'email' => $user['email']
+        'iat' => $issuedAt,  // Token oluşturulma zamanı
+        'exp' => $expire,    // Token son geçerlilik Süresi
+        'user_id' => $user['id'], // Kullanıcı kimligi
+        'username' => $user['username'], // Kullanıcı adı
+        'email' => $user['email'] // Kullanıcı e-postası
     ];
 
     // JWT oluşturma (base64 ile)
-    $header = base64_encode(json_encode(['typ' => 'JWT', 'alg' => 'HS256']));
-    $payload = base64_encode(json_encode($payload));
-    $signature = base64_encode(hash_hmac('sha256', "$header.$payload", JWT_SECRET_KEY, true));
+    $header = base64_encode(json_encode(['typ' => 'JWT', 'alg' => 'HS256'])); // JWT tipi ve algoritma      
+    $payload = base64_encode(json_encode($payload)); // JWT payload (kullanıcı verileri)
+    $signature = base64_encode(hash_hmac('sha256', "$header.$payload", JWT_SECRET_KEY, true)); // JWT imzasi
 
-    return "$header.$payload.$signature";
+    return "$header.$payload.$signature"; // JWT oluşturuldu
 }
 
 function verifyJWT($token) {
     try {
-        $tokenParts = explode('.', $token);
+        $tokenParts = explode('.', $token); // Token 3 parçaya ayırılıyor
         if (count($tokenParts) != 3) {
             return false;
         }
@@ -63,17 +63,17 @@ function verifyJWT($token) {
             return false;
         }
 
-        return $payload;
+        return $payload; // Token gecerliyse kullanıcı bilgilerini döndür
     } catch (Exception $e) {
         return false;
     }
 }
 
 // Gelen ham veriyi okuma
-$data = json_decode(file_get_contents("php://input"), true);
-$METHOD = $data['method'] ?? '';
+$data = json_decode(file_get_contents("php://input"), true); // Ham JSON verisi
+$METHOD = $data['method'] ?? ''; // HTTP metodu(register,login,update,delete...vb)
 
-$response = ['success' => false];
+$response = ['success' => false]; // Default yanıt
 
 // Veritabanı bağlantısı
 $db = new Database();
@@ -137,7 +137,7 @@ function registerUser($DB, $data) {
         // Begin transaction
         $DB->begin_transaction();
 
-        // Check duplicates in a single query
+        // kullanıcı önceden kayıt olmuş mu kontrol
         $stmt = $DB->prepare("SELECT COUNT(*) as count FROM users WHERE email = ? OR username = ?");
         $stmt->bind_param("ss", $data['email'], $data['username']);
         $stmt->execute();
