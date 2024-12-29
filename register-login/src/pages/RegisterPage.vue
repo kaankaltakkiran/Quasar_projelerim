@@ -34,7 +34,11 @@
           <q-toggle v-model="accept" label="I accept the license and terms" />
 
           <div>
-            <q-btn label="Register" type="submit" color="primary" />
+            <q-btn label="Register" type="submit" color="primary" :loading="loading">
+              <template v-slot:loading>
+                <q-spinner-facebook />
+              </template>
+            </q-btn>
           </div>
         </q-form>
       </q-card-section>
@@ -45,6 +49,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 
 import { api } from 'boot/axios'
 
@@ -52,8 +57,10 @@ const email = ref('')
 const password = ref('')
 const username = ref('')
 const accept = ref<boolean>(false)
+const loading = ref(false)
 
 const $q = useQuasar()
+const router = useRouter()
 
 //form submit edilmişse
 const onSubmit = async () => {
@@ -67,6 +74,8 @@ const onSubmit = async () => {
     })
     return
   }
+
+  loading.value = true
   //form verilerini apiye gönder json formatında
   try {
     const response = await api.post('/auth.php', {
@@ -85,7 +94,11 @@ const onSubmit = async () => {
         message: response.data.message,
         position: 'top-right',
       })
-      // hata varsa
+
+      // Wait for 1.5 seconds before redirecting
+      setTimeout(() => {
+        router.push('/login')
+      }, 1500)
     } else {
       $q.notify({
         color: 'red-5',
@@ -104,6 +117,8 @@ const onSubmit = async () => {
       message: 'An error occurred while sending the form',
       position: 'top-right',
     })
+  } finally {
+    loading.value = false
   }
 }
 </script>
