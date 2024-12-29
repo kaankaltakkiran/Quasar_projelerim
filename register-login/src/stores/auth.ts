@@ -48,18 +48,24 @@ export const useAuthStore = defineStore('auth', {
 
           Notify.create({
             color: 'positive',
-            message: 'Başarıyla giriş yapıldı',
+            message: response.data.message,
             position: 'top-right',
           })
 
           return true
+        } else if (response.data.error) {
+          Notify.create({
+            color: 'negative',
+            message: response.data.error,
+            position: 'top-right',
+          })
         }
         return false
       } catch (error) {
         console.error('Login error:', error)
         Notify.create({
           color: 'negative',
-          message: 'Giriş yapılırken hata oluştu',
+          message: 'Error logging in',
           position: 'top-right',
         })
         return false
@@ -78,17 +84,24 @@ export const useAuthStore = defineStore('auth', {
         if (response.data.success) {
           Notify.create({
             color: 'positive',
-            message: 'Kayıt başarıyla oluşturuldu',
+            message: response.data.message,
             position: 'top-right',
           })
           return true
         }
+
+        // Always show error message if success is false
+        Notify.create({
+          color: 'negative',
+          message: response.data.error,
+          position: 'top-right',
+        })
         return false
       } catch (error) {
         console.error('Register error:', error)
         Notify.create({
           color: 'negative',
-          message: 'Kayıt olurken hata oluştu',
+          message: 'Error registering',
           position: 'top-right',
         })
         return false
@@ -100,10 +113,10 @@ export const useAuthStore = defineStore('auth', {
       this.token = null
       this.user = null
       this.isAuthenticated = false
-      
+
       // Remove token from localStorage
       localStorage.removeItem('token')
-      
+
       // Remove token from axios headers
       delete api.defaults.headers.common['Authorization']
 

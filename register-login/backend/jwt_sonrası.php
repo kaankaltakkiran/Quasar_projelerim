@@ -134,50 +134,17 @@ function registerUser($DB, $data) {
     $response = ['success' => false];
 
     try {
-        // Begin transaction
-        $DB->begin_transaction();
-
-        // Check duplicates in a single query
-        $stmt = $DB->prepare("SELECT COUNT(*) as count FROM users WHERE email = ? OR username = ?");
-        $stmt->bind_param("ss", $data['email'], $data['username']);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $count = $result->fetch_assoc()['count'];
-
-        if ($count > 0) {
-            // Check which one is duplicate
-            $stmt = $DB->prepare("SELECT email, username FROM users WHERE email = ? OR username = ?");
-            $stmt->bind_param("ss", $data['email'], $data['username']);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $row = $result->fetch_assoc();
-
-            if ($row['email'] === $data['email']) {
-                $response['error'] = "This email is already in use";
-            } else {
-                $response['error'] = "This username is already in use";
-            }
-
-            $DB->rollback();
-            return $response;
-        }
-
         $hash = password_hash($data['password'], PASSWORD_DEFAULT);
         $stmt = $DB->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $data['username'], $data['email'], $hash);
 
         if ($stmt->execute()) {
             $response['success'] = true;
-            $response['message'] = "User registered successfully";
+            $response['message'] = "Kullanıcı başarıyla kaydedildi";
             $response['user_id'] = $stmt->insert_id;
-            $DB->commit();
-        } else {
-            $response['error'] = "User registration failed";
-            $DB->rollback();
         }
     } catch (Exception $e) {
-        $DB->rollback();
-        $response['error'] = "Database error: " . $e->getMessage();
+        $response['error'] = $e->getMessage();
     }
 
     return $response;
@@ -203,14 +170,14 @@ function loginUser($DB, $data) {
                 $token = generateJWT($user);
 
                 $response['success'] = true;
-                $response['message'] = "Logged in successfully";
+                $response['message'] = "Giriş başarılı";
                 $response['token'] = $token;
                 $response['user'] = $user;
             } else {
-                $response['error'] = "Wrong password or email";
+                $response['error'] = "Geçersiz şifre";
             }
         } else {
-            $response['error'] = "User not found";
+            $response['error'] = "Kullanıcı bulunamadı";
         }
     } catch (Exception $e) {
         $response['error'] = $e->getMessage();
@@ -251,7 +218,7 @@ function getUser($DB, $data) {
             $response['success'] = true;
             $response['user'] = $result->fetch_assoc();
         } else {
-            $response['error'] = "User not found";
+            $response['error'] = "Kullanıcı bulunamadı";
         }
     } catch (Exception $e) {
         $response['error'] = $e->getMessage();
@@ -270,9 +237,9 @@ function updateUser($DB, $data) {
 
         if ($stmt->execute()) {
             $response['success'] = true;
-            $response['message'] = "User updated successfully";
+            $response['message'] = "Kullanıcı bilgileri başarıyla güncellendi";
         } else {
-            $response['error'] = "User update failed";
+            $response['error'] = "Kullanıcı bilgileri güncellenemedi";
         }
     } catch (Exception $e) {
         $response['error'] = $e->getMessage();
@@ -291,9 +258,9 @@ function deleteUser($DB, $data) {
 
         if ($stmt->execute()) {
             $response['success'] = true;
-            $response['message'] = "User deleted successfully";
+            $response['message'] = "Kullanıcı başarıyla silindi";
         } else {
-            $response['error'] = "User delete failed";
+            $response['error'] = "Kullanıcı silinemedi";
         }
     } catch (Exception $e) {
         $response['error'] = $e->getMessage();
