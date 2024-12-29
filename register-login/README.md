@@ -1,40 +1,77 @@
-#   (register-login)
+# Register Login Projesi
 
-A Quasar Project
+Kullanıcı kaydı ve giriş işlevselliğine sahip modern bir kimlik doğrulama sistemi, Quasar Framework ile geliştirildi.
 
-## Install the dependencies
+## Teknoloji Kullanımları
+
+### Frontend (Ön Yüz)
+
+- **Quasar Framework v2** - Responsive SPA'lar oluşturmak için Vue.js tabanlı bir framework
+- **Vue.js 3** - İlerici bir JavaScript framework'ü
+- **TypeScript** - Tür güvenli kodlama için
+- **Pinia** - Durum yönetimi çözümü
+- **Axios** - API istekleri için HTTP istemcisi
+- **Vue Router** - Vue.js için resmi yönlendirici
+
+### Backend (Arka Yüz)
+
+- **PHP** - Sunucu tarafı betik dili
+- **MySQL** - Veritabanı yönetim sistemi
+- **RESTful API** - İstemci-sunucu iletişimi için
+
+### Geliştirme Araçları
+
+- **ESLint** - Kod kontrolü
+- **Prettier** - Kod formatlama
+- **Vite** - Yeni nesil frontend araçları
+- **Node.js** - JavaScript çalışma zamanı
+- **npm/yarn** - Paket yönetimi
+
+## Özellikler
+
+- Kullanıcı Kaydı
+- Kullanıcı Giriş/Çıkış İşlemleri
+- Kimlik Doğrulama Durumu Yönetimi
+- Form Doğrulama
+- Güvenli Şifre İşleme
+- Responsive Tasarım
+
+## Bağımlılıkları Yükleyin
+
 ```bash
 yarn
-# or
+# veya
 npm install
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+### Uygulamayı geliştirme modunda başlatın (hot-code reloading, hata raporlama vb.)
+
 ```bash
 quasar dev
 ```
 
+### Dosyaları kontrol edin
 
-### Lint the files
 ```bash
 yarn lint
-# or
+# veya
 npm run lint
 ```
 
+### Dosyaları formatlayın
 
-### Format the files
 ```bash
 yarn format
-# or
+# veya
 npm run format
 ```
 
+### Uygulamayı üretim için derleyin
 
-### Build the app for production
 ```bash
 quasar build
 ```
 
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
+### Yapılandırmayı özelleştirin
+
+Daha fazla bilgi için [quasar.config.js yapılandırması](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js) sayfasına göz atın.
