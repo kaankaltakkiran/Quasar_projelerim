@@ -50,8 +50,7 @@
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
-
-import { api } from 'boot/axios'
+import { useAuthStore } from 'stores/auth'
 
 const email = ref('')
 const password = ref('')
@@ -61,6 +60,7 @@ const loading = ref(false)
 
 const $q = useQuasar()
 const router = useRouter()
+const authStore = useAuthStore()
 
 //form submit edilmişse
 const onSubmit = async () => {
@@ -78,35 +78,12 @@ const onSubmit = async () => {
   loading.value = true
   //form verilerini apiye gönder json formatında
   try {
-    const response = await api.post('/auth.php', {
-      method: 'register',
-      email: email.value,
-      password: password.value,
-      username: username.value,
-    })
-    // işlem basarılı ise
-    console.log('Response:', response)
-    if (response.data.success) {
-      $q.notify({
-        color: 'green-4',
-        textColor: 'white',
-        icon: 'cloud_done',
-        message: response.data.message,
-        position: 'top-right',
-      })
-
-      // Wait for 1.5 seconds before redirecting
+    const success = await authStore.register(email.value, password.value, username.value)
+    if (success) {
+      // Wait for 1.5 seconds before redirecting to login page
       setTimeout(() => {
         router.push('/login')
       }, 1500)
-    } else {
-      $q.notify({
-        color: 'red-5',
-        textColor: 'white',
-        icon: 'warning',
-        message: response.data.error,
-        position: 'top-right',
-      })
     }
   } catch (error) {
     console.error('Error sending form:', error)

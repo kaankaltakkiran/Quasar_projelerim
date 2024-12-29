@@ -38,58 +38,28 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useQuasar } from 'quasar'
+
 import { useRouter } from 'vue-router'
-import { api } from 'boot/axios'
+import { useAuthStore } from 'stores/auth'
 
 const email = ref('')
 const password = ref('')
 const loading = ref(false)
 
-const $q = useQuasar()
 const router = useRouter()
+const authStore = useAuthStore()
 
 const onSubmit = async () => {
   loading.value = true
 
   try {
-    const response = await api.post('/auth.php', {
-      method: 'login',
-      email: email.value,
-      password: password.value,
-    })
-
-    if (response.data.success) {
-      $q.notify({
-        color: 'green-4',
-        textColor: 'white',
-        icon: 'cloud_done',
-        message: response.data.message,
-        position: 'top-right',
-      })
-
-      // Wait for 1.5 seconds before redirecting
+    const success = await authStore.login(email.value, password.value)
+    if (success) {
+      // Wait for 1.5 seconds before redirecting to index page
       setTimeout(() => {
         router.push('/')
       }, 1500)
-    } else {
-      $q.notify({
-        color: 'red-5',
-        textColor: 'white',
-        icon: 'warning',
-        message: response.data.error,
-        position: 'top-right',
-      })
     }
-  } catch (error) {
-    console.error('Error during login:', error)
-    $q.notify({
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      message: 'An error occurred during login',
-      position: 'top-right',
-    })
   } finally {
     loading.value = false
   }
