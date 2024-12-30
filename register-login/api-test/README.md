@@ -21,12 +21,14 @@ Gelen Response:
 }
 ```
 
+---
+
 ### 2. Kullanıcı Girişi (Login)
 
 ```json
 {
   "method": "login",
-  "username": "kaan",
+  "email": "kaan@gmail.com",
   "password": "123"
 }
 ```
@@ -37,14 +39,20 @@ Gelen Response:
 {
   "success": true,
   "message": "Logged in successfully",
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzU1Nzc4OTAsImV4cCI6MTczNTU4MTQ5MCwidXNlcl9pZCI6MSwidXNlcm5hbWUiOiJrYWFuIiwiZW1haWwiOiJrYWFuQGdtYWlsLmNvbSJ9.qwB9BjD0jCzVLyFTy41DgfFkndj82i387Jbl6SjBZ5Y=",
   "user": {
     "id": 1,
-    "username": "kaan"
+    "username": "kaan",
+    "email": "kaan@gmail.com"
   }
 }
 ```
 
+---
+
 ### 3. Tüm Kullanıcıları Listele
+
+`Authorization`: Bearer your-jwt-token
 
 ```json
 {
@@ -65,14 +73,18 @@ Gelen Response:
     },
     {
       "id": 2,
-      "username": "ahmet",
-      "email": "ahmet@gmail.com"
+      "username": "veli",
+      "email": "veli@gmail.com"
     }
   ]
 }
 ```
 
+---
+
 ### 4. Tek Kullanıcı Getir
+
+`Authorization`: Bearer your-jwt-token
 
 ```json
 {
@@ -94,14 +106,18 @@ Gelen Response:
 }
 ```
 
+---
+
 ### 5. Kullanıcı Güncelle
+
+`Authorization`: Bearer your-jwt-token
 
 ```json
 {
   "method": "update-user",
-  "id": 1,
-  "username": "yeni_kullanici",
-  "email": "yeni@email.com"
+  "id": 2,
+  "username": "update_veli",
+  "email": "updateveli@gmail.com"
 }
 ```
 
@@ -114,7 +130,11 @@ Gelen Response:
 }
 ```
 
+---
+
 ### 6. Kullanıcı Sil
+
+`Authorization`: Bearer your-jwt-token
 
 ```json
 {
@@ -131,6 +151,17 @@ Gelen Response:
   "message": "User deleted successfully"
 }
 ```
+
+Gelen Response:
+
+```json
+{
+  "success": true,
+  "message": "User deleted successfully"
+}
+```
+
+---
 
 ## Yanıt Formatı
 
