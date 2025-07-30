@@ -2,19 +2,11 @@
   <q-page class="flex flex-center">
     <q-card class="auth-card" style="min-width: 300px">
       <q-card-section>
-        <div class="text-h6">Üye Ol</div>
+        <div class="text-h6">Giriş Yap</div>
       </q-card-section>
 
       <q-card-section>
         <q-form class="q-gutter-md">
-          <q-input
-            v-model="name"
-            type="text"
-            label="Name"
-            filled
-            :rules="[(val: string) => !!val || 'Adınız gereklidir']"
-          />
-
           <q-input
             v-model="email"
             type="email"
@@ -30,15 +22,8 @@
             filled
             :rules="[(val: string) => !!val || 'Parolanız gereklidir']"
           />
-          <q-input
-            v-model="password_confirmation"
-            type="password"
-            label="Password Confirmation"
-            filled
-            :rules="[(val: string) => !!val || 'Parola onayınız gereklidir']"
-          />
           <div>
-            <q-btn label="Üye Ol" type="submit" color="primary">
+            <q-btn label="Giriş Yap" type="submit" color="primary">
               <template v-slot:loading>
                 <q-spinner-facebook />
               </template>
@@ -52,10 +37,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-const name = ref('');
+
 const email = ref('');
 const password = ref('');
-const password_confirmation = ref('');
 </script>
 
 <style scoped>
