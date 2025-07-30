@@ -6,11 +6,11 @@
     <q-space />
 
     <q-tabs v-model="tab" shrink>
-      <q-tab name="home" label="Ana Sayfa" />
-      <q-tab name="products" label="Ürünler" />
-      <q-tab name="register" label="Üye Ol" />
-      <q-tab name="login" label="Giriş Yap" />
-      <q-tab name="logout" label="Çıkış Yap" />
+      <q-route-tab name="home" to="/" exact label="Ana Sayfa" />
+      <q-route-tab name="products" to="/products" exact label="Ürünler" />
+      <q-route-tab name="register" to="/register" exact label="Üye Ol" />
+      <q-route-tab name="login" to="/login" exact label="Giriş Yap" />
+      <q-route-tab name="logout" to="/logout" exact label="Çıkış Yap" />
     </q-tabs>
   </q-toolbar>
 </template>
